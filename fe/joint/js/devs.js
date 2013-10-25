@@ -16,41 +16,30 @@ var connect = function(source, sourcePort, target, targetPort) {
     graph.addCell(link);
 };
 
-var c1 = new joint.shapes.devs.Coupled({
-    position: { x: 260, y: 150 },
-    size: { width: 300, height: 300 },
-    inPorts: ['in'],
-    outPorts: ['out 1','out 2']
-});
 
-var a1 = new joint.shapes.devs.Atomic({
+var a1 = new joint.shapes.devs.Model({
     position: { x: 360, y: 360 },
+    size: { width: 100, height: 300 },
     inPorts: ['port XY'],
-    outPorts: ['x','y']
+    outPorts: ['x','y', 'a', 'b']
 });
 
-var a2 = new joint.shapes.devs.Atomic({
+var a2 = new joint.shapes.devs.Model({
     position: { x: 50, y: 260 },
-    outPorts: ['out']
+    inPorts: ['in'],
+    outPorts: ['out', 'outb']
 });
 
-var a3 = new joint.shapes.devs.Atomic({
+var a3 = new joint.shapes.devs.Model({
     position: { x: 650, y: 150 },
     size: { width: 100, height: 300 },
     inPorts: ['a','b']
 });
 
+graph.addCell(a1).addCell(a2).addCell(a3);
 
-graph.addCell(a1)
-/*
-graph.addCell(c1).addCell(a1).addCell(a2).addCell(a3);
 
-c1.embed(a1);
+connect(a2,'outb',a1,'port XY');
+connect(a2,'out',a3,'a');
+connect(a1,'y',a3,'b');
 
-connect(a2,'out',c1,'in');
-connect(c1,'in',a1,'port XY');
-connect(a1,'x',c1,'out 1');
-connect(a1,'y',c1,'out 2');
-connect(c1,'out 1',a3,'a');
-connect(c1,'out 2',a3,'b');
-*/
