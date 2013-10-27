@@ -1,52 +1,41 @@
 function main()
 {
-    var canvas = new fabric.Canvas('c');
-
-    
-/*    canvas.findTarget = (function(originalFn) {
-  // The object search loop, taken from the original 'findTarget' in fabric.js
-  // 0.8.42.
-  //
-  // This version differs in that it recurses into a Group's 'objects'
-  // property.
-  var findTargetInObjects = function(e, objects) {
-    if(!(e.type === 'mousedown') ) return;
-    var target;
-    for (var i = objects.length; i--; ) {
-      if (objects[i] && this.containsPoint(e, objects[i])) {
-        // Ok, we matched a group.  Try to find out which thing INSIDE that
-        // group that was clicked.
-        if (objects[i].type === "group") {
-          return findTargetInObjects.call(this, e, objects[i]._objects);
-        } else {
-          target = objects[i];
-        }
-        break;
-      }
-    }
-    return target;
-  };
-
-  // The new 'findTarget' implementation, it is largely copied from the
-  // existing on in fabric.js 0.8.42
-  var newFn = function (e, skipGroup) {
-    var target,
-        pointer = this.getPointer(e);
-    // then check all of the objects on canvas
-    target = findTargetInObjects.call(this, e, this._objects);
-
-    if (target && target.selectable) {
-      return target;
-    }
-  };
-
-  return function() {
-    return newFn.apply(this, arguments);
-  };
-})(canvas.findTarget);
-*/
+    Canalada.canvas = new fabric.Canvas('c');
     
     
+    
+(function drawQuadratic() {
+
+  var line = new fabric.Path('M 65 0 Q 100, 100, 200, 0', { fill: '', stroke: 'black' });
+
+  line.path[0][1] = 100;
+  line.path[0][2] = 100;
+
+  line.path[1][1] = 200;
+  line.path[1][2] = 200;
+
+  line.path[1][3] = 300;
+  line.path[1][4] = 100;
+
+  line.selectable = false;
+  Canalada.canvas.add(line);
+
+  var p1 = makeCurvePoint(200, 200, null, line, null)
+  p1.name = "p1";
+  Canalada.canvas.add(p1);
+
+  var p0 = makeCurveCircle(100, 100, line, p1, null);
+  p0.name = "p0";
+  Canalada.canvas.add(p0);
+
+  var p2 = makeCurveCircle(300, 100, null, p1, line);
+  p2.name = "p2";
+  Canalada.canvas.add(p2);
+
+})();
+
+
+
     
     var r = new fabric.Rect({
             left: 200,
@@ -58,8 +47,8 @@ function main()
             stroke: '#666'
           });
 
-          r.hasBorders = r.hasControls = false;
-    canvas.add(r);
+    r.hasBorders = r.hasControls = false;
+    Canalada.canvas.add(r);
 
     var act = new Canalada.Actor();
     act.addInPort('blain1');
@@ -70,45 +59,27 @@ function main()
     act.addOutPort('blaout3');
     act.addOutPort('blaout4');
     act.addOutPort('blaout5');
+    
+    
     var actView = new Canalada.ActorView(act);
-    canvas.add(actView);
+    
+    Canalada.canvas.add(actView);
+    
+    Canalada.canvas.on({
+        'object:selected'         : Canalada.onObjectSelected,
+        'object:moving'           : Canalada.onObjectMoving,
+        'before:selection:cleared': Canalada.onBeforeSelectionCleared,
+        'mouse:up'                : Canalada.onMouseUp,
+        'mouse:down'              	: Canalada.onMouseDown
+    });
+
+
+    
+    
+    
+    
+    
+    
  
-    canvas.on('mouse:down', function(e) {
-        if(e.target === undefined) {
-            return;
-        }
-        if(e.target.ctype === 'ActorView') {
-            objects = e.target.getObjects();
-            var center = e.target.getCenterPoint()
-            for(var i = objects.length; i--; ) {
-                var pt = {x:e.e.offsetX - center.x, y:e.e.offsetY - center.y};
-                if(objects[i] && objects[i].containsPoint(pt)) {
-                    objects[i].setStroke('#ad2e3a');
-                    break;
-                }
-            }
-        } else {
-            e.target.setStroke('#ad2e3a');
-        }
-        canvas.renderAll();
-    });
-    canvas.on('mouse:up', function(e) {
-        if(e.target === undefined) {
-            return;
-        }
-        if(e.target.ctype === 'ActorView') {
-            objects = e.target.getObjects();
-            var center = e.target.getCenterPoint()
-            for(var i = objects.length; i--; ) {
-                var pt = {x:e.e.offsetX - center.x, y:e.e.offsetY - center.y};
-                if(objects[i] && objects[i].containsPoint(pt)) {
-                    objects[i].setStroke('#30407a');
-                    break;
-                }
-            }
-        } else {
-            e.target.setStroke('#30407a');
-        }
-        canvas.renderAll();
-    });
+    
 }
