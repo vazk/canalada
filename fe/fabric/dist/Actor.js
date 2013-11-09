@@ -31,15 +31,24 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
               hasControls : false
             });
         this.actorRect.hasBorders = this.actorRect.hasControls = false;
-        this.add(this.actorRect);
     },
 
     refresh: function() {
         var numPorts = Math.max(this.inPorts.length, this.outPorts.length);
         var w = 2 * this.C.pWidth + 2 * this.C.pTextWidth + 30;
-        var h = this.outPorts.length * (this.C.pHeight + this.C.pSpacing) + this.C.pPadding;
-        this.actorRect.w = w;
-        this.actorRect.h = h;
+        var h = numPorts * (this.C.pHeight + this.C.pSpacing) + this.C.pPadding;
+        this.actorRect.width = w;
+        this.actorRect.height = h;
+        this.addWithUpdate(this.actorRect);
+        //.this.actorRect.setCoords();
+        for(var i = 0; i < this.inPorts.length; ++i) {
+            this.inPorts[i].refresh();
+            this.add(this.inPorts[i]);
+        }
+        for(var i = 0; i < this.outPorts.length; ++i) {
+            this.outPorts[i].refresh();
+            this.add(this.outPorts[i]);
+        }
         Canalada.canvas.renderAll();
     },
 
@@ -52,15 +61,11 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
     addInPort : function(portName) {
         var port = new Canalada.InPort(portName, this, this.inPorts.length);
         this.inPorts.push(port);
-        this.add(port);        
-        this.refresh();
     },
 
     addOutPort : function(portName) {
         var port = new Canalada.OutPort(portName, this, this.outPorts.length);
         this.outPorts.push(port);
-        this.add(port);        
-        this.refresh();
     }
 
 });

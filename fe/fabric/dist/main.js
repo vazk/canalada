@@ -40,24 +40,24 @@ function main()
 
 */
 
-    var act = new Canalada.Actor("FileWriter");
-    act.addInPort('blain1');
-    act.addInPort('blain2');
-    act.addInPort('blain3');
-    act.addOutPort('blaout1');
-    act.addOutPort('blaout2');
-    act.addOutPort('blaout3');
-    act.addOutPort('blaout4');
-    act.addOutPort('blaout5');
+    var actA = new Canalada.Actor("FileWriter");
+    actA.addInPort('blain1');
+    actA.addInPort('blain2');
+    actA.addInPort('blain3');
+    actA.addOutPort('blaout1');
+    actA.addOutPort('blaout2');
+    actA.addOutPort('blaout3');
+    actA.addOutPort('blaout4');
+    actA.addOutPort('blaout5');
 
     var actB = new Canalada.Actor("FileReader");
     actB.addInPort('ain1');
     actB.addInPort('ain2');
     actB.addOutPort('aout1');
-    
-    //act.setup();
-    //actB.setup();
-    Canalada.canvas.add(act);
+
+    actA.refresh();
+    actB.refresh();
+    Canalada.canvas.add(actA);
     Canalada.canvas.add(actB);
     
     Canalada.canvas.on({
