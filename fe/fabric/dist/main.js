@@ -1,12 +1,15 @@
+
 function main()
 {
     Canalada.canvas = new fabric.Canvas('c');
     
     
+/*
     
 (function drawQuadratic() {
 
-  var line = new fabric.Path('M 65 0 Q 100, 100, 200, 0', { fill: '', stroke: 'black' });
+  var line = new fabric.Path('M 65 0 Q 100, 100, 200, 0', { fill: '', stroke: 'black', selectable: true,
+    strokeWidth : 5});
 
   line.path[0][1] = 100;
   line.path[0][2] = 100;
@@ -35,22 +38,9 @@ function main()
 })();
 
 
+*/
 
-    
-    var r = new fabric.Rect({
-            left: 200,
-            top: 300,
-            strokeWidth: 8,
-            width: 130,
-            height: 90,
-            fill: '#fff',
-            stroke: '#666'
-          });
-
-    r.hasBorders = r.hasControls = false;
-    Canalada.canvas.add(r);
-
-    var act = new Canalada.Actor();
+    var act = new Canalada.Actor("FileWriter");
     act.addInPort('blain1');
     act.addInPort('blain2');
     act.addInPort('blain3');
@@ -59,27 +49,23 @@ function main()
     act.addOutPort('blaout3');
     act.addOutPort('blaout4');
     act.addOutPort('blaout5');
+
+    var actB = new Canalada.Actor("FileReader");
+    actB.addInPort('ain1');
+    actB.addInPort('ain2');
+    actB.addOutPort('aout1');
     
-    
-    var actView = new Canalada.ActorView(act);
-    
-    Canalada.canvas.add(actView);
+    //act.setup();
+    //actB.setup();
+    Canalada.canvas.add(act);
+    Canalada.canvas.add(actB);
     
     Canalada.canvas.on({
         'object:selected'         : Canalada.onObjectSelected,
         'object:moving'           : Canalada.onObjectMoving,
-        'before:selection:cleared': Canalada.onBeforeSelectionCleared,
+        //'before:selection:cleared': Canalada.onBeforeSelectionCleared,
         'mouse:up'                : Canalada.onMouseUp,
         'mouse:down'              	: Canalada.onMouseDown
     });
-
-
-    
-    
-    
-    
-    
-    
- 
     
 }

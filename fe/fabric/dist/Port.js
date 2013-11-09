@@ -1,64 +1,52 @@
 
-Canalada.Port = fabric.util.createClass(fabric.Object, {
-    
-    ctype: 'Port',
-    name:  '',
-    actor: undefined,
-    links: [],
-    
-    initialize : function(ctype, name, actor) {
-        this.ctype = ctype;
-        this.name = name;
-        this.actor = actor;
-    }
-});
-
-Canalada.PortView = fabric.util.createClass(fabric.Rect, {
+Canalada.Port = fabric.util.createClass(fabric.Rect, {
     C : {'pHeight':10,
          'pWidth': 16,
          'pPadding' : 24,
          'pSpacing' : 6,
          'pTextWidth' : 40,
-         'pFill' : '#fffff',
+         'pFill' : '#ffffff',
          'pStroke' : '#30407a',
+         'pStrokeWidth' : 2,
          'pStrokeSelect' : '#ad2e3a'
-         },
+        },
     rx: 3,
     ry: 3,
-    strokeWidth: 1,
-    port: undefined,
-    initialize: function(port, options) {
-        this.port = port
+    initialize: function(name, actor, options) {
         this.options || (options = {});
-        this.width = this.C.pWidth,
-        this.height = this.C.pHeight,
-        this.fill = this.C.fill,
-        this.stroke = this.C.pStroke
+        this.width = this.C.pWidth;
+        this.height = this.C.pHeight;
+        this.fill = this.C.pFill;
+        this.stroke = this.C.pStroke;
+        this.strokeWidth = this.C.pStrokeWidth;
+        this.name =  '';
+        this.actor = actor;
+        this.links = [];
     }
 });
 
-Canalada.OutPortView = fabric.util.createClass(Canalada.PortView, {
+Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
     
-    ctype : 'OutPortView',
+    ctype : 'OutPort',
     
-    initialize: function(actorView, i, port, options) {
-        this.callSuper('initialize', port, options);
-        var w = actorView.width;
-        var h = actorView.height;
+    initialize: function(name, actor, i, options) {
+        this.callSuper('initialize', name, actor, options);
+        var w = actor.width;
+        var h = actor.height;
         this.left = w/2 - this.C.pWidth/2 + 4;
         this.top = -h/2 + this.C.pPadding + i * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
         this.setCoords();
     }
 });
 
-Canalada.InPortView = fabric.util.createClass(Canalada.PortView, {
+Canalada.InPort = fabric.util.createClass(Canalada.Port, {
     
-    ctype : 'InPortView',
+    ctype : 'InPort',
     
-    initialize: function(actorView, i, port, options) {
-        this.callSuper('initialize', port, options);
-        var w = actorView.width;
-        var h = actorView.height;
+    initialize: function(name, actor, i, options) {
+        this.callSuper('initialize', name, actor, options);
+        var w = actor.width;
+        var h = actor.height;
         this.left = -w/2 + this.C.pWidth/2 - 4;
         this.top = -h/2 + this.C.pPadding + i * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
         this.setCoords();

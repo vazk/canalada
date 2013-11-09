@@ -9,6 +9,19 @@ Canalada.Link = fabric.util.createClass(fabric.Object, {
 });
 
 
+Canalada.LinkView = fabric.util.createClass(fabric.Path, {
+    C : {'pStroke': 'black',
+         'pStrokeWidth':3,
+        },
+    port: undefined,
+    initialize: function(link, options) {
+        this.link = link;
+        this.options = options || (options = {});
+        this.fill = '';
+        this.stroke = this.C.pStroke;
+        this.strokeWidth = this.C.pStrokeWidth;
+    }
+});
 
 
 

@@ -1,35 +1,6 @@
-Canalada.Actor = fabric.util.createClass(fabric.Object, {
+Canalada.Actor = new fabric.util.createClass(fabric.Group, {
+
     ctype: 'Actor',
-    model: '',
-    name: '',
-
-    params: {},
-
-    inPorts: [],
-
-    outPorts: [],
-
-    initialize: function(options) {
-        this.params = options || { };
-    },
-
-    addInPort : function(portName) {
-        var port = new Canalada.Port('OutPort', portName, this);
-        this.inPorts.push(port);
-    },
-
-    addOutPort : function(portName) {
-        var port = new Canalada.Port('OutPort', portName, this);
-        this.outPorts.push(port);
-    }
-});
- 
-
-
-
-Canalada.ActorView = fabric.util.createClass(fabric.Group, {
-
-    ctype: 'ActorView',
   
     C : {'pHeight':10,
          'pWidth': 16,
@@ -40,48 +11,36 @@ Canalada.ActorView = fabric.util.createClass(fabric.Group, {
     
     options : {},
     
-    initialize: function(actor, options) {
-        this.actor = actor;
+    initialize: function(model, name, options) {
         this.options || (options = {});
+        this.model = model;
+        this.name = name;
         this.callSuper('initialize', options);
-        
         this.hasBorders = false;
         this.hasControls = false;
-        
-        //this.set('label', options.label || '');
-        if(this.actor === undefined)
-            return;
-
-        var inPorts = this.actor.inPorts;
-        var outPorts = this.actor.outPorts;
-        var numPorts = Math.max(inPorts.length, outPorts.length);
-        var w = 2 * this.C.pWidth + 2 * this.C.pTextWidth + 30;
-        var h = outPorts.length * (this.C.pHeight + this.C.pSpacing) + this.C.pPadding;
-        
-        var actorRect = new fabric.Rect({
+        this.inPorts = [];
+        this.outPorts = [];
+        this.actorRect = new fabric.Rect({
               left: 100,
               top: 100,
               strokeWidth: 5,
-              width: w, height: h,
+              width: 50, height:50,
               fill: '#fff',
               stroke: '#666',
               hasBorders : false,
               hasControls : false
             });
-        actorRect.hasBorders = actorRect.hasControls = false;
-        this.addWithUpdate(actorRect);
+        this.actorRect.hasBorders = this.actorRect.hasControls = false;
+        this.add(this.actorRect);
+    },
 
-        for(var i = 0; i < inPorts.length; i++) {
-            var port = new Canalada.InPortView(this, i, inPorts[i]);
-            //port.setCoords();
-            this.add(port);
-        }
-          
-        for(var i = 0; i < outPorts.length; i++) {
-            var port = new Canalada.OutPortView(this, i, outPorts[i]);
-            //port.setCoords();
-            this.add(port);        }
-        
+    refresh: function() {
+        var numPorts = Math.max(this.inPorts.length, this.outPorts.length);
+        var w = 2 * this.C.pWidth + 2 * this.C.pTextWidth + 30;
+        var h = this.outPorts.length * (this.C.pHeight + this.C.pSpacing) + this.C.pPadding;
+        this.actorRect.w = w;
+        this.actorRect.h = h;
+        Canalada.canvas.renderAll();
     },
 
     toObject: function() {
@@ -90,4 +49,19 @@ Canalada.ActorView = fabric.util.createClass(fabric.Group, {
         });
     },
 
+    addInPort : function(portName) {
+        var port = new Canalada.InPort(portName, this, this.inPorts.length);
+        this.inPorts.push(port);
+        this.add(port);        
+        this.refresh();
+    },
+
+    addOutPort : function(portName) {
+        var port = new Canalada.OutPort(portName, this, this.outPorts.length);
+        this.outPorts.push(port);
+        this.add(port);        
+        this.refresh();
+    }
+
 });
+
