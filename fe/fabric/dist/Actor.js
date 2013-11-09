@@ -6,7 +6,7 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
          'pWidth': 16,
          'pPadding' : 24,
          'pSpacing' : 6,
-         'pTextWidth' : 40
+         'pTextMaxWidth' : 40
          },
     
     options : {},
@@ -33,14 +33,25 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
         this.actorRect.hasBorders = this.actorRect.hasControls = false;
     },
 
-    refresh: function() {
+    setup: function() {
+        var inMaxWidth = 0;
+        var outMaxWidth = 0;
+        for(var i = 0; i < this.inPorts.length; ++i) {
+            var p = this.inPorts[i];
+            inMaxWidth = Math.max(inMaxWidth, p.textWidth);
+        }
+       
+        for(var i = 0; i < this.outPorts.length; ++i) {
+            var p = this.outPorts[i];
+            outMaxWidth = Math.max(outMaxWidth, p.textWidth);
+        }
+        
         var numPorts = Math.max(this.inPorts.length, this.outPorts.length);
-        var w = 2 * this.C.pWidth + 2 * this.C.pTextWidth + 30;
+        var w = 2 * this.C.pWidth + inMaxWidth + outMaxWidth;
         var h = numPorts * (this.C.pHeight + this.C.pSpacing) + this.C.pPadding;
         this.actorRect.width = w;
         this.actorRect.height = h;
         this.addWithUpdate(this.actorRect);
-        //.this.actorRect.setCoords();
         for(var i = 0; i < this.inPorts.length; ++i) {
             this.inPorts[i].refresh();
             this.add(this.inPorts[i]);
@@ -68,5 +79,16 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
         this.outPorts.push(port);
     }
 
+});
+
+
+Canalada.FileWriterActor = new fabric.util.createClass(Canalada.Actor, {
+    initialize: function(options) {
+        this.callSuper('initialize', '', 'FileWriter', options);
+        this.addInPort('file_name');
+        this.addInPort('file_data');
+        this.addOutPort('result');
+        this.setup();
+    }
 });
 

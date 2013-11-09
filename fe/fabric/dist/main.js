@@ -55,10 +55,12 @@ function main()
     actB.addInPort('ain2');
     actB.addOutPort('aout1');
 
-    actA.refresh();
-    actB.refresh();
+    actA.setup();
+    actB.setup();
     Canalada.canvas.add(actA);
     Canalada.canvas.add(actB);
+    
+    Canalada.canvas.add(new Canalada.FileWriterActor())
     
     Canalada.canvas.on({
         'object:selected'         : Canalada.onObjectSelected,

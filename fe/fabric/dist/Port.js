@@ -4,12 +4,12 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
          'pWidth': 12,
          'pPadding' : 24,
          'pSpacing' : 6,
-         'pTextWidth' : 40,
          'pFill' : '#ffffff',
          'pStroke' : '#30407a',
          'pStrokeWidth' : 2,
-         'pStrokeSelect' : '#ad2e3a'
-        },
+         'pStrokeSelect' : '#ad2e3a',
+         'pFont' :  '11px Helvetica'
+,        },
     rx: 3,
     ry: 3,
     initialize: function(name, actor, index, options) {
@@ -19,10 +19,11 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
         this.fill = this.C.pFill;
         this.stroke = this.C.pStroke;
         this.strokeWidth = this.C.pStrokeWidth;
-        this.name =  '';
+        this.name =  name;
         this.actor = actor;
         this.index = index;
         this.links = [];
+        this.textWidth = Canalada.textWidth(this.name, this.C.pFont);
     }
 });
 
@@ -33,7 +34,15 @@ Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
         var h = this.actor.actorRect.height;
         this.left = w/2 - this.C.pWidth/2 + 4;
         this.top = -h/2 + this.C.pPadding + this.index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
-        this.setCoords();
+    },
+    _render: function(ctx) {
+        this.callSuper('_render', ctx);
+        ctx.font = this.C.pFont
+        ctx.fillStyle = 'black';
+        ctx.fillText(this.name,
+                     -this.width/2 - 3 - Math.min(this.actor.C.pTextMaxWidth, this.textWidth),
+                     -this.height/2 + 9,
+                     this.actor.C.pTextMaxWidth);
     }
 });
 
@@ -44,7 +53,16 @@ Canalada.InPort = fabric.util.createClass(Canalada.Port, {
         var h = this.actor.actorRect.height;
         this.left = -w/2 + this.C.pWidth/2 - 4;
         this.top = -h/2 + this.C.pPadding + this.index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
-        this.setCoords();
+    },
+    _render: function(ctx) {
+        this.callSuper('_render', ctx);
+        ctx.font = this.C.pFont;
+        ctx.fillStyle = 'black';
+        ctx.fillText(this.name,
+                     this.width/2 + 3,
+                     -this.height/2 + 9,
+                     this.actor.C.pTextMaxWidth);
+
     }
 });
 
