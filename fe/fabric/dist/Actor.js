@@ -55,10 +55,12 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
         for(var i = 0; i < this.inPorts.length; ++i) {
             this.inPorts[i].refresh();
             this.add(this.inPorts[i]);
+            this.inPorts[i].setCoords();
         }
         for(var i = 0; i < this.outPorts.length; ++i) {
             this.outPorts[i].refresh();
             this.add(this.outPorts[i]);
+            this.outPorts[i].setCoords();
         }
         Canalada.canvas.renderAll();
     },
