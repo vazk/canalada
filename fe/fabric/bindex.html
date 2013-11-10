@@ -1,0 +1,117 @@
+<!doctype html>
+ 
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>jQuery UI Accordion - Open on hoverintent</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <style>
+      pre { margin-left: 15px !important }
+    </style>
+    <!--[if lt IE 9]>
+      <script src="../lib/excanvas.js"></script>
+    <![endif]-->
+    <script src="dist/all.js"></script>
+    <script src="dist/Canalada.js"></script>
+    <script src="dist/Port.js"></script>
+    <script src="dist/Actor.js"></script>
+    <script src="dist/Link.js"></script>
+    <script src="dist/main.js"></script>
+    <link rel="stylesheet" href="main.css" />
+  
+  
+  
+  <script>
+  $(function() {
+    $( "#accordion" ).accordion({
+      event: "click hoverintent"
+    });
+  });
+
+  $.event.special.hoverintent = {
+    setup: function() {
+      $( this ).bind( "mouseover", jQuery.event.special.hoverintent.handler );
+    },
+    teardown: function() {
+      $( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
+    },
+    handler: function( event ) {
+      var currentX, currentY, timeout,
+        args = arguments,
+        target = $( event.target ),
+        previousX = event.pageX,
+        previousY = event.pageY;
+ 
+      function track( event ) {
+        currentX = event.pageX;
+        currentY = event.pageY;
+      };
+ 
+      function clear() {
+        target
+          .unbind( "mousemove", track )
+          .unbind( "mouseout", clear );
+        clearTimeout( timeout );
+      }
+ 
+      function handler() {
+        var prop,
+          orig = event;
+ 
+        if ( ( Math.abs( previousX - currentX ) +
+            Math.abs( previousY - currentY ) ) < 7 ) {
+          clear();
+ 
+          event = $.Event( "hoverintent" );
+          for ( prop in orig ) {
+            if ( !( prop in event ) ) {
+              event[ prop ] = orig[ prop ];
+            }
+          }
+          // Prevent accessing the original event since the new event
+          // is fired asynchronously and the old event is no longer
+          // usable (#6028)
+          delete event.originalEvent;
+ 
+          target.trigger( event );
+        } else {
+          previousX = currentX;
+          previousY = currentY;
+          timeout = setTimeout( handler, 100 );
+        }
+      }
+      timeout = setTimeout( handler, 100 );
+      target.bind({
+        mousemove: track,
+        mouseout: clear
+      });
+    }
+  };
+  </script>
+</head>
+<body>
+ 
+    <div id='library'>
+        <div id="accordion">
+            <h3>Section 1</h3>
+                <div>
+                    <p> Mauris mauris ante.</p>
+                </div>
+            <h3>Section 2</h3>
+                <div>
+                    <p> Sed non urna. </p>
+                </div>
+        </div>
+    </div>
+    <div id="canal">
+        <canvas id="canal-canvas"></canvas>
+    </div>
+    
+    <script id="main">
+        main();
+    </script>
+ 
+</body>
+</html>
