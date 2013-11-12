@@ -26,7 +26,7 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
               strokeWidth: 4,
               width: 50, height:50,
               fill: '#fff',
-              stroke: '#666',
+              stroke: '#444',
               hasBorders : false,
               hasControls : false
             });
@@ -63,6 +63,18 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
             this.outPorts[i].setCoords();
         }
         Canalada.canvas.renderAll();
+    },
+   
+    getSelectedItem: function(offset) {
+        var objects = this.getObjects();
+        var center = this.getCenterPoint()
+        for(var i = objects.length; i--; ) {
+            var pt = {x:offset.x - center.x, y:offset.y - center.y};
+            if(objects[i] && objects[i].containsPoint(pt)) {
+                return objects[i];
+            }
+        }
+        return null;
     },
 
     toObject: function() {
