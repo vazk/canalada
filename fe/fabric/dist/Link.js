@@ -1,19 +1,9 @@
 
-Canalada.Link = fabric.util.createClass(fabric.Object, {
-    ctype: 'Link',
-    inp: undefined,
-    outp: undefined,
-    
-    initialize: function() {
-    }
-});
-
-
-Canalada.LinkView = fabric.util.createClass(fabric.Path, {
+Canalada.Link = fabric.util.createClass(fabric.Path, {
     C : {'pStroke': 'black',
          'pStrokeWidth':3,
         },
-    port: undefined,
+    ctype: 'Link',
     initialize: function(link, options) {
         this.link = link;
         this.options = options || (options = {});
