@@ -22,6 +22,54 @@ function main()
     
     Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
     
+    
+    Canalada.canvas.findTarget = (function(originalFn) {
+        return function() {
+            var target = originalFn.apply(this, arguments);
+            var e = arguments[0];
+            if(target == null || e.type !== 'mousedown')
+                return target;
+            
+            if(target.ctype === 'Actor') {
+                var p = target.getSelectedItem({x:e.offsetX, y:e.offsetY});
+                if(p && (p.ctype === 'InPort' || p.ctype === 'OutPort')) {
+                    var mouse = Canalada.canvas.getPointer(e);
+                    Canalada.mouseState.down = true;
+                    Canalada.mouseState.x = mouse.x;
+                    Canalada.mouseState.y = mouse.y;
+                    var endpt = new fabric.Circle({
+                                    radius: 3,
+                                    left: Canalada.mouseState.x,
+                                    top: Canalada.mouseState.y,
+                                    stroke: '#444',
+                                    hasBorders : false,
+                                    hasControls : false});
+                    var ln = new fabric.Line(
+                                    [Canalada.mouseState.x,
+                                     Canalada.mouseState.y,
+                                     Canalada.mouseState.x,
+                                     Canalada.mouseState.y],
+                                    {
+                                    strokeDashArray: [5, 5],
+                                    stroke: '#444',
+                                    strokeWidth: 2,
+                                    hasBorders: false,
+                                    hasControls: false
+                                    });
+
+                    //ln._setWidthHeight();
+                    Canalada.canvas.add(endpt);
+                    Canalada.canvas.add(ln);
+                    Canalada.mouseState.marker = endpt;
+                    Canalada.mouseState.line = ln;
+                    return Canalada.mouseState.marker;
+                }
+
+            }
+            return target;
+        };
+    })(Canalada.canvas.findTarget);
+    
     var actA = new Canalada.Actor("FileWriter");
     actA.addInPort('blain1');
     actA.addInPort('blain2');
