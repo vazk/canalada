@@ -19,8 +19,48 @@ function resize() {
 function main()
 {
     window.addEventListener('resize', resize, false);
+ 
+    var lib_items = document.querySelectorAll('#lib_items_s1 itm');
+    [].forEach.call(lib_items, function (itm) {
+        img.addEventListener('dragstart', function(e){this.style.opacity = '0.4'}, false);
+        img.addEventListener('dragend', function(e){}, false);
+    });
     
     Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
+
+    
+    
+    function handleDragOver(e) {
+        if (e.preventDefault) {
+            e.preventDefault(); // Necessary. Allows us to drop.
+        }
+        return false;
+    }
+    
+    function handleDrop(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation(); // stops the browser from redirecting.
+        }
+        return false;
+    }
+    
+    function handleDragEnter(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation(); // stops the browser from redirecting.
+        }
+        return false;
+    }
+    
+
+    // Bind the event listeners for the canvas
+    var canvasContainer = document.getElementById('canal');
+    canvasContainer.addEventListener('dragenter', handleDragEnter, false);
+    canvasContainer.addEventListener('dragover',  handleDragOver, false);
+    //canvasContainer.addEventListener('dragleave', handleDragLeave, false);
+    canvasContainer.addEventListener('drop',      handleDrop, false);
+    
+    
+    
     
     
     Canalada.canvas.findTarget = (function(originalFn) {
