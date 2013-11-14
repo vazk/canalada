@@ -5,6 +5,7 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
          'pPadding' : 24,
          'pSpacing' : 6,
          'pFill' : '#ffffff',
+         'pFillSelect' : '#ad2e3a',
          'pStroke' : '#30407a',
          'pStrokeWidth' : 2,
          'pStrokeSelect' : '#ad2e3a',
@@ -24,6 +25,12 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
         this.index = index;
         this.links = [];
         this.textWidth = Canalada.textWidth(this.name, this.C.pFont);
+    },
+    select: function(flag) {
+        if(flag)
+            this.fill = this.C.pFillSelect;
+        else 
+            this.fill = this.C.pFill;
     }
 });
 

@@ -5,6 +5,7 @@ Canalada.mouseState = {
     x:0,
     y:0,
     down:false,
+    port: null,
     marker:null,
     line:null
 };
@@ -14,35 +15,42 @@ Canalada.mouseState = {
 
 
 Canalada.onMouseDown = function(e) {
-    if(e.target === undefined) {
+    if(e.target === undefined || e.target.ctype === undefined) {
         return;
     }
-    if(e.target.ctype === 'Actor') {
-        var p = e.target.getSelectedItem({x:e.e.offsetX, y:e.e.offsetY});
-        if(p) {
-            p.setStroke('#ad2e3a');
-            if(p.ctype === 'InPort' || p.ctype === 'OutPort') {
-                /*var mouse = Canalada.canvas.getPointer(e.e);
-                Canalada.mouseState.down = true;
-                Canalada.mouseState.x = mouse.x;
-                Canalada.mouseState.y = mouse.y;
-                //var lnk = new Canalada.Link();
-                var ln = new fabric.Line({strokeDashArray: [5, 5],
-                                          stroke: 'black'});
-                var endpt = new fabric.Circle({
-                        radius: 10, fill: 'green', left:
-                        Canalada.mouseState.x1, top: Canalada.mouseState.y1});
-                ln.x1 = Canalada.mouseState.x;
-                ln.y1 = Canalada.mouseState.y;
-                Canalada.canvas.add(ln);
-                Canalada.canvas.add(endpt);
-                Canalada.mouseState.marker = endpt;
-                //e.target = endpt;
-                Canalada.canvas.setActiveObject(endpt);*/
-            }
-        }
-    } else {
-        e.target.setStroke('#ad2e3a');
+    if(e.target.ctype === 'OutPort' || e.target.ctype === 'InPort') {
+        Canalada.mouseState.port = e.target;
+        Canalada.mouseState.port.actor.bringToFront();
+        Canalada.mouseState.port.select(true);
+        Canalada.mouseState.down = true;
+        var marker = new fabric.Circle({
+                                    radius: 3,
+                                    left: Canalada.mouseState.x,
+                                    top: Canalada.mouseState.y,
+                                    stroke: '#444',
+                                    hasBorders : false,
+                                    hasControls : false});
+        var ln = new fabric.Line([Canalada.mouseState.x,
+                                  Canalada.mouseState.y,
+                                  Canalada.mouseState.x,
+                                  Canalada.mouseState.y],
+                                  {
+                                     strokeDashArray: [5, 5],
+                                     stroke: '#444',
+                                     strokeWidth: 2,
+                                     hasBorders: false,
+                                     hasControls: false
+                                  });
+        Canalada.canvas.add(marker);
+        Canalada.canvas.add(ln);
+        Canalada.mouseState.marker = marker;
+        Canalada.mouseState.line = ln;
+
+        Canalada.mouseState.port.bringToFront();
+    } else
+    if(e.target.ctype == 'Actor') {
+        e.target.stroke = '#ad2e3a';
+        e.target.bringToFront();
     }
     Canalada.canvas.renderAll();
 };
@@ -54,6 +62,8 @@ Canalada.onMouseUp = function(e) {
         Canalada.mouseState.marker = null;
         Canalada.mouseState.line = null;
         Canalada.mouseState.down = false;
+        Canalada.mouseState.port.select(false);
+        Canalada.mouseState.port = null;
     }
     if(e.target === undefined) {
         return;

@@ -73,10 +73,13 @@ function main()
             if(target.ctype === 'Actor') {
                 var p = target.getSelectedItem({x:e.offsetX, y:e.offsetY});
                 if(p && (p.ctype === 'InPort' || p.ctype === 'OutPort')) {
-                    var mouse = Canalada.canvas.getPointer(e);
-                    Canalada.mouseState.down = true;
-                    Canalada.mouseState.x = mouse.x;
-                    Canalada.mouseState.y = mouse.y;
+                    //var mouse = Canalada.canvas.getPointer(e);
+                    var portCenter = p.getCenterPoint();
+                    var actorCenter = target.getCenterPoint();
+                    Canalada.mouseState.x = portCenter.x + actorCenter.x;//mouse.x;
+                    Canalada.mouseState.y = portCenter.y + actorCenter.y;//mouse.y;
+                    //Canalada.mouseState.port = p;
+                    /*
                     var endpt = new fabric.Circle({
                                     radius: 3,
                                     left: Canalada.mouseState.x,
@@ -90,19 +93,20 @@ function main()
                                      Canalada.mouseState.x,
                                      Canalada.mouseState.y],
                                     {
-                                    strokeDashArray: [5, 5],
-                                    stroke: '#444',
-                                    strokeWidth: 2,
-                                    hasBorders: false,
-                                    hasControls: false
+                                        strokeDashArray: [5, 5],
+                                        stroke: '#444',
+                                        strokeWidth: 2,
+                                        hasBorders: false,
+                                        hasControls: false
                                     });
-
                     //ln._setWidthHeight();
                     Canalada.canvas.add(endpt);
                     Canalada.canvas.add(ln);
                     Canalada.mouseState.marker = endpt;
                     Canalada.mouseState.line = ln;
                     return Canalada.mouseState.marker;
+                    */
+                    return p;
                 }
 
             }
