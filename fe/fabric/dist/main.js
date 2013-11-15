@@ -78,8 +78,7 @@ function main()
                     var actorCenter = target.getCenterPoint();
                     Canalada.mouseState.x = portCenter.x + actorCenter.x;//mouse.x;
                     Canalada.mouseState.y = portCenter.y + actorCenter.y;//mouse.y;
-                    //Canalada.mouseState.port = p;
-                    /*
+                    Canalada.mouseState.port = p;
                     var endpt = new fabric.Circle({
                                     radius: 3,
                                     left: Canalada.mouseState.x,
@@ -99,14 +98,11 @@ function main()
                                         hasBorders: false,
                                         hasControls: false
                                     });
-                    //ln._setWidthHeight();
                     Canalada.canvas.add(endpt);
                     Canalada.canvas.add(ln);
                     Canalada.mouseState.marker = endpt;
                     Canalada.mouseState.line = ln;
                     return Canalada.mouseState.marker;
-                    */
-                    return p;
                 }
 
             }

@@ -6,7 +6,9 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
          'pWidth': 16,
          'pPadding' : 24,
          'pSpacing' : 6,
-         'pTextMaxWidth' : 40
+         'pTextMaxWidth' : 40,
+         'pStroke' : '#444',
+         'pStrokeSelect' : '#ad2e3a'
          },
     
     options : {},
@@ -91,8 +93,14 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
     addOutPort : function(portName) {
         var port = new Canalada.OutPort(portName, this, this.outPorts.length);
         this.outPorts.push(port);
-    }
+    },
 
+    select: function(flag) {
+        if(flag)
+            this.getObjects()[0].setStroke(this.C.pStrokeSelect);
+        else 
+            this.getObjects()[0].setStroke(this.C.pStroke);
+    }
 });
 
 
