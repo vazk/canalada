@@ -13,7 +13,7 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
 ,        },
     rx: 3,
     ry: 3,
-    initialize: function(name, actor, index, options) {
+    initialize: function(name, actor, options) {
         this.options || (options = {});
         this.width = this.C.pWidth;
         this.height = this.C.pHeight;
@@ -22,7 +22,6 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
         this.strokeWidth = this.C.pStrokeWidth;
         this.name =  name;
         this.actor = actor;
-        this.index = index;
         this.links = [];
         this.textWidth = Canalada.textWidth(this.name, this.C.pFont);
     },
@@ -36,11 +35,11 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
 
 Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
     ctype : 'OutPort',
-    refresh: function() {
+    setup: function(index) {
         var w = this.actor.actorRect.width;
         var h = this.actor.actorRect.height;
         this.left = w/2 - this.C.pWidth/2 + 4;
-        this.top = -h/2 + this.C.pPadding + this.index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
+        this.top = -h/2 + this.C.pPadding + index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
     },
     _render: function(ctx) {
         this.callSuper('_render', ctx);
@@ -55,11 +54,11 @@ Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
 
 Canalada.InPort = fabric.util.createClass(Canalada.Port, {
     ctype : 'InPort',
-    refresh: function() {
+    setup: function(index) {
         var w = this.actor.actorRect.width;
         var h = this.actor.actorRect.height;
         this.left = -w/2 + this.C.pWidth/2 - 4;
-        this.top = -h/2 + this.C.pPadding + this.index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
+        this.top = -h/2 + this.C.pPadding + index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
     },
     _render: function(ctx) {
         this.callSuper('_render', ctx);

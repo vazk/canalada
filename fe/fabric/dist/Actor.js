@@ -20,8 +20,7 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
         this.callSuper('initialize', options);
         this.hasBorders = false;
         this.hasControls = false;
-        this.inPorts = [];
-        this.outPorts = [];
+        this.ports = [];
         this.actorRect = new fabric.Rect({
               left: 100,
               top: 100,
@@ -37,39 +36,46 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
 
     setup: function() {
         var inMaxWidth = 0;
+        var outCount = 0;
         var outMaxWidth = 0;
-        for(var i = 0; i < this.inPorts.length; ++i) {
-            var p = this.inPorts[i];
-            inMaxWidth = Math.max(inMaxWidth, p.textWidth);
-        }
-       
-        for(var i = 0; i < this.outPorts.length; ++i) {
-            var p = this.outPorts[i];
-            outMaxWidth = Math.max(outMaxWidth, p.textWidth);
+        var inCount = 0;
+        for(var i = 0; i < this.ports.length; ++i) {
+            var p = this.ports[i];
+            if(p.ctype === 'InPort') {
+                inMaxWidth = Math.max(inMaxWidth, p.textWidth);
+                inCount++;
+            } else {
+                outMaxWidth = Math.max(outMaxWidth, p.textWidth);
+                outCount++;
+            }
         }
         
-        var numPorts = Math.max(this.inPorts.length, this.outPorts.length);
+        var numPorts = Math.max(inCount, outCount);
         var w = 2 * this.C.pWidth + inMaxWidth + outMaxWidth;
         var h = numPorts * (this.C.pHeight + this.C.pSpacing) + this.C.pPadding;
         this.actorRect.width = w;
         this.actorRect.height = h;
         this.addWithUpdate(this.actorRect);
-        for(var i = 0; i < this.inPorts.length; ++i) {
-            this.inPorts[i].refresh();
-            this.add(this.inPorts[i]);
-            this.inPorts[i].setCoords();
-        }
-        for(var i = 0; i < this.outPorts.length; ++i) {
-            this.outPorts[i].refresh();
-            this.add(this.outPorts[i]);
-            this.outPorts[i].setCoords();
+
+        inCount = 0; outCount = 0;
+        for(var i = 0; i < this.ports.length; ++i) {
+            var p = this.ports[i];
+            var index;
+            if(p.ctype === 'InPort') {
+                index = inCount++;
+            } else {
+                index = outCount++;
+            }
+            p.setup(index);
+            this.add(p);
+            p.setCoords();
         }
         Canalada.canvas.renderAll();
     },
    
     getSelectedItem: function(offset) {
         var objects = this.getObjects();
-        var center = this.getCenterPoint()
+        var center = this.getCenterPoint();
         for(var i = objects.length; i--; ) {
             var pt = {x:offset.x - center.x, y:offset.y - center.y};
             if(objects[i] && objects[i].containsPoint(pt)) {
@@ -86,13 +92,13 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
     },
 
     addInPort : function(portName) {
-        var port = new Canalada.InPort(portName, this, this.inPorts.length);
-        this.inPorts.push(port);
+        var port = new Canalada.InPort(portName, this);
+        this.ports.push(port);
     },
 
     addOutPort : function(portName) {
-        var port = new Canalada.OutPort(portName, this, this.outPorts.length);
-        this.outPorts.push(port);
+        var port = new Canalada.OutPort(portName, this);
+        this.ports.push(port);
     },
 
     select: function(flag) {

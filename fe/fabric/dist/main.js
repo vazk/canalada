@@ -73,24 +73,23 @@ function main()
             if(target.ctype === 'Actor') {
                 var p = target.getSelectedItem({x:e.offsetX, y:e.offsetY});
                 if(p && (p.ctype === 'InPort' || p.ctype === 'OutPort')) {
-                    //var mouse = Canalada.canvas.getPointer(e);
                     var portCenter = p.getCenterPoint();
                     var actorCenter = target.getCenterPoint();
-                    Canalada.mouseState.x = portCenter.x + actorCenter.x;//mouse.x;
-                    Canalada.mouseState.y = portCenter.y + actorCenter.y;//mouse.y;
-                    Canalada.mouseState.port = p;
+                    Canalada.linkState.x = portCenter.x + actorCenter.x;//mouse.x;
+                    Canalada.linkState.y = portCenter.y + actorCenter.y;//mouse.y;
+                    Canalada.linkState.sport = p;
                     var endpt = new fabric.Circle({
                                     radius: 3,
-                                    left: Canalada.mouseState.x,
-                                    top: Canalada.mouseState.y,
+                                    left: Canalada.linkState.x,
+                                    top: Canalada.linkState.y,
                                     stroke: '#444',
                                     hasBorders : false,
                                     hasControls : false});
                     var ln = new fabric.Line(
-                                    [Canalada.mouseState.x,
-                                     Canalada.mouseState.y,
-                                     Canalada.mouseState.x,
-                                     Canalada.mouseState.y],
+                                    [Canalada.linkState.x,
+                                     Canalada.linkState.y,
+                                     Canalada.linkState.x,
+                                     Canalada.linkState.y],
                                     {
                                         strokeDashArray: [5, 5],
                                         stroke: '#444',
@@ -100,9 +99,9 @@ function main()
                                     });
                     Canalada.canvas.add(endpt);
                     Canalada.canvas.add(ln);
-                    Canalada.mouseState.marker = endpt;
-                    Canalada.mouseState.line = ln;
-                    return Canalada.mouseState.marker;
+                    Canalada.linkState.marker = endpt;
+                    Canalada.linkState.line = ln;
+                    return Canalada.linkState.marker;
                 }
 
             }
@@ -127,10 +126,9 @@ function main()
 
     actA.setup();
     actB.setup();
-    Canalada.canvas.add(actA);
-    Canalada.canvas.add(actB);
-    
-    Canalada.canvas.add(new Canalada.FileWriterActor())
+    Canalada.addActor(actA);
+    Canalada.addActor(actB);
+    Canalada.addActor(new Canalada.FileWriterActor())
     
     Canalada.canvas.on({
         'object:selected'         : Canalada.onObjectSelected,

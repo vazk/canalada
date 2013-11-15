@@ -1,32 +1,37 @@
 
 Canalada = {};
 
-Canalada.mouseState = {
+Canalada.linkState = {
     x:0,
     y:0,
     down:false,
-    port: null,
+    sport: null,
+    tport: null,
     marker:null,
     line:null
 };
 
 
+Canalada.actors = [];
 
-
+Canalada.addActor = function(actor) {
+    this.actors.push(actor);
+    Canalada.canvas.add(actor);
+}
 
 Canalada.onMouseDown = function(e) {
     if(e.target === undefined) {
         return;
     }
-    if(Canalada.mouseState.port) {
-        Canalada.mouseState.port.actor.bringToFront();
-        Canalada.mouseState.port.select(true);
-        Canalada.mouseState.down = true;
-        //Canalada.mouseState.port.bringToFront();
-        Canalada.mouseState.marker.bringToFront();
-        Canalada.mouseState.line.bringToFront();
+    if(Canalada.linkState.sport) {
+        Canalada.linkState.sport.actor.bringToFront();
+        Canalada.linkState.sport.select(true);
+        Canalada.linkState.down = true;
+        Canalada.linkState.marker.bringToFront();
+        Canalada.linkState.line.bringToFront();
     } else
-    if(e.target.hasOwnProperty('ctype') && e.target.ctype == 'Actor') {
+    if(e.target.ctype == 'Actor') {
+
         e.target.select(true);
         e.target.bringToFront();
     }
@@ -34,17 +39,20 @@ Canalada.onMouseDown = function(e) {
 };
 
 Canalada.onMouseUp = function(e) {
-    if(Canalada.mouseState.down) {
-        Canalada.canvas.remove(Canalada.mouseState.marker);
-        Canalada.canvas.remove(Canalada.mouseState.line);
-        Canalada.mouseState.marker = null;
-        Canalada.mouseState.line = null;
-        Canalada.mouseState.down = false;
-        Canalada.mouseState.port.select(false);
-        Canalada.mouseState.port = null;
-    }
     if(e.target === undefined) {
         return;
+    }
+    if(Canalada.linkState.down) {
+        if(Canalada.linkState.tport == null) {
+            Canalada.canvas.remove(Canalada.linkState.line);
+            Canalada.linkState.sport.select(false);
+        }
+        Canalada.canvas.remove(Canalada.linkState.marker);
+        Canalada.linkState.marker = null;
+        Canalada.linkState.line = null;
+        Canalada.linkState.down = false;
+        Canalada.linkState.sport = null;
+        Canalada.linkState.tport = null;
     }
     if(e.target.select) {
         e.target.select(false);
@@ -69,11 +77,57 @@ Canalada.onObjectSelected = function(e) {
 }
 
 Canalada.onObjectMoving = function(e) {
-    if(e.target === Canalada.mouseState.marker) {
-        var center = Canalada.mouseState.marker.getCenterPoint();
-        Canalada.mouseState.line.x2 = center.x;
-        Canalada.mouseState.line.y2 = center.y;
-        Canalada.mouseState.line._setWidthHeight();
+    if(e.target === Canalada.linkState.marker) {
+        var mouse = Canalada.linkState.marker.getCenterPoint();
+        Canalada.linkState.line.x2 = mouse.x;
+        Canalada.linkState.line.y2 = mouse.y;
+
+        var mindist = 20;
+        var candidate = null;
+        var candidatept = null;
+
+        actors = Canalada.actors;
+        for(var i = 0; i < actors.length; ++i) {
+            if(actors[i] === Canalada.linkState.sport.actor) {
+                continue;
+            }
+            var acenter = actors[i].getCenterPoint();
+            for(var j = 0; j < actors[i].ports.length; ++j) {
+                var port = actors[i].ports[j];
+                var pcenter = port.getCenterPoint();
+                pcenter.x += acenter.x;
+                pcenter.y += acenter.y;
+                
+                var dx = mouse.x - pcenter.x;
+                var dy = mouse.y - pcenter.y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                //if(objects[i] && objects[i].containsPoint(pt)) {
+                //    pos.x = aobjects[i].x;
+                //}
+                if(dist < mindist) {
+                    mindist = dist;
+                    candidate = port;
+                    candidatept = pcenter;
+                }
+            }
+
+        }
+        
+        if(Canalada.linkState.tport) {
+            Canalada.linkState.tport.select(false);
+        }
+        Canalada.linkState.tport = null;
+
+        if(candidate) {
+            Canalada.linkState.tport = candidate;
+            Canalada.linkState.tport.select(true);
+            Canalada.linkState.line.x2 = candidatept.x;
+            Canalada.linkState.line.y2 = candidatept.y;
+            Canalada.linkState.marker.setLeft(candidatept.x);
+            Canalada.linkState.marker.setTop(candidatept.y);
+        }
+
+        Canalada.linkState.line._setWidthHeight();
         Canalada.canvas.renderAll();
     }
 }
