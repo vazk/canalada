@@ -131,9 +131,7 @@ function main()
     Canalada.addActor(new Canalada.FileWriterActor())
     
     Canalada.canvas.on({
-        'object:selected'         : Canalada.onObjectSelected,
         'object:moving'           : Canalada.onObjectMoving,
-        //'before:selection:cleared': Canalada.onBeforeSelectionCleared,
         'mouse:up'                : Canalada.onMouseUp,
         'mouse:down'              	: Canalada.onMouseDown
     });

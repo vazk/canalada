@@ -13,10 +13,16 @@ Canalada.linkState = {
 
 
 Canalada.actors = [];
+Canalada.links = [];
 
 Canalada.addActor = function(actor) {
     this.actors.push(actor);
     Canalada.canvas.add(actor);
+}
+
+Canalada.addLink= function(link) {
+    this.links.push(link);
+    Canalada.canvas.add(link);
 }
 
 Canalada.onMouseDown = function(e) {
@@ -31,7 +37,6 @@ Canalada.onMouseDown = function(e) {
         Canalada.linkState.line.bringToFront();
     } else
     if(e.target.ctype == 'Actor') {
-
         e.target.select(true);
         e.target.bringToFront();
     }
@@ -43,10 +48,13 @@ Canalada.onMouseUp = function(e) {
         return;
     }
     if(Canalada.linkState.down) {
-        if(Canalada.linkState.tport == null) {
-            Canalada.canvas.remove(Canalada.linkState.line);
+        if(Canalada.linkState.tport) {
+            var lnk = new Canalada.Link(Canalada.linkState.sport, Canalada.linkState.tport);
+            Canalada.addLink(lnk);
+        } else {
             Canalada.linkState.sport.select(false);
         }
+        Canalada.canvas.remove(Canalada.linkState.line);
         Canalada.canvas.remove(Canalada.linkState.marker);
         Canalada.linkState.marker = null;
         Canalada.linkState.line = null;
@@ -59,22 +67,6 @@ Canalada.onMouseUp = function(e) {
     }
     Canalada.canvas.renderAll();
 };
-
-Canalada.onObjectSelected = function(e) {
-    //var activeObject = e.target;
-    //if(activeObject.type === 'circle') {
-    //Canalada.canvas.deactivateAll();
-    //}
-    /*
-    if (activeObject.name == "p0" || activeObject.name == "p2") {
-        activeObject.line2.animate('opacity', '1', {
-            duration: 200,
-            onChange: Canalada.canvas.renderAll.bind(Canalada.canvas),
-        });
-        activeObject.line2.selectable = true;
-    }
-    */
-}
 
 Canalada.onObjectMoving = function(e) {
     if(e.target === Canalada.linkState.marker) {
@@ -129,27 +121,17 @@ Canalada.onObjectMoving = function(e) {
 
         Canalada.linkState.line._setWidthHeight();
         Canalada.canvas.renderAll();
+    } else 
+    if(e.target.ctype && e.target.ctype === 'Actor') {
+        for(var i = 0; i < Canalada.links.length; ++i) {
+            var lnk = Canalada.links[i];
+            if(lnk.porta.actor === e.target || lnk.portb.actor === e.target) {
+                lnk.setup();
+            }
+        }
+        Canalada.canvas.renderAll();
     }
 }
-
-Canalada.onBeforeSlectionCleared = function(e) {
-    var activeObject = e.target;
-    if (activeObject.name == "p0" || activeObject.name == "p2") {
-        activeObject.line2.animate('opacity', '0', {
-            duration: 200,
-            onChange: Canalada.canvas.renderAll.bind(Canalada.canvas),
-        });
-        activeObject.line2.selectable = false;
-    } else
-    if (activeObject.name == "p1") {
-        activeObject.animate('opacity', '0', {
-            duration: 200,
-            onChange: Canalada.canvas.renderAll.bind(Canalada.canvas),
-        });
-        activeObject.selectable = false;
-    }
-}
-
 
 Canalada.textWidth = function(text, fontProp) {
     var tag = document.createElement("div");
