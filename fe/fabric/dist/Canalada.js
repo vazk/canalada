@@ -17,11 +17,31 @@ Canalada.links = [];
 
 Canalada.addActor = function(actor) {
     this.actors.push(actor);
+    var shadow = {
+        color: 'rgba(0,0,0,0.6)',
+        blur: 20,    
+        offsetX: 4,
+        offsetY: 4,
+        opacity: 0.3,
+        fillShadow: true, 
+        strokeShadow: true 
+    };
+    actor.actorRect.setShadow(shadow);
     Canalada.canvas.add(actor);
 }
 
 Canalada.addLink= function(link) {
     this.links.push(link);
+    var shadow = {
+        color: 'rgba(0,0,0,0.6)',
+        blur: 20,    
+        offsetX: 4,
+        offsetY: 4,
+        opacity: 0.3,
+        fillShadow: true, 
+        strokeShadow: true 
+    };
+    link.setShadow(shadow);
     Canalada.canvas.add(link);
 }
 
