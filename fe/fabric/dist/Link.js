@@ -32,17 +32,27 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
         var toX = bc.x + bpc.x;
         var toY = bc.y + bpc.y;
 
+        var amult = 1;
+        var bmult = 1;
+        if(this.porta.ctype === 'InPort') {
+            amult = -1;
+        }
+        if(this.portb.ctype === 'InPort') {
+            bmult = -1;
+        }
+        
         this.path[0][1] = fromX;
         this.path[0][2] = fromY;
-
-        this.path[1][1] = this.C.pStraight + fromX;
+        
+        this.path[1][1] = amult * this.C.pStraight + fromX;
+        
         this.path[1][2] = fromY;
 
-        this.path[2][1] = fromX + this.C.pCurve;
+        this.path[2][1] = fromX + amult * this.C.pCurve;
         this.path[2][2] = fromY;
-        this.path[2][3] = toX - this.C.pCurve;
+        this.path[2][3] = toX + bmult * this.C.pCurve;
         this.path[2][4] = toY;
-        this.path[2][5] = toX-this.C.pStraight;
+        this.path[2][5] = toX + bmult * this.C.pStraight;
         this.path[2][6] = toY;
 
         this.path[3][1] = toX;
