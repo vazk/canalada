@@ -15,18 +15,19 @@ function resize() {
 };
 
 
-
-function main()
-{
-    window.addEventListener('resize', resize, false);
+function loadLibraries() {
  
+    var library = {image: 
+        [{"src":"image/Globe.png","info":{"title":"Globa","author":"vazkus","description":"globe bla."}}]
+    };
+
+
     var lib_items = document.querySelectorAll('#lib_items_s1 itm');
     [].forEach.call(lib_items, function (itm) {
         img.addEventListener('dragstart', function(e){this.style.opacity = '0.4'}, false);
         img.addEventListener('dragend', function(e){}, false);
     });
     
-    Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
 
     
     
@@ -38,6 +39,13 @@ function main()
     }
     
     function handleDrop(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation(); // stops the browser from redirecting.
+        }
+        return false;
+    }
+    
+    function handleDragLeave(e) {
         if (e.stopPropagation) {
             e.stopPropagation(); // stops the browser from redirecting.
         }
@@ -56,12 +64,22 @@ function main()
     var canvasContainer = document.getElementById('canal');
     canvasContainer.addEventListener('dragenter', handleDragEnter, false);
     canvasContainer.addEventListener('dragover',  handleDragOver, false);
-    //canvasContainer.addEventListener('dragleave', handleDragLeave, false);
+    canvasContainer.addEventListener('dragleave', handleDragLeave, false);
     canvasContainer.addEventListener('drop',      handleDrop, false);
+}
     
     
+
+
+
+function main()
+{
     
+    window.addEventListener('resize', resize, false);
+
+    loadLibraries();
     
+    Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
     
     Canalada.canvas.findTarget = (function(originalFn) {
         return function() {
