@@ -25,53 +25,14 @@
 <body>
 
     <div id="library">
-        <div id="section_1">
-            <h3><a href="#">Section 1</a></h3>
-            <div lib_items_s1>
-                <img draggable="true" src="image/Globe.png" width="32" height="32"></img>
-                <img draggable="true" src="image/Graph.png" width="32" height="32"></img>
-            </div>
-        </div>
-        <div id="section_2">
-            <h3><a href="#">Section 2</a></h3>
-            <div>
-              <p>Sed non urna.</p>
-            </div>
-        </div>
     </div>
 
-
-
-
-    <div id="canal">
+   <div id="canal">
         <canvas id="canal-canvas"></canvas>
     </div>
     
     <script id="main">
-        var stop = false;
-        $( "#library h3" ).click(function( event ) {
-          if ( stop ) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            stop = false;
-          }
-        });
-        $( "#library" )
-          .accordion({
-            header: "> div > h3"
-          })
-          .sortable({
-            axis: "y",
-            handle: "h3",
-            stop: function() {
-              stop = true;
-            },
-            update: function() {
-              alert( $(this).sortable('serialize') );
-            }
-        });
-
-        main();
+         main();
     </script>
  
 </body>

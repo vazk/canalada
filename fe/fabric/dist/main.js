@@ -15,21 +15,66 @@ function resize() {
 };
 
 
-function loadLibraries() {
- 
-    var library = {image: 
-        [{"src":"image/Globe.png","info":{"title":"Globa","author":"vazkus","description":"globe bla."}}]
-    };
+function loadLibraries(library) {
+   for(var category in library) {
+        if(!library.hasOwnProperty(category)){continue;}
+       
+        var accordion_div = document.getElementById('library');
+       
+        var library_div = document.createElement('div');
+        library_div.setAttribute('id','library_'+category);
+        var caption_h3 = document.createElement('h3');
+        caption_h3.innerHTML = '<a href="#">' + category + '</a>';
+       
+        var body_ul = document.createElement('ul');
+        body_ul.setAttribute('id','grid');
+       
 
+        for(var index in library[category]) {
+            var module = library[category][index];
+            var module_li = document.createElement('li');
+            var module_icon = document.createElement('img');
+            module_icon.setAttribute('src', module['src']);
+            module_icon.setAttribute('ctype', module['module']);
+            //module_icon.addEventListener('dragstart', function(e){console.log("start");}, false);
+            //module_icon.addEventListener('dragend', function(e){console.log("end")}, false);
+            module_li.appendChild(module_icon);
+            body_ul.appendChild(module_li);
+        }
+        
+        library_div.appendChild(caption_h3);
+        library_div.appendChild(body_ul);
+        accordion_div.appendChild(library_div);
+    }
+    buildLibraryAccordion();
+}
 
-    var lib_items = document.querySelectorAll('#lib_items_s1 itm');
-    [].forEach.call(lib_items, function (itm) {
-        img.addEventListener('dragstart', function(e){this.style.opacity = '0.4'}, false);
-        img.addEventListener('dragend', function(e){}, false);
+function buildLibraryAccordion() {
+    var stop = false;
+    $( "#library h3" ).click(function( event ) {
+      if ( stop ) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        stop = false;
+      }
     });
-    
+    $( "#library" )
+      .accordion({
+        header: "> div > h3"
+      })
+      .sortable({
+        axis: "y",
+        handle: "h3",
+        stop: function() {
+          stop = true;
+        },
+        update: function() {
+          alert( $(this).sortable('serialize') );
+        }
+    });
+}
 
-    
+function setupDragDrop() {
     
     function handleDragOver(e) {
         if (e.preventDefault) {
@@ -58,7 +103,6 @@ function loadLibraries() {
         }
         return false;
     }
-    
 
     // Bind the event listeners for the canvas
     var canvasContainer = document.getElementById('canal');
@@ -69,16 +113,7 @@ function loadLibraries() {
 }
     
     
-
-
-
-function main()
-{
-    
-    window.addEventListener('resize', resize, false);
-
-    loadLibraries();
-    
+function setupCanvas() {
     Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
     
     Canalada.canvas.findTarget = (function(originalFn) {
@@ -126,27 +161,42 @@ function main()
             return target;
         };
     })(Canalada.canvas.findTarget);
+}
+
+
+function main()
+{
+    window.addEventListener('resize', resize, false);
+
+    var library = {image:
+        [
+         {'src':'image/Disk.png',
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileWriter'}},
+         {'src':'image/Folder.png',
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileReader'}},
+         {'src':'image/Mail-2.png',
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailReader'}},
+         {'src':'image/Mobile.png',
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileReader'}},
+         {'src':'image/PaperClip.png',
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailReader'}},
+         {'src':'image/Rss.png',
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileReader'}},
+         {'src':'image/Lock.png',
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailReader'}}
+        ]
+    };
     
-    var actA = new Canalada.Actor("FileWriter");
-    actA.addInPort('blain1');
-    actA.addInPort('blain2');
-    actA.addInPort('blain3');
-    actA.addOutPort('blaout1');
-    actA.addOutPort('blaout2');
-    actA.addOutPort('blaout3');
-    actA.addOutPort('blaout4');
-    actA.addOutPort('blaout5');
+    loadLibraries(library);
+    
+    setupDragDrop();
+    
+    setupCanvas();
+    
 
-    var actB = new Canalada.Actor("FileReader");
-    actB.addInPort('ain1');
-    actB.addInPort('ain2');
-    actB.addOutPort('aout1');
+    //Canalada.addActor(new Canalada.FileWriterActor());
 
-    actA.setup();
-    actB.setup();
-    Canalada.addActor(actA);
-    Canalada.addActor(actB);
-    Canalada.addActor(new Canalada.FileWriterActor())
+    Canalada.addActor(new Canalada.actorClassRegistry['EmailClient']());
     
     Canalada.canvas.on({
         'object:moving'           : Canalada.onObjectMoving,

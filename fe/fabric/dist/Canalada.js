@@ -11,7 +11,7 @@ Canalada.linkState = {
     line:null
 };
 
-
+Canalada.actorClassRegistry = {};
 Canalada.actors = [];
 Canalada.links = [];
 
@@ -113,9 +113,7 @@ Canalada.onObjectMoving = function(e) {
                 var dx = mouse.x - pcenter.x;
                 var dy = mouse.y - pcenter.y;
                 var dist = Math.sqrt(dx * dx + dy * dy);
-                //if(objects[i] && objects[i].containsPoint(pt)) {
-                //    pos.x = aobjects[i].x;
-                //}
+
                 if(dist < mindist) {
                     mindist = dist;
                     candidate = port;
@@ -166,7 +164,15 @@ Canalada.textWidth = function(text, fontProp) {
     var result = tag.clientWidth;
 
     document.body.removeChild(tag);
-
+    
     return result;
 }
 
+
+
+Canalada.registerActorClass = function(actorModel, actorClass) {
+    actorClass.model = actorModel;
+    Canalada.actorClassRegistry[actorModel] = actorClass;
+    
+    //var alala = new actorClass();
+}

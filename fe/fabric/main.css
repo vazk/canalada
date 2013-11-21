@@ -1,21 +1,8 @@
 div#library {
     width: 150px;
+    height: 'auto';
     border: 1px blue;
     float: left;
-}
-
-div#canal {
-    background-color:  silver;
-    border: 1px solid green;
-    padding: 2px;
-    margin-left:160px;
-}
-
-div#canal {
-    border:'1px solid #ccc';
-    position: absolute;
-    width: 100%;
-    height: 100%;
 }
 
 #library{
@@ -25,4 +12,35 @@ div#canal {
     -moz-user-select: moz-none;
     -ms-user-select: none;
     user-select: none;
+}
+
+div#canal {
+    background-color:  silver;
+    border: 1px solid green;
+    padding: 2px;
+    margin-left:160px;
+}
+
+ul#grid {
+  padding: 0;
+  list-style: none;
+  margin: 0px auto 0;
+  height: auto;
+  width: auto;
+}
+
+#grid li {
+  float: left;
+  padding:10;
+  /*margin: 0 5px 10px 5px;*/
+  margin: 0px auto 0;
+  text-align:center;
+}
+  
+#grid li img {
+  background-color: white;
+  padding: 8px;
+  margin: 0px;
+  width: 32px;
+  height: 32px;
 }

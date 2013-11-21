@@ -1,4 +1,4 @@
-Canalada.Actor = new fabric.util.createClass(fabric.Group, {
+Canalada.Actor = fabric.util.createClass(fabric.Group, {
 
     ctype: 'Actor',
   
@@ -11,12 +11,11 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
          'pStrokeSelect' : '#ad2e3a'
          },
     
-    options : {},
+    //options : {},
     
-    initialize: function(model, name, options) {
-        this.options || (options = {});
-        this.model = model;
-        this.name = name;
+    model: null,
+    
+    initialize: function(options) {
         this.callSuper('initialize', options);
         this.hasBorders = false;
         this.hasControls = false;
@@ -32,6 +31,8 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
               hasControls : false
             });
         this.actorRect.hasBorders = this.actorRect.hasControls = false;
+        //this.addWithUpdate(this.actorRect);
+        //this.callSuper('initialize', options);
     },
 
     setup: function() {
@@ -110,13 +111,42 @@ Canalada.Actor = new fabric.util.createClass(fabric.Group, {
 });
 
 
+
+
+
+
+/*
 Canalada.FileWriterActor = new fabric.util.createClass(Canalada.Actor, {
     initialize: function(options) {
-        this.callSuper('initialize', '', 'FileWriter', options);
+        this.callSuper('initialize', 'FileWriter', options);
         this.addInPort('file_name');
         this.addInPort('file_data');
         this.addOutPort('result');
         this.setup();
     }
 });
+
+Canalada.FileReaderActor = new fabric.util.createClass(Canalada.Actor, {
+    initialize: function(options) {
+        this.callSuper('initialize', 'FileReader', options);
+        this.addInPort('file_name');
+        this.addOutPort('file_data');
+        this.addOutPort('result');
+        this.setup();
+    }
+});
+
+*/
+
+EmailClientActor = fabric.util.createClass(Canalada.Actor, {
+    initialize: function(options) {
+        this.callSuper('initialize', options);
+        this.addInPort('file_name');
+        this.addOutPort('file_data');
+        this.addOutPort('status');
+        this.setup();
+    }
+});
+
+Canalada.registerActorClass('EmailClient', EmailClientActor);
 
