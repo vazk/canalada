@@ -16,7 +16,13 @@ function resize() {
 
 
 function loadLibraries(library) {
-   for(var category in library) {
+    function handleDragStart(e) {
+        ctype = e.target.getAttribute('ctype');
+        e.dataTransfer.setData("module", ctype);
+        return true;
+    }
+    
+    for(var category in library) {
         if(!library.hasOwnProperty(category)){continue;}
        
         var accordion_div = document.getElementById('library');
@@ -35,8 +41,8 @@ function loadLibraries(library) {
             var module_li = document.createElement('li');
             var module_icon = document.createElement('img');
             module_icon.setAttribute('src', module['src']);
-            module_icon.setAttribute('ctype', module['module']);
-            //module_icon.addEventListener('dragstart', function(e){console.log("start");}, false);
+            module_icon.setAttribute('ctype', module.info['module']);
+            module_icon.addEventListener('dragstart', handleDragStart, false);
             //module_icon.addEventListener('dragend', function(e){console.log("end")}, false);
             module_li.appendChild(module_icon);
             body_ul.appendChild(module_li);
@@ -84,6 +90,13 @@ function setupDragDrop() {
     }
     
     function handleDrop(e) {
+        var ctypeName = e.dataTransfer.getData("module");
+        var ctype = Canalada.actorClassRegistry[ctypeName];
+        if(ctype) {
+            var inst = new ctype();
+            inst.setPositionByOrigin({x:e.offsetX,y:e.offsetY},'center','center');
+            Canalada.addActor(inst);
+        }
         if (e.stopPropagation) {
             e.stopPropagation(); // stops the browser from redirecting.
         }
@@ -177,13 +190,13 @@ function main()
          {'src':'image/Mail-2.png',
           'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailReader'}},
          {'src':'image/Mobile.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileReader'}},
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'DropboxWriter'}},
          {'src':'image/PaperClip.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailReader'}},
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'DropboxReader'}},
          {'src':'image/Rss.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileReader'}},
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'YoutubeDownloader'}},
          {'src':'image/Lock.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailReader'}}
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'MediaConverter'}}
         ]
     };
     
@@ -196,7 +209,7 @@ function main()
 
     //Canalada.addActor(new Canalada.FileWriterActor());
 
-    Canalada.addActor(new Canalada.actorClassRegistry['EmailClient']());
+    //Canalada.addActor(new Canalada.actorClassRegistry['EmailClient']());
     
     Canalada.canvas.on({
         'object:moving'           : Canalada.onObjectMoving,
