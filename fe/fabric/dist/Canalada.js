@@ -85,6 +85,7 @@ Canalada.onMouseUp = function(e) {
     if(e.target.select) {
         e.target.select(false);
     }
+
     Canalada.canvas.renderAll();
 };
 

@@ -12,6 +12,7 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
         this.fill = '';
         this.stroke = this.C.pStroke;
         this.strokeWidth = this.C.pStrokeWidth;
+        this.perPixelTargetFind = true;
         this.hasBorders = false;
         this.hasControls = false;
 
@@ -57,6 +58,13 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
 
         this.path[3][1] = toX;
         this.path[3][2] = toY;
+
+        this.left = 0;
+        this.top = 0;
+        var dim = this._parseDimensions();
+        this.set(dim);
+        this.pathOffset = {x: dim.left - dim.width/2, y: dim.top - dim.height/2};
+        this.setCoords();
     }
 });
 
