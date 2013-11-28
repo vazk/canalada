@@ -11,6 +11,10 @@ Canalada.linkState = {
     line:null
 };
 
+Canalada.selectState = {
+    item: null
+};
+
 Canalada.actorClassRegistry = {};
 Canalada.actors = [];
 Canalada.links = [];
@@ -46,19 +50,29 @@ Canalada.addLink= function(link) {
 }
 
 Canalada.onMouseDown = function(e) {
-    if(e.target === undefined) {
-        return;
+    if(Canalada.selectState.item) {
+        Canalada.selectState.item.select(false);
+        Canalada.selectState.item = null;
     }
-    if(Canalada.linkState.sport) {
-        Canalada.linkState.sport.actor.bringToFront();
-        Canalada.linkState.sport.select(true);
-        Canalada.linkState.down = true;
-        Canalada.linkState.marker.bringToFront();
-        Canalada.linkState.line.bringToFront();
-    } else
-    if(e.target.ctype == 'Actor') {
-        e.target.select(true);
-        e.target.bringToFront();
+    if(e.target) {
+        
+        if(Canalada.linkState.sport) {
+            Canalada.linkState.sport.actor.bringToFront();
+            Canalada.linkState.sport.select(true);
+            Canalada.linkState.down = true;
+            Canalada.linkState.marker.bringToFront();
+            Canalada.linkState.line.bringToFront();
+        } else
+        if(e.target.ctype == 'Actor') {
+            e.target.select(true);
+            e.target.bringToFront();
+            Canalada.selectState.item = e.target;
+        } else
+        if(e.target.ctype == 'Link') {
+            e.target.select(true);
+            e.target.bringToFront();
+            Canalada.selectState.item = e.target;
+        }
     }
     Canalada.canvas.renderAll();
 };
@@ -81,9 +95,6 @@ Canalada.onMouseUp = function(e) {
         Canalada.linkState.down = false;
         Canalada.linkState.sport = null;
         Canalada.linkState.tport = null;
-    }
-    if(e.target.select) {
-        e.target.select(false);
     }
 
     Canalada.canvas.renderAll();
