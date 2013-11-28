@@ -1,6 +1,7 @@
 
 Canalada.Link = fabric.util.createClass(fabric.Path, {
     C : {'pStroke': 'black',
+         'pStrokeSelect' : '#ad2e3a',
          'pStrokeWidth':3,
          'pStraight' : 25,
          'pCurve' : 50
@@ -65,6 +66,12 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
         this.set(dim);
         this.pathOffset = {x: dim.left - dim.width/2, y: dim.top - dim.height/2};
         this.setCoords();
+    },
+    select: function(flag) {
+        if(flag)
+            this.stroke = this.C.pStrokeSelect;
+        else 
+            this.stroke = this.C.pStroke;
     }
 });
 
