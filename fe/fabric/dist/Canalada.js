@@ -72,6 +72,8 @@ Canalada.removeLink = function(link) {
     if(~si) {
         Canalada.links.splice(si,1);
         Canalada.canvas.remove(link);
+        link.porta.select(false);
+        link.portb.select(false);
     }
 }
 

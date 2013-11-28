@@ -24,12 +24,18 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
         this.actor = actor;
         this.links = [];
         this.textWidth = Canalada.textWidth(this.name, this.C.pFont);
+        this.selectCnt = 0;
     },
     select: function(flag) {
-        if(flag)
+        if(flag) {
             this.fill = this.C.pFillSelect;
-        else 
-            this.fill = this.C.pFill;
+            this.selectCnt++;
+        } else {
+            this.selectCnt--;
+            if(this.selectCnt == 0) {
+                this.fill = this.C.pFill;
+            }
+        }
     }
 });
 
