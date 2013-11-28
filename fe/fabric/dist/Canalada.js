@@ -49,6 +49,26 @@ Canalada.addLink= function(link) {
     Canalada.canvas.add(link);
 }
 
+Canalada.onKeyDown = function(e) {
+    if((e.keyCode == 8 || e.keyCode == 46) && Canalada.selectState.item) {
+        if(Canalada.selectState.item.ctype == 'Actor') {
+            var si = Canalada.actors.indexOf(Canalada.selectState.item);
+            if(~si) {
+                Canalada.actors.splice(si,1);
+            }
+        } else
+        if(Canalada.selectState.item.ctype == 'Link') {
+            var si = Canalada.links.indexOf(Canalada.selectState.item);
+            if(~si) {
+                Canalada.links.splice(si,1);
+            }
+        }
+        Canalada.canvas.remove(Canalada.selectState.item);
+        Canalada.selectState.item = null;
+        Canalada.canvas.renderAll();
+    }
+}
+
 Canalada.onMouseDown = function(e) {
     if(Canalada.selectState.item) {
         Canalada.selectState.item.select(false);

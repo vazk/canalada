@@ -81,6 +81,15 @@ function buildLibraryAccordion() {
 }
 
 function setupDragDrop() {
+
+    
+    function handleKeyDown(e) {
+        Canalada.onKeyDown(e);
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        return false;
+    }
     
     function handleDragOver(e) {
         if (e.preventDefault) {
@@ -123,6 +132,7 @@ function setupDragDrop() {
     canvasContainer.addEventListener('dragover',  handleDragOver, false);
     canvasContainer.addEventListener('dragleave', handleDragLeave, false);
     canvasContainer.addEventListener('drop',      handleDrop, false);
+    canvasContainer.addEventListener('keydown',   handleKeyDown, false);
 }
     
     
