@@ -128,7 +128,7 @@ function setupDragDrop() {
     
 function setupCanvas() {
     Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
-    
+    Canalada.canvas.selection = false;
     Canalada.canvas.findTarget = (function(originalFn) {
         return function() {
             var target = originalFn.apply(this, arguments);
