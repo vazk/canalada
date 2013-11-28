@@ -16,7 +16,8 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
         this.perPixelTargetFind = true;
         this.hasBorders = false;
         this.hasControls = false;
-
+        this.lockMovementX = true;
+        this.lockMovementY = true;
         this.porta = porta;
         this.portb = portb;
         

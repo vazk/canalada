@@ -179,7 +179,6 @@ function setupCanvas() {
                     Canalada.linkState.line = ln;
                     return Canalada.linkState.marker;
                 }
-
             }
             return target;
         };

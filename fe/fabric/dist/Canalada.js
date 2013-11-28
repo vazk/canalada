@@ -100,7 +100,6 @@ Canalada.onMouseDown = function(e) {
         Canalada.selectState.item = null;
     }
     if(e.target) {
-        
         if(Canalada.linkState.sport) {
             Canalada.linkState.sport.actor.bringToFront();
             Canalada.linkState.sport.select(true);
@@ -229,6 +228,4 @@ Canalada.textWidth = function(text, fontProp) {
 Canalada.registerActorClass = function(actorModel, actorClass) {
     actorClass.model = actorModel;
     Canalada.actorClassRegistry[actorModel] = actorClass;
-    
-    //var alala = new actorClass();
 }
