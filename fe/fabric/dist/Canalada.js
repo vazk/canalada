@@ -34,7 +34,7 @@ Canalada.addActor = function(actor) {
     Canalada.canvas.add(actor);
 }
 
-Canalada.addLink= function(link) {
+Canalada.addLink = function(link) {
     this.links.push(link);
     var shadow = {
         color: 'rgba(0,0,0,0.6)',
@@ -49,19 +49,42 @@ Canalada.addLink= function(link) {
     Canalada.canvas.add(link);
 }
 
+Canalada.removeActor = function(actor) {
+    var si = Canalada.actors.indexOf(actor);
+    if(~si) {
+        Canalada.actors.splice(si,1);
+        Canalada.canvas.remove(actor);
+        var attachedLinks = [];
+        for(var i = 0; i < Canalada.links.length; ++i) {
+            var lnk = Canalada.links[i];
+            if(lnk.porta.actor === actor || lnk.portb.actor === actor) {
+                attachedLinks.push(lnk);
+            }
+        }
+        for(var i = 0; i < attachedLinks.length; ++i) {
+            Canalada.removeLink(attachedLinks[i]);
+        }
+    }
+}
+
+Canalada.removeLink = function(link) {
+    var si = Canalada.links.indexOf(link);
+    if(~si) {
+        Canalada.links.splice(si,1);
+        Canalada.canvas.remove(link);
+    }
+}
+
+
+
+
 Canalada.onKeyDown = function(e) {
     if((e.keyCode == 8 || e.keyCode == 46) && Canalada.selectState.item) {
         if(Canalada.selectState.item.ctype == 'Actor') {
-            var si = Canalada.actors.indexOf(Canalada.selectState.item);
-            if(~si) {
-                Canalada.actors.splice(si,1);
-            }
+            Canalada.removeActor(Canalada.selectState.item);
         } else
         if(Canalada.selectState.item.ctype == 'Link') {
-            var si = Canalada.links.indexOf(Canalada.selectState.item);
-            if(~si) {
-                Canalada.links.splice(si,1);
-            }
+            Canalada.removeLink(Canalada.selectState.item);
         }
         Canalada.canvas.remove(Canalada.selectState.item);
         Canalada.selectState.item = null;
@@ -186,7 +209,6 @@ Canalada.onObjectMoving = function(e) {
 Canalada.textWidth = function(text, fontProp) {
     var tag = document.createElement("div");
     tag.style.position = "absolute";
-    //tag.style.left = "-999em";
     tag.style.whiteSpace = "nowrap";
     tag.style.font = fontProp;
     tag.innerHTML = text;
