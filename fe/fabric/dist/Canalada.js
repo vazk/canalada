@@ -229,3 +229,18 @@ Canalada.registerActorClass = function(actorModel, actorClass) {
     actorClass.model = actorModel;
     Canalada.actorClassRegistry[actorModel] = actorClass;
 }
+
+Canalada.save = function() {
+    Canalada.socket.emit('requestSaveCanal', {name: 'trololo', canal: Canalada.canvas.toJSON()}); 
+    console.log("save function is called");
+}
+
+Canalada.open = function() {
+    Canalada.socket.emit('requestReadCanal', {name: 'trololo'}); 
+    console.log("open function is called");
+}
+
+Canalada.onOpenData = function(cdata) {
+    console.log("open function is called, data: " + JSON.stringify(cdata.canal));
+    Canalada.canvas.loadFromJSON(cdata.canal);
+}

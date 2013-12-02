@@ -5,7 +5,7 @@ div#library {
     float: left;
 }
 
-#library{
+#library, #menu ul, #menu ul li, #menu > ul > li > a{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -44,3 +44,43 @@ ul#grid {
   width: 32px;
   height: 32px;
 }
+
+#menu {
+  background-color: #fff;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+  color: #888;
+  display: block;
+  margin: 5px 12px 5px 12px;
+  overflow: hidden;
+  width: 90%
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+
+#menu ul {
+  margin: 0;
+  padding: 0;
+}
+
+  #menu ul li {
+      display: inline-block;
+      list-style-type: none;
+      -webkit-transition: all 0.2s;
+      -moz-transition: all 0.2s;
+      -ms-transition: all 0.2s;
+      -o-transition: all 0.2s;
+      transition: all 0.2s; 
+      color: #111;
+      display: block;
+      line-height: 32px;
+      padding: 0 12px;
+      text-decoration: none;
+    }
+    #menu > ul > li:hover {
+        background-color: rgb( 40, 44, 47 );
+        color: rgb( 255, 255, 255 );
+      }
+    

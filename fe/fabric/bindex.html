@@ -27,8 +27,15 @@
     <div id='library'>
     </div>
 
-   <div id='canal'  tabindex='1'>
-        <canvas id='canal-canvas'></canvas>
+    <div id='canal'  tabindex='1'>
+        <div id='menu' style='z-index: 2'>
+            <ul>
+                <li style='cursor: pointer' onclick='Canalada.save()'>Save</li>
+                <!--<li><a style='cursor: pointer' onclick='Canalada.open()'>Open</a></li>-->
+                <li style='cursor: pointer' onclick='Canalada.open()'>Open</li>
+            </ul>
+        </div>
+        <canvas id='canal-canvas' style='z-index: 1'></canvas>
     </div>
     
     <script id='main'>
