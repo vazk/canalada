@@ -11,7 +11,7 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
          'pStrokeSelect' : '#ad2e3a'
          },
     
-    model: null,
+    //model: null,
     
     initialize: function(options) {
         this.callSuper('initialize', options);
@@ -69,7 +69,17 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
         }
         Canalada.canvas.renderAll();
     },
-   
+
+    getPortByName: function(name) {
+        for(var i = 0; i < this.ports.length; ++i) {
+            var p = this.ports[i];
+            if(p.name == name) {
+                return p;
+            }
+        }
+        return null;
+    },
+
     getSelectedItem: function(offset) {
         var objects = this.getObjects();
         var center = this.getCenterPoint();
@@ -82,11 +92,11 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
         return null;
     },
 
-    toObject: function() {
-        return fabric.util.object.extend(this.callSuper('toObject'), {
-            Actor: this.get('Actor')
-        });
-    },
+    //toObject: function() {
+    //    return fabric.util.object.extend(this.callSuper('toObject'), {
+    //        Actor: this.get('Actor')
+    //    });
+    //},
 
     addInPort : function(portName) {
         var port = new Canalada.InPort(portName, this);
@@ -103,6 +113,17 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
             this.getObjects()[0].setStroke(this.C.pStrokeSelect);
         else 
             this.getObjects()[0].setStroke(this.C.pStroke);
+    },
+
+    model: function() {
+        return this.__proto__.constructor.model;
+    },
+
+    serialize: function() {
+        var data = {};
+        data.top = this.top;
+        data.left = this.left;
+        return data;   
     }
 });
 

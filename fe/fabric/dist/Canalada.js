@@ -223,6 +223,51 @@ Canalada.textWidth = function(text, fontProp) {
     return result;
 }
 
+Canalada.serialize = function()
+{
+    var actors = [];
+    for(var i = 0; i < Canalada.actors.length; ++i) {
+        var actorData = {};
+        actorData["model"] = Canalada.actors[i].model();
+        actorData["properties"] = Canalada.actors[i].serialize();
+        actors.push(actorData);
+    }
+    var links = [];
+    for(var i = 0; i < Canalada.links.length; ++i) {
+        links.push(Canalada.links[i].serialize());
+    }
+    return {
+              "actors" : actors,
+              "links"  : links
+           };
+}
+
+
+Canalada.deserialize = function(data)
+{
+    var actors = data.actors;
+    if(actors) {
+        for(var i = 0; i < actors.length; ++i) {
+            var modelName = actors[i].model;
+            var modelProps = actors[i].properties;
+            var model = Canalada.actorClassRegistry[modelName];
+            if(model && modelProps) {
+                var inst = new model();
+                inst.left = modelProps.left;
+                inst.top = modelProps.top;
+                Canalada.addActor(inst);
+            }
+        }
+    }
+    var links = data.links;
+    if(links) {
+        for(var i = 0; i < links.length; ++i) {
+            var lnk = new Canalada.Link();
+            lnk.deserialize(links[i]);
+            Canalada.addLink(lnk);  
+        }
+    }
+}
 
 
 Canalada.registerActorClass = function(actorModel, actorClass) {
@@ -231,7 +276,7 @@ Canalada.registerActorClass = function(actorModel, actorClass) {
 }
 
 Canalada.save = function() {
-    Canalada.socket.emit('requestSaveCanal', {name: 'trololo', canal: Canalada.canvas.toJSON()}); 
+    Canalada.socket.emit('requestSaveCanal', {name: 'trololo', canal: Canalada.serialize()}); 
     console.log("save function is called");
 }
 
@@ -242,5 +287,5 @@ Canalada.open = function() {
 
 Canalada.onOpenData = function(cdata) {
     console.log("open function is called, data: " + JSON.stringify(cdata.canal));
-    Canalada.canvas.loadFromJSON(cdata.canal);
+    Canalada.canvas.loadFromJSON(Canalada.deserialize(cdata.canal));
 }

@@ -25,6 +25,9 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
     },
 
     setup: function() {
+        if(!this.porta || !this.portb) {
+            return;
+        }
         var ac = this.porta.actor.getCenterPoint();
         var bc = this.portb.actor.getCenterPoint();
         var apc = this.porta.getCenterPoint();
@@ -73,6 +76,21 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
             this.stroke = this.C.pStrokeSelect;
         else 
             this.stroke = this.C.pStroke;
+    },
+    serialize: function() {
+        var data = {};
+        data.porta = {"actor_id": Canalada.actors.indexOf(this.porta.actor), 
+                      "name": this.porta.name};
+        data.portb = {"actor_id": Canalada.actors.indexOf(this.portb.actor), 
+                      "name": this.portb.name};
+        return data;
+    },
+    deserialize: function(data) {
+        var actora = Canalada.actors[data.porta.actor_id];
+        var actorb = Canalada.actors[data.portb.actor_id];
+        this.porta = actora.getPortByName(data.porta.name);
+        this.portb = actorb.getPortByName(data.portb.name);
+        this.setup();
     }
 });
 

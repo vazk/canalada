@@ -98,10 +98,10 @@ function setupDragDrop() {
     }
     
     function handleDrop(e) {
-        var ctypeName = e.dataTransfer.getData("module");
-        var ctype = Canalada.actorClassRegistry[ctypeName];
-        if(ctype) {
-            var inst = new ctype();
+        var modelName = e.dataTransfer.getData("module");
+        var model = Canalada.actorClassRegistry[modelName];
+        if(model) {
+            var inst = new model();
             inst.setPositionByOrigin({x:e.offsetX,y:e.offsetY},'center','center');
             Canalada.addActor(inst);
         }
