@@ -1,7 +1,13 @@
+body, html {
+    height: 99%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
 div#library {
     width: 150px;
     height: 'auto';
-    border: 1px blue;
     float: left;
 }
 
@@ -14,12 +20,6 @@ div#library {
     user-select: none;
 }
 
-div#canal {
-    background-color:  silver;
-    border: 1px solid green;
-    padding: 2px;
-    margin-left:160px;
-}
 
 ul#grid {
   padding: 0;
@@ -32,7 +32,6 @@ ul#grid {
 #grid li {
   float: left;
   padding:10;
-  /*margin: 0 5px 10px 5px;*/
   margin: 0px auto 0;
   text-align:center;
 }
@@ -51,12 +50,11 @@ ul#grid {
   border-radius: 4px;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
   color: #888;
-  display: block;
+  /*display: block;*/
   margin: 5px 12px 5px 12px;
   overflow: hidden;
   width: 90%
   bottom: 0;
-  left: 0;
   position: absolute;
 }
 
@@ -65,22 +63,42 @@ ul#grid {
   padding: 0;
 }
 
-  #menu ul li {
-      display: inline-block;
-      list-style-type: none;
-      -webkit-transition: all 0.2s;
-      -moz-transition: all 0.2s;
-      -ms-transition: all 0.2s;
-      -o-transition: all 0.2s;
-      transition: all 0.2s; 
-      color: #111;
-      display: block;
-      line-height: 32px;
-      padding: 0 12px;
-      text-decoration: none;
-    }
-    #menu > ul > li:hover {
-        background-color: rgb( 40, 44, 47 );
-        color: rgb( 255, 255, 255 );
-      }
+#menu ul li {
+  display: inline-block;
+  list-style-type: none;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s; 
+  color: #111;
+  display: block;
+  line-height: 32px;
+  padding: 0 12px;
+  text-decoration: none;
+}
+
+#menu > ul > li:hover {
+    background-color: rgb( 40, 44, 47 );
+    color: rgb( 255, 255, 255 );
+}
     
+#top-workspace {
+    border: 1px solid red;
+    position:absolute;
+    height: 200px;
+    float: top;
+    background: #e0e0e0;
+    left: 3px;
+    right: 3px;
+    top: 0px;
+}
+
+#bottom-workspace{
+    border: 1px solid blue;
+    position:absolute;
+    left:3px;
+    right:3px;
+    bottom:3px;
+}
+

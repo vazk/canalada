@@ -1,17 +1,31 @@
+main = {};
 
-function resize() {
+main.resize = function() {
+    var topDiv = document.getElementById('top-workspace');
+    var bottomDiv = document.getElementById('bottom-workspace');
     var canvasDiv = document.getElementById('canal');
     var canvasSelf = document.getElementById('canal-canvas');
-    var viewportWidth = window.innerWidth-180;
-    var viewportHeight = window.innerHeight-20;
+
+    var clientHeight = $(document).innerHeight();
+    var topHeight = $("#top-workspace").outerHeight(true);
+    var bottomHeight = clientHeight-topHeight-5;
+    $('#bottom-workspace').offset({'top':topHeight});
+    $('#bottom-workspace').height(bottomHeight);
+
+    var canvasWidth = $("#bottom-workspace").innerWidth() - 160;
+    var canvasHeight = bottomHeight;
+    console.log(canvasHeight);
+
     canvasDiv.style.position = "fixed";
-    canvasDiv.style.width = viewportWidth + 'px';
-    canvasDiv.style.height = viewportHeight + 'px';
+    canvasDiv.style.left = 160 + 'px';
+    canvasDiv.style.width = canvasWidth + 'px';
+    canvasDiv.style.height = canvasHeight - 1 + 'px';
     canvasSelf.style.top = 0;
     canvasSelf.style.left = 0;
-    Canalada.canvas.setWidth(viewportWidth);
-    Canalada.canvas.setHeight(viewportHeight);
+    Canalada.canvas.setWidth(canvasWidth);
+    Canalada.canvas.setHeight(canvasHeight-1);
     Canalada.canvas.calcOffset();
+
 };
 
 
@@ -77,6 +91,17 @@ function buildLibraryAccordion() {
                          alert( $(this).sortable('serialize') );
                        }
                    });
+    
+    var maxBorderCellHeight = 450;
+    var minBorderCellHeight = 100;
+    $("#top-workspace").resizable({
+      maxHeight: maxBorderCellHeight,
+      minHeight: minBorderCellHeight,
+      handles: 's',
+      resize: function (event, ui){
+          main.resize();
+      }
+    });
 }
 
 function setupDragDrop() {
@@ -215,9 +240,9 @@ function setupSocket()
     });
 }
 
-function main()
+function start()
 {
-    window.addEventListener('resize', resize, false);
+    window.addEventListener('resize', main.resize, false);
 
     var library = {image:
         [
@@ -244,7 +269,7 @@ function main()
     
     setupCanvas();
     
-    setupSocket();
+    //setupSocket();
 
     //Canalada.addActor(new Canalada.FileWriterActor());
 
@@ -255,5 +280,5 @@ function main()
         'mouse:up'                : Canalada.onMouseUp,
         'mouse:down'              	: Canalada.onMouseDown
     });
-    resize();
+    main.resize();
 }
