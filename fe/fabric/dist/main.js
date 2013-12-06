@@ -16,7 +16,7 @@ main.resize = function() {
     var canvasHeight = bottomHeight;
     console.log(canvasHeight);
 
-    canvasDiv.style.position = "fixed";
+    canvasDiv.style.position = "absolute";
     canvasDiv.style.left = 160 + 'px';
     canvasDiv.style.width = canvasWidth + 'px';
     canvasDiv.style.height = canvasHeight - 1 + 'px';
