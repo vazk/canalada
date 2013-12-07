@@ -21,7 +21,7 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
         this.actorRect = new fabric.Rect({
               left: 100,
               top: 100,
-              strokeWidth: 4,
+              strokeWidth: 2,
               width: 50, height:50,
               fill: '#fff',
               stroke: '#444',
