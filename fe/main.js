@@ -267,7 +267,7 @@ function start()
          {'src':'image/Folder.png',
           'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileReader'}},
          {'src':'image/Mail-2.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailReader'}},
+          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailClient'}},
          {'src':'image/Mobile.png',
           'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'DropboxWriter'}},
          {'src':'image/PaperClip.png',
@@ -287,11 +287,7 @@ function start()
     
     setupCanvas();
     
-    //setupSocket();
-
-    //Canalada.addActor(new Canalada.FileWriterActor());
-
-    //Canalada.addActor(new Canalada.actorClassRegistry['EmailClient']());
+    setupSocket();
     
     Canalada.canvas.on({
         'object:moving'           : Canalada.onObjectMoving,
