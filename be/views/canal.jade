@@ -16,14 +16,16 @@ html(lang="en")
         link(rel="stylesheet", href="main.css")
     
     body
-        div#library
-        div#canal(tabindex="1")    
-            div#menu(style="z-index: 2")
-                ul
-                    li(style="cursor: pointer",onclick="Canalada.save()") Save
-                    li(style="cursor: pointer",onclick="Canalada.open()") Open
-            canvas#canal-canvas(style="z-index: 1")
+        div#top-workspace
+        div#bottom-workspace
+            div#library
+            div#canal(tabindex="1")    
+                div#menu(style="z-index: 2")
+                    ul
+                        li(style="cursor: pointer",onclick="Canalada.save()") Save
+                        li(style="cursor: pointer",onclick="Canalada.open()") Open
+                canvas#canal-canvas(style="z-index: 1")
             
-        script(type="text/javascript").main
-            main();
+        script(type="text/javascript").start
+            start();
         
