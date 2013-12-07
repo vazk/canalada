@@ -223,8 +223,19 @@ Canalada.textWidth = function(text, fontProp) {
     return result;
 }
 
-Canalada.serialize = function()
-{
+Canalada.reset = function() {
+    Canalada.canvas.clear();
+    Canalada.actors = [];
+    Canalada.links = [];
+    Canalada.linkState.down = false;
+    Canalada.marker = null;
+    Canalada.line = null;
+    Canalada.selectState.item = null;
+    Canalada.canvas.renderAll();
+
+}
+
+Canalada.serialize = function() {
     var actors = [];
     for(var i = 0; i < Canalada.actors.length; ++i) {
         var actorData = {};
@@ -243,8 +254,7 @@ Canalada.serialize = function()
 }
 
 
-Canalada.deserialize = function(data)
-{
+Canalada.deserialize = function(data) {
     var actors = data.actors;
     if(actors) {
         for(var i = 0; i < actors.length; ++i) {
@@ -281,6 +291,7 @@ Canalada.save = function() {
 }
 
 Canalada.open = function() {
+    Canalada.reset();
     Canalada.socket.emit('requestReadCanal', {name: 'trololo'}); 
     console.log("open function is called");
 }
