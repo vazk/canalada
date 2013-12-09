@@ -7,36 +7,39 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="js/jquery.ui.dialog.minmax.js"></script>
+
     <!--<style>
       pre { margin-left: 15px !important }
     </style>-->
     <!--[if lt IE 9]>
       <script src="../lib/excanvas.js"></script>
     <![endif]-->
-    <script src="dist/all.js"></script>
-    <script src="dist/Canalada.js"></script>
-    <script src="dist/Port.js"></script>
-    <script src="dist/Actor.js"></script>
-    <script src="dist/Link.js"></script>
-    <script src="dist/main.js"></script>
-    <link rel="stylesheet" href="main.css" />
+    <script src="fabric/all.js"></script>
+    <script src="fabric/Canalada.js"></script>
+    <script src="fabric/Port.js"></script>
+    <script src="fabric/Actor.js"></script>
+    <script src="fabric/Link.js"></script>
+    <script src="fabric/main.js"></script>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/jquery.ui.dialog.minmax.css" />
 </head>
 
 <body>
     <div id='top-workspace'>
     </div>
     <div id='bottom-workspace'>
-        <div id='library'>
-        </div>
-        <div id='canal' tabindex='1'>
-            <div id='menu' style='z-index: 2'>
-                <ul>
-                    <li style='cursor: pointer' onclick='Canalada.save()'>Save</li>
-                    <li style='cursor: pointer' onclick='Canalada.open()'>Open</li>
-                </ul>
+
+        <div id="dialogL" title="Actor Library">
+            <div id='library'>
             </div>
+        </div>
+
+
+        <div id='canal' tabindex='1'>
             <canvas id='canal-canvas' style='z-index: 1'></canvas>
         </div> 
+        <div id="toolbar"  style='z-index: 3'>&nbsp;&nbsp;&nbsp;</div>
     </div>
     
     <script id='start'>

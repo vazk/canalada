@@ -7,11 +7,11 @@ body, html {
 
 div#library {
     width: 150px;
-    height: 'auto';
-    float: left;
+    height: auto;
+    float: middle;
 }
 
-#library, #menu ul, #menu ul li, #menu > ul > li > a{
+#dialogL, #toolbar, #library, #menu ul, #menu ul li, #menu > ul > li > a{
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -102,3 +102,37 @@ ul#grid {
     bottom:3px;
 }
 
+
+
+#toolbar { 
+    font-size: 22px; 
+    height: 22px; 
+    padding: 4px; 
+    background-color: #ddd; 
+    position: fixed; 
+    bottom: 3px; 
+    width: auto;
+}
+
+#toolbar a { 
+    font-weight: bold; 
+    border: 1px 
+    solid #aaa; 
+    padding: 2px; 
+}
+
+#toolbar a:hover { 
+    color: white; 
+    background-color: #aaa; 
+}
+
+#dialogL, .ui-dialog-titlebar, .ui-button-text {
+    padding: 0.05em 0.1em;
+    position: relative;
+    font-size: 0.6em;
+}
+
+#toolbar{
+    background-color: transparent;
+    font-size: 0.8em;
+}

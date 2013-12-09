@@ -12,12 +12,12 @@ main.resize = function() {
     $('#bottom-workspace').offset({'top':topHeight});
     $('#bottom-workspace').height(bottomHeight);
 
-    var canvasWidth = $("#bottom-workspace").innerWidth() - 160;
+    var canvasWidth = $("#bottom-workspace").innerWidth();
     var canvasHeight = bottomHeight;
     console.log(canvasHeight);
 
     canvasDiv.style.position = "absolute";
-    canvasDiv.style.left = 160 + 'px';
+    //canvasDiv.style.left = 160 + 'px';
     canvasDiv.style.width = canvasWidth + 'px';
     canvasDiv.style.height = canvasHeight - 1 + 'px';
     canvasSelf.style.top = 0;
@@ -91,6 +91,23 @@ function buildLibraryAccordion() {
                          alert( $(this).sortable('serialize') );
                        }
                    });
+    $('#dialogL')
+        .dialog({width: '155px', minimize: '#toolbar', maximize: false, close: false})
+        .parent().resizable({ 
+                    // Settings that will execute when resized.
+                    maxHeight: 380,
+                    minHeight: 230,
+                    maxWidth: 155,
+                    minWidth: 155,
+                    handles: 's',
+                    containment: "#bottom-workspace" // Constrains the resizing to the div.
+                  })
+                 .draggable({ 
+                    // Settings that execute when the dialog is dragged. If parent isn't 
+                    // used the text content will have dragging enabled.
+                    containment: "#bottom-workspace", // The element the dialog is constrained to.
+                    opacity: 0.70 // Fancy opacity. Optional.
+                 });
     
     var maxBorderCellHeight = 450;
     var minBorderCellHeight = 100;
