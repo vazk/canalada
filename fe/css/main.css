@@ -11,7 +11,15 @@ div#library {
     float: middle;
 }
 
-#dialogL, #toolbar, #library, #menu ul, #menu ul li, #menu > ul > li > a{
+#dialogL, 
+#toolbar, 
+#library, 
+#menu ul, 
+#menu ul li, 
+#menu > ul > li > a, 
+.canal-row, 
+.canal-row-new,
+.canal-row-content {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -88,10 +96,11 @@ ul#grid {
     position:absolute;
     height: 200px;
     float: top;
-    background: #e0e0e0;
+    background: white;
     left: 3px;
     right: 3px;
     top: 0px;
+    overflow: auto;
 }
 
 #bottom-workspace{
@@ -126,7 +135,9 @@ ul#grid {
     background-color: #aaa; 
 }
 
-#dialogL, .ui-dialog-titlebar, .ui-button-text {
+#dialogL, 
+.ui-dialog-titlebar, 
+.ui-button-text {
     padding: 0.05em 0.1em;
     position: relative;
     font-size: 0.6em;
@@ -136,3 +147,50 @@ ul#grid {
     background-color: transparent;
     font-size: 0.8em;
 }
+
+
+/*.canal-row-new, */
+.canal-row{
+    height: auto;
+    background-color: white;
+	margin: 1px 0 0 0;
+	padding: 4px 8px;
+	border: 2px solid #d0d0d0;
+	border-right: 0;
+	border-radius: 3px 0 0 3px;
+	position: relative;
+}
+
+.canal-row-new, 
+.canal-row-new > label, 
+.canal-row-new > input {
+    vertical-align:middle;
+}
+
+.canal-row-new{ 
+    opacity:0.4;
+    height: auto;
+    background-color: white;
+	padding: 8px 8px;
+	position: relative;
+}
+
+.canal-row-new:hover {
+    vertical-align:middle;
+    opacity:1.0;
+}
+	
+.canal-row-content {
+	display: none;
+	border: 1px solid #ccc;
+    border-top: 0;
+}
+
+
+.ui-accordion-header { 
+    background-color: white; 
+    background-image:none;
+    font-size: 10pt;  
+    line-height: 16pt; 
+}
+

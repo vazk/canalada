@@ -20,15 +20,31 @@
     <script src="fabric/Port.js"></script>
     <script src="fabric/Actor.js"></script>
     <script src="fabric/Link.js"></script>
-    <script src="fabric/main.js"></script>
+    <script src="CanalListBuilder.js"></script>
+    <script src="main.js"></script>
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/jquery.ui.dialog.minmax.css" />
 </head>
 
 <body>
-    <div id='top-workspace'>
+
+    <div id="top-workspace">
+        <div id="canal-rows">
+            <div>
+                <a href="#" class="handle" height=10px>Section 1</a>
+                <div class="canal-row-content">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" required>
+                </div>
+            </div>
+        </div>
+        <div class="canal-row-new" onclick="createCanalRow()">
+            <input type="image" src="batch/32x32/add.png" width=20> 
+            <label>Create new canal</label>
+        </div>
     </div>
-    <div id='bottom-workspace'>
+
+    <div id="bottom-workspace">
 
         <div id="dialogL" title="Actor Library">
             <div id='library'>
@@ -36,10 +52,10 @@
         </div>
 
 
-        <div id='canal' tabindex='1'>
-            <canvas id='canal-canvas' style='z-index: 1'></canvas>
+        <div id="canal" tabindex="1">
+            <canvas id="canal-canvas" style="z-index: 1"></canvas>
         </div> 
-        <div id="toolbar"  style='z-index: 3'>&nbsp;&nbsp;&nbsp;</div>
+        <div id="toolbar"  style="z-index: 3">&nbsp;&nbsp;&nbsp;</div>
     </div>
     
     <script id='start'>
