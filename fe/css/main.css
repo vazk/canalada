@@ -67,8 +67,8 @@ ul#grid {
 }
 
 #menu ul {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 #menu ul li {
@@ -94,33 +94,36 @@ ul#grid {
 #top-workspace {
     border: 1px solid grey;
     position:absolute;
-    height: 200px;
     float: top;
     background: white;
     left: 3px;
     right: 3px;
     top: 0px;
+    bottom: 3px;
     overflow: auto;
 }
 
-#bottom-workspace{
-    border: 1px solid grey;
-    position:absolute;
+#workspace {
+    border: 2px solid blue;
+    position:relative;
+    /*position:absolute;*/
     left:3px;
     right:3px;
     bottom:3px;
+    top:3px;
 }
 
 
 
 #toolbar { 
-    font-size: 22px; 
     height: 22px; 
     padding: 4px; 
-    background-color: #ddd; 
-    position: fixed; 
+    position: relative;
+    float:bottom; 
     bottom: 3px; 
-    width: auto;
+    width: 100px;
+    background-color: green;/*transparent;*/
+    font-size: 0.8em;
 }
 
 #toolbar a { 
@@ -143,23 +146,22 @@ ul#grid {
     font-size: 0.6em;
 }
 
-#toolbar{
-    background-color: transparent;
-    font-size: 0.8em;
-}
-
-
 /*.canal-row-new, */
-.canal-row{
+#canal-rows {
     height: auto;
     background-color: white;
-	margin: 1px 0 0 0;
-	padding: 4px 8px;
-	border: 2px solid #d0d0d0;
-	border-right: 0;
-	border-radius: 3px 0 0 3px;
-	position: relative;
+	  margin: 1px 0 0 0;
+	  padding: 4px 2px;
+	  border: 2px solid #d0d0d0;
+  	border-right: 0;
+	  border-radius: 3px 0 0 3px;
+	  position: relative;
 }
+
+#canal-rows .ui-accordion-content > * {  
+    margin: 0;  
+    padding: 0px;  
+}  
 
 .canal-row-new, 
 .canal-row-new > label, 
@@ -167,30 +169,78 @@ ul#grid {
     vertical-align:middle;
 }
 
-.canal-row-new{ 
+.canal-row-new { 
     opacity:0.4;
     height: auto;
     background-color: white;
-	padding: 8px 8px;
-	position: relative;
+	  padding: 8px 8px;
+	  position: relative;
 }
 
 .canal-row-new:hover {
     vertical-align:middle;
     opacity:1.0;
 }
-	
+/*
 .canal-row-content {
-	display: none;
-	border: 1px solid #ccc;
+	  display: none;
+	  border: 1px solid #ccc;
     border-top: 0;
 }
+*/
 
 
-.ui-accordion-header { 
+#canal-rows * .ui-accordion-header { 
     background-color: white; 
     background-image:none;
     font-size: 10pt;  
     line-height: 16pt; 
 }
 
+#canal-rows * .ui-accordion, 
+#canal-rows * .ui-accordion-content {
+    padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+.canal-row-content {
+    position: relative;
+    background: white;
+    margin: 2px, 0px, 0px, 0px;
+    padding: 2px, 0px, 0px, 0px;
+    /*left:0px;
+    right:3px;
+    bottom: 0px;
+    /*border: 3px solid green;*/
+}
+
+h1 {
+  text-align: center;
+}
+ul.tabs {
+  list-style-type: none;
+  margin: 3px;
+  padding: 5px 0px;
+  float: left;
+}
+ul.tabs li {
+  border: gray solid 1px;
+  border-bottom: none;
+  float: left;
+  margin: 0 .25em 0 0;
+  padding: .25em .25em;
+  font-size: 0.8em;
+}
+ul.tabs li a {
+  color: gray;
+  font-weight: bold;
+  text-decoration: none;
+}
+ul.tabs li.active {
+  background: gray;
+}
+ul.tabs li.active a {
+  color: white;
+}
+.clr {
+  clear: both;
+}

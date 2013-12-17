@@ -1,6 +1,32 @@
 main = {};
 
-main.resize = function() {
+main.resize = function(outter) {
+    return;/*
+    var oWidth = outter.innerWidth();
+    var oHeight = outter.innerHeight();
+    console.log("h: " + oHeight);
+    var workspaceDiv = $(outter).find('#workspace');
+    workspaceDiv.height(oHeight);
+    
+    var canvasWidth = workspaceDiv.innerWidth();
+    var canvasHeight = oHeight;
+
+    //var canvasDiv = $(workspaceDiv).find('#canal');
+    //var canvasSelf = $(workspaceDiv).find('#canal-canvas');
+    var canvasDiv = outter.find('#canal');
+    var canvasSelf = outter.find('#canal-canvas');
+
+
+    canvasDiv.position("absolute");
+    canvasDiv.width(canvasWidth + 'px');
+    canvasDiv.height(canvasHeight - 1 + 'px');
+    canvasSelf.offset({'left':0,'top':0});
+    Canalada.canvas.setWidth(canvasWidth);
+    Canalada.canvas.setHeight(canvasHeight-1);
+    Canalada.canvas.calcOffset();
+
+
+    /*
     var topDiv = document.getElementById('top-workspace');
     var bottomDiv = document.getElementById('bottom-workspace');
     var canvasDiv = document.getElementById('canal');
@@ -9,8 +35,8 @@ main.resize = function() {
     var clientHeight = $(document).innerHeight();
     var topHeight = $("#top-workspace").outerHeight(true);
     var bottomHeight = clientHeight-topHeight-5;
-    $('#bottom-workspace').offset({'top':topHeight});
-    $('#bottom-workspace').height(bottomHeight);
+    //$('#bottom-workspace').offset({'top':topHeight});
+    //$('#bottom-workspace').height(bottomHeight);
 
     var canvasWidth = $("#bottom-workspace").innerWidth();
     var canvasHeight = bottomHeight;
@@ -25,6 +51,7 @@ main.resize = function() {
     Canalada.canvas.setWidth(canvasWidth);
     Canalada.canvas.setHeight(canvasHeight-1);
     Canalada.canvas.calcOffset();
+    */
 
 };
 
@@ -78,20 +105,33 @@ function buildLibraryAccordion() {
                           }
                         });
     $("#library").accordion({
-                       header: "> div > h3"
+                        header: "> div > h3",
+                        activate: function() {
+                          console.log('activate');
+                          alert(ui.newHeader.text());  // For instance.
+                        }
                    })
                    .sortable({
-                       axis: "y",
-                       handle: "h3",
-                       stop: function() {
-                         stop = true;
-                       },
-                       update: function() {
-                         alert( $(this).sortable('serialize') );
-                       }
+                        axis: "y",
+                        handle: "h3",
+                        stop: function() {
+                          stop = true;
+                        },
+                        update: function() {
+                          alert( $(this).sortable('serialize') );
+                        }
                    });
+    
     $('#dialogL')
-        .dialog({width: '155px', minimize: '#toolbar', maximize: false, close: false})
+        .dialog({width: '155px', minimize: '#toolbar', 
+                 autoOpen:false, maximize: false, close: false, 
+                /* appendTo: '#workspace',
+                create: function () {
+                    $(this).closest('div.ui-dialog')
+                        .click(function (e) {
+                        e.stopPropagation();
+                    });
+                }*/})
         .parent().resizable({ 
                     // Settings that will execute when resized.
                     maxHeight: 380,
@@ -99,30 +139,34 @@ function buildLibraryAccordion() {
                     maxWidth: 155,
                     minWidth: 155,
                     handles: 's',
-                    containment: "#bottom-workspace" // Constrains the resizing to the div.
+                    containment: "#workspace" // Constrains the resizing to the div.
                   })
                  .draggable({ 
                     // Settings that execute when the dialog is dragged. If parent isn't 
                     // used the text content will have dragging enabled.
-                    containment: "#bottom-workspace", // The element the dialog is constrained to.
+                    containment: "#workspace", // The element the dialog is constrained to.
                     opacity: 0.70 // Fancy opacity. Optional.
                  });
     
-    var maxBorderCellHeight = 450;
-    var minBorderCellHeight = 100;
-    $("#top-workspace").resizable({
-      maxHeight: maxBorderCellHeight,
-      minHeight: minBorderCellHeight,
-      handles: 's',
-      resize: function (event, ui){
-          main.resize();
-      }
+    // On resize: adjust the height to the new size of the outter container...
+    $('#workspace').resize(function(ev) {
+        var self = $(this);
+        var parent = self.closest('.ui-accordion-content');
+        //var oWidth = parent.innerWidth();
+
+        var oHeight = parent.innerHeight();
+        //self.offset({'top':40});
+        var tabs = parent.find('.tabs');
+        self.height(oHeight-tabs.height() - 12);
+        console.log("workspace h: " + parent.innerHeight());
+
+        //self.find('#dialogL').dialog("option", "position");
     });
+    $('#workspace').hide();
 }
 
 function setupDragDrop() {
-
-    
+  
     function handleKeyDown(e) {
         Canalada.onKeyDown(e);
         if (e.preventDefault) {
@@ -258,7 +302,7 @@ function setupSocket()
 
 function start()
 {
-    window.addEventListener('resize', main.resize, false);
+    //window.addEventListener('resize', main.resize, false);
 
     var library = {image:
         [
@@ -287,12 +331,12 @@ function start()
     
     setupCanvas();
     
-    setupSocket();
+    //setupSocket();
     
     Canalada.canvas.on({
         'object:moving'           : Canalada.onObjectMoving,
         'mouse:up'                : Canalada.onMouseUp,
         'mouse:down'              	: Canalada.onMouseDown
     });
-    main.resize();
+    //main.resize();
 }

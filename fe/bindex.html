@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>jQuery UI Accordion - Open on hoverintent</title>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="js/jquery.ui.dialog.minmax.js"></script>
 
@@ -33,17 +33,60 @@
             <div>
                 <a href="#" class="handle" height=10px>Section 1</a>
                 <div class="canal-row-content">
+                  <ul class="tabs">
+                    <li><a href="#properties">Properties</a></li>
+                    <li><a href="#workspace">Scheme</a></li>
+                  </ul>
+                  <div class="clr"></div>
+                  <section class="block">
+                    <div id="properties">
+                      <p>Lorem, nunc.</p>
+                    </div>
+                    <div id="workspace">
+                   <!--      <div id="dialogL" title="Actor Library">
+                            <div id='library'>
+                            </div>
+                        </div>-->
+                        <div id="canal" tabindex="1">
+                            <canvas id="canal-canvas" style="z-index: 1"></canvas>
+                        </div> 
+                        <div id="toolbar"  style="z-index: 3">&nbsp;&nbsp;&nbsp;</div>
+                    </div>
+                  </section>
+
+                </div>
+            </div>
+            <!--<div>
+                <a href="#" class="handle" height=10px>Section 1</a>
+                <div class="canal-row-content">
                     <label for="name">Name</label>
                     <input type="text" id="name" required>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="canal-row-new" onclick="createCanalRow()">
             <input type="image" src="batch/32x32/add.png" width=20> 
             <label>Create new canal</label>
         </div>
-    </div>
 
+
+    </div>
+        <div id="dialogL" title="Actor Library" display='none'>
+            <div id='library'>
+        </div>
+                            <!--
+        <div id="workspace">
+            <div id="dialogL" title="Actor Library">
+                <div id='library'>
+                </div>
+            </div>
+            <div id="canal" tabindex="1">
+                <canvas id="canal-canvas" style="z-index: 1"></canvas>
+            </div> 
+            <div id="toolbar"  style="z-index: 3">&nbsp;&nbsp;&nbsp;</div>
+        </div>-->
+    </div>
+    <!--
     <div id="bottom-workspace">
 
         <div id="dialogL" title="Actor Library">
@@ -57,6 +100,7 @@
         </div> 
         <div id="toolbar"  style="z-index: 3">&nbsp;&nbsp;&nbsp;</div>
     </div>
+    -->
     
     <script id='start'>
          start();
