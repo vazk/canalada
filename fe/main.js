@@ -106,9 +106,11 @@ function buildLibraryAccordion() {
                         });
     $("#library").accordion({
                         header: "> div > h3",
+                        collapsible: true,
+                        heightStyle: "fill",
                         activate: function() {
                           console.log('activate');
-                          alert(ui.newHeader.text());  // For instance.
+                          //alert(ui.newHeader.text());  // For instance.
                         }
                    })
                    .sortable({
@@ -118,7 +120,7 @@ function buildLibraryAccordion() {
                           stop = true;
                         },
                         update: function() {
-                          alert( $(this).sortable('serialize') );
+                          //alert( $(this).sortable('serialize') );
                         }
                    });
     
@@ -139,14 +141,17 @@ function buildLibraryAccordion() {
                     maxWidth: 155,
                     minWidth: 155,
                     handles: 's',
-                    containment: "#workspace" // Constrains the resizing to the div.
+                    //containment: "#workspace" // Constrains the resizing to the div.
                   })
                  .draggable({ 
                     // Settings that execute when the dialog is dragged. If parent isn't 
                     // used the text content will have dragging enabled.
-                    containment: "#workspace", // The element the dialog is constrained to.
+                    //containment: "#workspace", // The element the dialog is constrained to.
                     opacity: 0.70 // Fancy opacity. Optional.
                  });
+
+    //$("#dialogL").accordion("refresh");
+
 }
 
 function setupDragDrop() {

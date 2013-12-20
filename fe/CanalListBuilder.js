@@ -99,16 +99,22 @@ function createCanalRow() {
                 activeTab.resize();
 
                 dialogL.parent().appendTo(activeTab);
+                dialogL.parent().draggable('option', 'containment', activeTab);
+                dialogL.parent().resizable('option', 'containment', activeTab);
+
                 dialogL.parent().css({'display':' block', 'position': 'absolute', 'top': '55px', 'left': '250px'});
                 dialogL.parent().find("*").show();
-                activeTab.find("#toolbar").show();
+                //activeTab.find("#toolbar").show();
+
+                
+
             } 
             return false;
         });
 
     row_content.find(".canal-row-content").resizable({
         maxHeight: 400,
-        minHeight: 100,
+        minHeight: 300,
         handles: 's',
         resize: function (ev, ui) {
             var content = $(this);

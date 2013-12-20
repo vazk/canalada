@@ -6,17 +6,19 @@ body, html {
 }
 
 div#library {
-    width: 150px;
-    height: auto;
-    float: middle;
+    width: auto;
+    height: 140px;
+}
+
+#library * h3{
+    line-height: 0.9em;
+    font-size: 0.5em;
+    padding: 0.05em 2em;
 }
 
 #dialogL, 
 #toolbar, 
 #library, 
-#menu ul, 
-#menu ul li, 
-#menu > ul > li > a, 
 .canal-row, 
 .canal-row-new,
 .canal-row-content {
@@ -33,7 +35,7 @@ ul#grid {
   padding: 0;
   list-style: none;
   margin: 0px auto 0;
-  height: auto;
+  height: 100%;
   width: auto;
 }
 
@@ -48,49 +50,10 @@ ul#grid {
   background-color: white;
   padding: 8px;
   margin: 0px;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
 }
-
-#menu {
-  background-color: #fff;
-  border: 1px solid #dedede;
-  border-radius: 4px;
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
-  color: #888;
-  /*display: block;*/
-  margin: 5px 12px 5px 12px;
-  overflow: hidden;
-  width: 90%
-  bottom: 0;
-  position: absolute;
-}
-
-#menu ul {
-    margin: 0;
-    padding: 0;
-}
-
-#menu ul li {
-  display: inline-block;
-  list-style-type: none;
-  -webkit-transition: all 0.2s;
-  -moz-transition: all 0.2s;
-  -ms-transition: all 0.2s;
-  -o-transition: all 0.2s;
-  transition: all 0.2s; 
-  color: #111;
-  display: block;
-  line-height: 32px;
-  padding: 0 12px;
-  text-decoration: none;
-}
-
-#menu > ul > li:hover {
-    background-color: rgb( 40, 44, 47 );
-    color: rgb( 255, 255, 255 );
-}
-    
+ 
 #top-workspace {
     border: 1px solid grey;
     position:absolute;
@@ -116,14 +79,14 @@ ul#grid {
 
 
 #toolbar { 
-    height: 22px; 
-    padding: 4px; 
+    height: 1.0em; 
+    padding: 0em; 
     position: relative;
     float:bottom; 
-    bottom: 3px; 
+    bottom: 0.1em; 
     width: 100px;
-    background-color: green;/*transparent;*/
-    font-size: 0.8em;
+    background-color: 'green';/*transparent;*/
+    font-size: 0.5em;
 }
 
 #toolbar a { 
@@ -141,21 +104,22 @@ ul#grid {
 #dialogL, 
 .ui-dialog-titlebar, 
 .ui-button-text {
-    padding: 0.05em 0.1em;
+    padding: 0.05em 0.05em;
     position: relative;
-    font-size: 0.6em;
+    font-size: 0.5em;
+    /*height: 1.1em; /* or whatever you want */
+    line-height: 1.0em;
 }
 
-/*.canal-row-new, */
 #canal-rows {
     height: auto;
     background-color: white;
-	  margin: 1px 0 0 0;
-	  padding: 4px 2px;
-	  border: 2px solid #d0d0d0;
-  	border-right: 0;
-	  border-radius: 3px 0 0 3px;
-	  position: relative;
+    margin: 1px 0 0 0;
+    padding: 4px 2px;
+    border: 2px solid #d0d0d0;
+    border-right: 0;
+    border-radius: 3px 0 0 3px;
+    position: relative;
 }
 
 #canal-rows .ui-accordion-content > * {  
@@ -173,8 +137,8 @@ ul#grid {
     opacity:0.4;
     height: auto;
     background-color: white;
-	  padding: 8px 8px;
-	  position: relative;
+    padding: 8px 8px;
+    position: relative;
 }
 
 .canal-row-new:hover {
