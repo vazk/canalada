@@ -147,22 +147,6 @@ function buildLibraryAccordion() {
                     containment: "#workspace", // The element the dialog is constrained to.
                     opacity: 0.70 // Fancy opacity. Optional.
                  });
-    
-    // On resize: adjust the height to the new size of the outter container...
-    $('#workspace').resize(function(ev) {
-        var self = $(this);
-        var parent = self.closest('.ui-accordion-content');
-        //var oWidth = parent.innerWidth();
-
-        var oHeight = parent.innerHeight();
-        //self.offset({'top':40});
-        var tabs = parent.find('.tabs');
-        self.height(oHeight-tabs.height() - 12);
-        console.log("workspace h: " + parent.innerHeight());
-
-        //self.find('#dialogL').dialog("option", "position");
-    });
-    $('#workspace').hide();
 }
 
 function setupDragDrop() {
