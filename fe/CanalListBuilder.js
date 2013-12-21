@@ -86,13 +86,13 @@ function createCanalRow() {
 
 
 
-    dialogL.dialog({width: '155px', minimize: toolbar, 
+    dialogL.dialog({width: '150px', minimize: toolbar, 
                  autoOpen:false, maximize: false, close: false, 
             })
             .parent().resizable({ 
                         // Settings that will execute when resized.
                         maxHeight: 380,
-                        minHeight: 200,
+                        minHeight: 170,
                         maxWidth: 180,
                         minWidth: 140,
                         handles: 'n, e, s, w',
@@ -138,10 +138,10 @@ function createCanalRow() {
                 var dialogL = activeTab.find('#dialogL');   
                 var toolbar = activeTab.find("#toolbar");
                 dialogL.dialog('open');
-                activeTab.resize();
-                dialogL.parent().css({'display':' block', 'position': 'absolute', 'top': '5px', 'left': '50px'});
+                dialogL.parent().css({'display':' block', 'top': '5px', 'left': '5px'});
                 dialogL.parent().find("*").show();
                 toolbar.show();
+                activeTab.resize();
             } 
             return false;
         });
