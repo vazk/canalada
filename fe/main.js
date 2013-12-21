@@ -123,26 +123,6 @@ function buildLibraryAccordion() {
                           //alert( $(this).sortable('serialize') );
                         }
                    });
-    
-    $('#dialogL')
-        .dialog({width: '155px', minimize: '#toolbar', 
-                 autoOpen:false, maximize: false, close: false, 
-                })
-        .parent().resizable({ 
-                    // Settings that will execute when resized.
-                    maxHeight: 380,
-                    minHeight: 230,
-                    maxWidth: 155,
-                    minWidth: 155,
-                    handles: 's',
-                    //containment: "#workspace" // Constrains the resizing to the div.
-                  })
-                 .draggable({ 
-                    // Settings that execute when the dialog is dragged. If parent isn't 
-                    // used the text content will have dragging enabled.
-                    //containment: "#workspace", // The element the dialog is constrained to.
-                    opacity: 0.70 // Fancy opacity. Optional.
-                 });
 
     //$("#dialogL").accordion("refresh");
 

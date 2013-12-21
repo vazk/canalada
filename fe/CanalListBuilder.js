@@ -20,12 +20,9 @@ function buildCanals() {
                 stop = true;
             }
         });
-   
-    //$(".canal-row-content").append($('dialogL');
-
-
-        
 }
+
+
 function createCanalRow() {
     var content = "<div>" +
                   "<a href=\"#\" class=\"handle\" height=10px>Section 1</a>" + 
@@ -43,6 +40,7 @@ function createCanalRow() {
                   "       <div id=\"canal\" tabindex=\"1\">" + 
                   "           <canvas id=\"canal-canvas\" style=\"z-index: 1\"></canvas>" + 
                   "       </div> " + 
+                  "       <div id=\"dialogL\" title=\"Actor Library\" display=\"none\"> </div>" +
                   "       <div id=\"toolbar\"  style=\"z-index: 3\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
                   "  </section>" + 
@@ -61,6 +59,30 @@ function createCanalRow() {
     $("#canal-rows").append(row_content);
 
     var workspace = row_content.find('#workspace');
+    var dialogL = row_content.find('#dialogL');   
+    var toolbar = row_content.find('#toolbar');   
+
+    dialogL.dialog({width: '155px', minimize: toolbar, 
+                 autoOpen:false, maximize: false, close: false, 
+            })
+            .parent().resizable({ 
+                        // Settings that will execute when resized.
+                        maxHeight: 380,
+                        minHeight: 230,
+                        maxWidth: 155,
+                        minWidth: 155,
+                        handles: 's',
+                        containment: workspace // Constrains the resizing to the div.
+                      })
+                     .draggable({ 
+                        // Settings that execute when the dialog is dragged. If parent isn't 
+                        // used the text content will have dragging enabled.
+                        containment: workspace, // The element the dialog is constrained to.
+                        opacity: 0.70 // Fancy opacity. Optional.
+                     });
+
+
+
 
     workspace.resize(function(ev) {
         var self = $(this);
@@ -90,33 +112,23 @@ function createCanalRow() {
             var activeTabRef = self.find('a').attr('href');
             var activeTab = parentContent.find(activeTabRef);
             
- 
             activeTab.show();
 
             if(activeTabRef == '#workspace') {
-                var dialogL = $('#dialogL');   
+                var dialogL = activeTab.find('#dialogL');   
                 var toolbar = activeTab.find("#toolbar");
                 dialogL.dialog('open');
                 activeTab.resize();
-
-                dialogL.parent().appendTo(activeTab);
-                dialogL.parent().draggable('option', 'containment', activeTab);
-                dialogL.parent().resizable('option', 'containment', activeTab);
-                dialogL.dialog('option', 'minimize', toolbar);
-
-                dialogL.parent().css({'display':' block', 'position': 'absolute', 'top': '55px', 'left': '250px'});
+                dialogL.parent().css({'display':' block', 'position': 'absolute', 'top': '5px', 'left': '50px'});
                 dialogL.parent().find("*").show();
                 toolbar.show();
-
-                
-
             } 
             return false;
         });
 
     row_content.find(".canal-row-content").resizable({
-        maxHeight: 400,
-        minHeight: 300,
+        maxHeight: 600,
+        minHeight: 200,
         handles: 's',
         resize: function (ev, ui) {
             var content = $(this);
@@ -124,6 +136,7 @@ function createCanalRow() {
             workspace.resize();
         }
     });
+    dialogL.parent().appendTo(workspace);
 
     
 
