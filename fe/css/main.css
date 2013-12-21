@@ -79,14 +79,14 @@ ul#grid {
 
 
 #toolbar { 
-    height: 1.0em; 
+    line-height: 1.2em; 
     padding: 0em; 
-    position: relative;
-    float:bottom; 
-    bottom: 0.1em; 
+    position: absolute;
+    /*float: bottom; */
+    bottom: 0.6em; 
     width: 100px;
-    background-color: 'green';/*transparent;*/
-    font-size: 0.5em;
+    background-color: transparent;
+    font-size: 0.6em;
 }
 
 #toolbar a { 
@@ -106,9 +106,9 @@ ul#grid {
 .ui-button-text {
     padding: 0.05em 0.05em;
     position: relative;
-    font-size: 0.5em;
+    font-size: 0.6em;
     /*height: 1.1em; /* or whatever you want */
-    line-height: 1.0em;
+    line-height: 1.2em;
 }
 
 #canal-rows {

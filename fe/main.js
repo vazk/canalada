@@ -127,13 +127,7 @@ function buildLibraryAccordion() {
     $('#dialogL')
         .dialog({width: '155px', minimize: '#toolbar', 
                  autoOpen:false, maximize: false, close: false, 
-                /* appendTo: '#workspace',
-                create: function () {
-                    $(this).closest('div.ui-dialog')
-                        .click(function (e) {
-                        e.stopPropagation();
-                    });
-                }*/})
+                })
         .parent().resizable({ 
                     // Settings that will execute when resized.
                     maxHeight: 380,

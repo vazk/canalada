@@ -40,10 +40,10 @@ function createCanalRow() {
                   "     <p>Lorem, nunc.</p>" + 
                   "   </div>" + 
                   "   <div id=\"workspace\">" + 
-                  //"       <div id=\"canal\" tabindex=\"1\">" + 
-                  //"           <canvas id=\"canal-canvas\" style=\"z-index: 1\"></canvas>" + 
-                  //"       </div> " + 
-                  //"       <div id=\"toolbar\"  style=\"z-index: 3\">&nbsp;&nbsp;&nbsp;</div>" + 
+                  "       <div id=\"canal\" tabindex=\"1\">" + 
+                  "           <canvas id=\"canal-canvas\" style=\"z-index: 1\"></canvas>" + 
+                  "       </div> " + 
+                  "       <div id=\"toolbar\"  style=\"z-index: 3\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
                   "  </section>" + 
                   "</div>" + 
@@ -95,16 +95,18 @@ function createCanalRow() {
 
             if(activeTabRef == '#workspace') {
                 var dialogL = $('#dialogL');   
+                var toolbar = activeTab.find("#toolbar");
                 dialogL.dialog('open');
                 activeTab.resize();
 
                 dialogL.parent().appendTo(activeTab);
                 dialogL.parent().draggable('option', 'containment', activeTab);
                 dialogL.parent().resizable('option', 'containment', activeTab);
+                dialogL.dialog('option', 'minimize', toolbar);
 
                 dialogL.parent().css({'display':' block', 'position': 'absolute', 'top': '55px', 'left': '250px'});
                 dialogL.parent().find("*").show();
-                //activeTab.find("#toolbar").show();
+                toolbar.show();
 
                 
 
