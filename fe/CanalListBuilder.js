@@ -11,7 +11,8 @@ function buildCanals() {
             header: "> div > a",
             icons: false,
             collapsible: true,
-            active: false
+            active: false,
+            heightStyle: "content"
         })
         .sortable({
             axis: "y",
@@ -47,14 +48,6 @@ function createCanalRow() {
                   "</div>" + 
                   "</div>";
                 
-
-    /*
-    var row_div = document.createElement('div');
-    row_div.innerHTML = content;
-    $("#canal-rows").append(row_div);
-    var row_content = $(row_div);
-    */
-
     var row_content = $(content);
     $("#canal-rows").append(row_content);
 
@@ -62,23 +55,54 @@ function createCanalRow() {
     var dialogL = row_content.find('#dialogL');   
     var toolbar = row_content.find('#toolbar');   
 
+    var libraryL = $("#library").clone();
+    var stop = false;
+    libraryL.find("h3").click(function( event ) {
+                          if(stop) {
+                            event.stopImmediatePropagation();
+                            event.preventDefault();
+                            stop = false;
+                          }
+                        });
+    libraryL.accordion({
+                        header: "> div > h3",
+                        collapsible: true,
+                        heightStyle: "content",
+                        activate: function() {
+                          console.log('activate');
+                          //alert(ui.newHeader.text());  // For instance.
+                        }
+                   })
+                   .sortable({
+                        axis: "y",
+                        handle: "h3",
+                        stop: function() {
+                          stop = true;
+                        },
+                        update: function() {
+                          //alert( $(this).sortable('serialize') );
+                        }
+                   });
+
+
+
     dialogL.dialog({width: '155px', minimize: toolbar, 
                  autoOpen:false, maximize: false, close: false, 
             })
             .parent().resizable({ 
                         // Settings that will execute when resized.
                         maxHeight: 380,
-                        minHeight: 230,
-                        maxWidth: 155,
-                        minWidth: 155,
-                        handles: 's',
+                        minHeight: 200,
+                        maxWidth: 180,
+                        minWidth: 140,
+                        handles: 'n, e, s, w',
                         containment: workspace // Constrains the resizing to the div.
                       })
                      .draggable({ 
                         // Settings that execute when the dialog is dragged. If parent isn't 
                         // used the text content will have dragging enabled.
                         containment: workspace, // The element the dialog is constrained to.
-                        opacity: 0.70 // Fancy opacity. Optional.
+                        opacity: 0.7
                      });
 
 
@@ -87,15 +111,11 @@ function createCanalRow() {
     workspace.resize(function(ev) {
         var self = $(this);
         var parent = self.closest('.ui-accordion-content');
-        //var oWidth = parent.innerWidth();
-
         var oHeight = parent.innerHeight();
-        //self.offset({'top':40});
         var tabs = parent.find('.tabs');
         self.height(oHeight-tabs.height() - 12);
         console.log("workspace h: " + parent.innerHeight());
 
-        //self.find('#dialogL').dialog("option", "position");
     });
     workspace.hide();
 
@@ -136,9 +156,10 @@ function createCanalRow() {
             workspace.resize();
         }
     });
+
+    libraryL.appendTo(dialogL);
     dialogL.parent().appendTo(workspace);
 
-    
 
     $("#canal-rows").accordion("refresh");
 }

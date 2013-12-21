@@ -48,7 +48,7 @@ ul#grid {
   
 #grid li img {
   background-color: white;
-  padding: 8px;
+  padding: 5px;
   margin: 0px;
   width: 24px;
   height: 24px;
@@ -74,6 +74,7 @@ ul#grid {
     right:3px;
     bottom:3px;
     top:3px;
+    min-height: 300px;
 }
 
 
@@ -114,8 +115,8 @@ ul#grid {
 #canal-rows {
     height: auto;
     background-color: white;
-    margin: 1px 0 0 0;
-    padding: 4px 2px;
+    /*margin: 1px 0 0 0;
+    padding: 4px 2px;*/
     border: 2px solid #d0d0d0;
     border-right: 0;
     border-radius: 3px 0 0 3px;
@@ -145,13 +146,10 @@ ul#grid {
     vertical-align:middle;
     opacity:1.0;
 }
-/*
+
 .canal-row-content {
-	  display: none;
-	  border: 1px solid #ccc;
-    border-top: 0;
+/*    min-height: 200px;*/
 }
-*/
 
 
 #canal-rows * .ui-accordion-header { 

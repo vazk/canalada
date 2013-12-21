@@ -92,40 +92,6 @@ function loadLibraries(library) {
         library_div.appendChild(body_ul);
         accordion_div.appendChild(library_div);
     }
-    buildLibraryAccordion();
-}
-
-function buildLibraryAccordion() {
-    var stop = false;
-    $("#library h3").click(function( event ) {
-                          if(stop) {
-                            event.stopImmediatePropagation();
-                            event.preventDefault();
-                            stop = false;
-                          }
-                        });
-    $("#library").accordion({
-                        header: "> div > h3",
-                        collapsible: true,
-                        heightStyle: "fill",
-                        activate: function() {
-                          console.log('activate');
-                          //alert(ui.newHeader.text());  // For instance.
-                        }
-                   })
-                   .sortable({
-                        axis: "y",
-                        handle: "h3",
-                        stop: function() {
-                          stop = true;
-                        },
-                        update: function() {
-                          //alert( $(this).sortable('serialize') );
-                        }
-                   });
-
-    //$("#dialogL").accordion("refresh");
-
 }
 
 function setupDragDrop() {
