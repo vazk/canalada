@@ -41,10 +41,11 @@ div#library {
 canvas {
     background-color: #E6E5D8;
     position: absolute;
-    left: 0px;
+    /*left: 0px;
     right: 0px;
     top: 0px;
-    bottom: 0px;
+    bottom: 0px;*/
+    z-index: 4;
 }
 
 
@@ -87,10 +88,10 @@ ul#grid {
 #workspace {
     /*border: 2px solid blue;*/
     position:relative;
-    left:3px;
-    right:3px;
-    bottom:3px;
-    top:3px;
+    left:1px;
+    right:1px;
+    bottom:1px;
+    top:1px;
     min-height: 300px;
 }
 
@@ -98,12 +99,14 @@ ul#grid {
 
 #toolbar { 
     line-height: 1.2em; 
-    padding: 0em; 
+    padding: 2px; 
     position: absolute;
-    bottom: 0.6em; 
+    bottom: 3px;
+    left: 3px; 
     width: 100px;
     background-color: transparent;
     font-size: 0.6em;
+    z-index: 5;
 }
 
 #toolbar a { 
@@ -119,10 +122,9 @@ ul#grid {
 }
 
 #dialogL, 
-.ui-dialog-titlebar, 
-.ui-button-text {
-    padding: 0.0em 0.05em;
-    position: relative;
+.ui-dialog-titlebar{
+    padding: 0px 0px;
+    margin: 0px, 0px, 0px, 0px;
     font-size: 0.6em;
     /*height: 1.1em; /* or whatever you want */
     line-height: 0.9em;
@@ -164,11 +166,6 @@ ul#grid {
     opacity:1.0;
 }
 
-.canal-row-content {
-/*    min-height: 200px;*/
-}
-
-
 #canal-rows * .ui-accordion-header { 
     background-color: white; 
     background-image:none;
@@ -183,14 +180,14 @@ ul#grid {
 
 #canal-rows * .ui-accordion, 
 #canal-rows * .ui-accordion-content {
-    padding: 0.2em 0.2em 0.2em 0.2em;
+    padding: 2px 2px 2px 2px;
 }
 
 .canal-row-content {
     position: relative;
     background: white;
-    margin: 2px, 0px, 0px, 0px;
-    padding: 2px, 0px, 0px, 0px;
+    margin: 1px, 0px, 0px, 0px;
+    padding: 1px, 0px, 0px, 0px;
     /*left:0px;
     right:3px;
     bottom: 0px;
@@ -210,8 +207,8 @@ ul.tabs li {
   border: gray solid 1px;
   border-bottom: none;
   float: left;
-  margin: 0 .25em 0 0;
-  padding: .25em .25em;
+  margin: 0 2px 0 0;
+  padding: 2px 2px;
   font-size: 0.8em;
 }
 ul.tabs li a {

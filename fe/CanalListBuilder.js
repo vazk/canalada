@@ -4,10 +4,20 @@ function onCanalToBeSelected(event, ui) {
     var c = ui.newPanel.length;
     var d = ui.oldHeader.length;
     var e = ui.oldPanel.length;
+
+    if(ui.newPanel.length != 0) {
+        var canalschemeD = $('#canal-scheme');   
+        var newWorkspace = ui.newPanel.find('#workspace');
+        canalschemeD.appendTo(newWorkspace);
+    }
 }
 
 function onCanalTabSelected() {
     var self = $(this);
+    // check if the tab is already active and return if so...
+    if(self.hasClass('active')) {
+        return;
+    }
     var parentContent = self.closest('.canal-row-content');
     parentContent.find('ul.tabs li').removeClass('active');
     self.addClass('active')
@@ -18,6 +28,7 @@ function onCanalTabSelected() {
     activeTab.show();
 
     if(activeTabRef == '#workspace') {
+        activeTab.resize();
         var dialogL = activeTab.find('#dialogL');   
         var toolbarD = activeTab.find("#toolbar");
         dialogL.dialog('open');
@@ -25,24 +36,31 @@ function onCanalTabSelected() {
         dialogL.parent().find("*").show();
         toolbarD.show();
         // get the canvas element, add it to the active tab, and show
-        var canvasD = $('#canal-scheme');   
-        canvasD.appendTo(activeTab);
-        canvasD.css({'display':'block'});
+        var canalschemeD = $('#canal-scheme');  
+        canalschemeD.show(); 
+        canalschemeD.find("*").show();
+        //var canvasD = $('canvas');   
+        //canvasD.appendTo(activeTab);
+        //canalschemeD.css({'display':'block'});
+        //canvasD.css({'display':'block'});
         // resize the activeTab
         //activeTab.resize();
     } 
     return false;
 }
 
-function onCanalWorkspaceResize(ev) {
+function onCanalWorkspaceResize() {
     var self = $(this);
     var parent = self.closest('.ui-accordion-content');
     var oHeight = parent.innerHeight();
     var tabs = parent.find('.tabs');
-    self.height(oHeight-tabs.height() - 12);
+    self.height(oHeight-tabs.height()-3);
+
+    $('canvas').height(self.height()-4);
+    $('canvas').width(self.width()-4);
+
+    var a = $('#canal-scheme').height();
 }
-
-
 
 
 
@@ -71,6 +89,7 @@ function buildCanals() {
                 stop = true;
             }
         });
+
 }
 
 
@@ -92,7 +111,7 @@ function createCanalRow() {
                   //"           <canvas id=\"canal-canvas\" style=\"z-index: 1\"></canvas>" + 
                   //"       </div> " + 
                   "       <div id=\"dialogL\" title=\"Actor Library\" display=\"none\"> </div>" +
-                  "       <div id=\"toolbar\"  style=\"z-index: 3\">&nbsp;&nbsp;&nbsp;</div>" + 
+                  "       <div id=\"toolbar\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
                   "  </section>" + 
                   "</div>" + 
@@ -169,7 +188,7 @@ function createCanalRow() {
 
     row_content.find(".canal-row-content").resizable({
         maxHeight: 600,
-        minHeight: 200,
+        minHeight: 300,
         handles: 's',
         resize: function (ev, ui) {
             var content = $(this);
