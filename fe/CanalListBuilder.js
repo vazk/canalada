@@ -1,3 +1,52 @@
+function onCanalToBeSelected(event, ui) {
+    var a = $(this);
+    var b = ui.newHeader.length;
+    var c = ui.newPanel.length;
+    var d = ui.oldHeader.length;
+    var e = ui.oldPanel.length;
+}
+
+function onCanalTabSelected() {
+    var self = $(this);
+    var parentContent = self.closest('.canal-row-content');
+    parentContent.find('ul.tabs li').removeClass('active');
+    self.addClass('active')
+    parentContent.find('.block div').hide();
+    var activeTabRef = self.find('a').attr('href');
+    var activeTab = parentContent.find(activeTabRef);
+    
+    activeTab.show();
+
+    if(activeTabRef == '#workspace') {
+        var dialogL = activeTab.find('#dialogL');   
+        var toolbarD = activeTab.find("#toolbar");
+        dialogL.dialog('open');
+        dialogL.parent().css({'display':' block', 'top': '5px', 'left': '5px'});
+        dialogL.parent().find("*").show();
+        toolbarD.show();
+        // get the canvas element, add it to the active tab, and show
+        var canvasD = $('#canal-scheme');   
+        canvasD.appendTo(activeTab);
+        canvasD.css({'display':'block'});
+        // resize the activeTab
+        //activeTab.resize();
+    } 
+    return false;
+}
+
+function onCanalWorkspaceResize(ev) {
+    var self = $(this);
+    var parent = self.closest('.ui-accordion-content');
+    var oHeight = parent.innerHeight();
+    var tabs = parent.find('.tabs');
+    self.height(oHeight-tabs.height() - 12);
+}
+
+
+
+
+
+
 function buildCanals() {
     var stop = false;
     $("#canal-rows a").click(function(event) {
@@ -12,7 +61,8 @@ function buildCanals() {
             icons: false,
             collapsible: true,
             active: false,
-            heightStyle: "content"
+            heightStyle: "content",
+            beforeActivate: onCanalToBeSelected
         })
         .sortable({
             axis: "y",
@@ -38,9 +88,9 @@ function createCanalRow() {
                   "     <p>Lorem, nunc.</p>" + 
                   "   </div>" + 
                   "   <div id=\"workspace\">" + 
-                  "       <div id=\"canal\" tabindex=\"1\">" + 
-                  "           <canvas id=\"canal-canvas\" style=\"z-index: 1\"></canvas>" + 
-                  "       </div> " + 
+                  //"       <div id=\"canal\" tabindex=\"1\">" + 
+                  //"           <canvas id=\"canal-canvas\" style=\"z-index: 1\"></canvas>" + 
+                  //"       </div> " + 
                   "       <div id=\"dialogL\" title=\"Actor Library\" display=\"none\"> </div>" +
                   "       <div id=\"toolbar\"  style=\"z-index: 3\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
@@ -53,7 +103,7 @@ function createCanalRow() {
 
     var workspace = row_content.find('#workspace');
     var dialogL = row_content.find('#dialogL');   
-    var toolbar = row_content.find('#toolbar');   
+    var toolbarD = row_content.find('#toolbar');   
 
     var libraryL = $("#library").clone();
     var stop = false;
@@ -86,7 +136,7 @@ function createCanalRow() {
 
 
 
-    dialogL.dialog({width: '150px', minimize: toolbar, 
+    dialogL.dialog({width: '150px', minimize: toolbarD, 
                  autoOpen:false, maximize: false, close: false, 
             })
             .parent().resizable({ 
@@ -108,43 +158,14 @@ function createCanalRow() {
 
 
 
-    workspace.resize(function(ev) {
-        var self = $(this);
-        var parent = self.closest('.ui-accordion-content');
-        var oHeight = parent.innerHeight();
-        var tabs = parent.find('.tabs');
-        self.height(oHeight-tabs.height() - 12);
-        console.log("workspace h: " + parent.innerHeight());
-
-    });
+    workspace.resize(onCanalWorkspaceResize);
     workspace.hide();
 
     row_content.find('ul.tabs li:first').addClass('active');
     row_content.find('.block div').hide();
     row_content.find('.block div:first').show();
 
-    row_content.find('ul.tabs li').click(function(){
-            var self = $(this);
-            var parentContent = self.closest('.canal-row-content');
-            parentContent.find('ul.tabs li').removeClass('active');
-            self.addClass('active')
-            parentContent.find('.block div').hide();
-            var activeTabRef = self.find('a').attr('href');
-            var activeTab = parentContent.find(activeTabRef);
-            
-            activeTab.show();
-
-            if(activeTabRef == '#workspace') {
-                var dialogL = activeTab.find('#dialogL');   
-                var toolbar = activeTab.find("#toolbar");
-                dialogL.dialog('open');
-                dialogL.parent().css({'display':' block', 'top': '5px', 'left': '5px'});
-                dialogL.parent().find("*").show();
-                toolbar.show();
-                activeTab.resize();
-            } 
-            return false;
-        });
+    row_content.find('ul.tabs li').click(onCanalTabSelected);
 
     row_content.find(".canal-row-content").resizable({
         maxHeight: 600,

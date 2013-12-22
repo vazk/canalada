@@ -140,7 +140,7 @@ function setupDragDrop() {
     }
 
     // Bind the event listeners for the canvas
-    var canvasContainer = document.getElementById('canal');
+    var canvasContainer = document.getElementById('canal-scheme');
     canvasContainer.addEventListener('dragenter', handleDragEnter, false);
     canvasContainer.addEventListener('dragover',  handleDragOver, false);
     canvasContainer.addEventListener('dragleave', handleDragLeave, false);

@@ -30,6 +30,23 @@ div#library {
     user-select: none;
 }
 
+#canal-scheme {
+    position: absolute;
+    left: 0px;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+}
+
+canvas {
+    background-color: #E6E5D8;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+
 
 ul#grid {
   padding: 0;
