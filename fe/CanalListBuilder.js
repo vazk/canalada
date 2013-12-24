@@ -1,5 +1,3 @@
-
-
 var contextCanal = undefined;
 var loadedCanals = [];
 
@@ -36,14 +34,14 @@ function onCanalTabSelected() {
 
     if(activeTabRef == '#workspace') {
         activeTab.resize();
-        var dialogL = activeTab.find('#dialogL');   
-        var toolbarD = activeTab.find("#toolbar");
-        dialogL.dialog('open');
-        dialogL.parent().css({'display':' block', 
+        //var dialogL = activeTab.find('#dialogL');   
+        //var toolbarD = activeTab.find("#toolbar");
+        contextCanal.dialog.widget.dialog('open');
+        contextCanal.dialog.widget.parent().css({'display':' block', 
                               'top': contextCanal.dialog.top, 
                               'left': contextCanal.dialog.left});
-        dialogL.parent().find("*").show();
-        toolbarD.show();
+        contextCanal.dialog.widget.parent().find("*").show();
+        contextCanal.dialog.toolbar.show();
         // get the canvas element, add it to the active tab, and show
         var canalschemeD = $('#canal-scheme');  
         canalschemeD.show(); 
@@ -150,10 +148,6 @@ function createCanalRow() {
     // and to the element itself
     row_content.data('canalData', newCanal);
 
-    //var dialogL = row_content.find('#dialogL');   
-    var toolbarD = row_content.find('#toolbar');   
-    var libraryL = $('#library').clone();
-
     var stop = false;
     newCanal.dialog.library.find('h3').click(function( event ) {
                           if(stop) {
@@ -186,7 +180,6 @@ function createCanalRow() {
 
     newCanal.dialog.widget.dialog({width: '150px', minimize: newCanal.dialog.toolbar, 
                  autoOpen:false, maximize: false, close: false, 
-                 position: [120, 100],
                  drag: onDialogLDrag,
             })
             .parent().resizable({ 
