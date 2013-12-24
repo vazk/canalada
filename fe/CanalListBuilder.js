@@ -1,3 +1,8 @@
+
+
+var contextCanal = undefined;
+var loadedCanals = [];
+
 function onCanalToBeSelected(event, ui) {
     var a = $(this);
     var b = ui.newHeader.length;
@@ -6,9 +11,11 @@ function onCanalToBeSelected(event, ui) {
     var e = ui.oldPanel.length;
 
     if(ui.newPanel.length != 0) {
+        var row_content = $(ui.newPanel).parent();
+        contextCanal = row_content.data('canalData');
         var canalschemeD = $('#canal-scheme');   
-        var newWorkspace = ui.newPanel.find('#workspace');
-        canalschemeD.appendTo(newWorkspace);
+        var workspaceD = ui.newPanel.find('#workspace');
+        canalschemeD.appendTo(workspaceD);
     }
 }
 
@@ -32,7 +39,9 @@ function onCanalTabSelected() {
         var dialogL = activeTab.find('#dialogL');   
         var toolbarD = activeTab.find("#toolbar");
         dialogL.dialog('open');
-        dialogL.parent().css({'display':' block', 'top': '5px', 'left': '5px'});
+        dialogL.parent().css({'display':' block', 
+                              'top': contextCanal.dialog.top, 
+                              'left': contextCanal.dialog.left});
         dialogL.parent().find("*").show();
         toolbarD.show();
         // get the canvas element, add it to the active tab, and show
@@ -62,6 +71,11 @@ function onCanalWorkspaceResize() {
     var a = $('#canal-scheme').height();
 }
 
+function onDialogLDrag(event, ui) {
+    var position = $(event.target).parent().position();
+    contextCanal.dialog.top = position.top;
+    contextCanal.dialog.left = position.left;
+}
 
 
 
@@ -118,33 +132,48 @@ function createCanalRow() {
                   "</div>";
                 
     var row_content = $(content);
-    $("#canal-rows").append(row_content);
+    $('#canal-rows').append(row_content);
 
-    var workspace = row_content.find('#workspace');
-    var dialogL = row_content.find('#dialogL');   
+    // create the data to be associated with canal
+    var newCanal = { 
+        id: loadedCanals.length,
+        workspace: row_content.find('#workspace'),
+        dialog:{
+            top:5, left:5, minimized:false,
+            widget:row_content.find('#dialogL'),
+            library:$('#library').clone(),
+            toolbar:row_content.find('#toolbar'),
+        },
+    };
+    // add it to the list
+    loadedCanals.push(newCanal);
+    // and to the element itself
+    row_content.data('canalData', newCanal);
+
+    //var dialogL = row_content.find('#dialogL');   
     var toolbarD = row_content.find('#toolbar');   
+    var libraryL = $('#library').clone();
 
-    var libraryL = $("#library").clone();
     var stop = false;
-    libraryL.find("h3").click(function( event ) {
+    newCanal.dialog.library.find('h3').click(function( event ) {
                           if(stop) {
                             event.stopImmediatePropagation();
                             event.preventDefault();
                             stop = false;
                           }
                         });
-    libraryL.accordion({
-                        header: "> div > h3",
+    newCanal.dialog.library.accordion({
+                        header: '> div > h3',
                         collapsible: true,
-                        heightStyle: "content",
+                        heightStyle: 'content',
                         activate: function() {
                           console.log('activate');
                           //alert(ui.newHeader.text());  // For instance.
                         }
                    })
                    .sortable({
-                        axis: "y",
-                        handle: "h3",
+                        axis: 'y',
+                        handle: 'h3',
                         stop: function() {
                           stop = true;
                         },
@@ -155,8 +184,10 @@ function createCanalRow() {
 
 
 
-    dialogL.dialog({width: '150px', minimize: toolbarD, 
+    newCanal.dialog.widget.dialog({width: '150px', minimize: newCanal.dialog.toolbar, 
                  autoOpen:false, maximize: false, close: false, 
+                 position: [120, 100],
+                 drag: onDialogLDrag,
             })
             .parent().resizable({ 
                         // Settings that will execute when resized.
@@ -165,41 +196,39 @@ function createCanalRow() {
                         maxWidth: 180,
                         minWidth: 140,
                         handles: 'n, e, s, w',
-                        containment: workspace // Constrains the resizing to the div.
+                        containment: newCanal.workspace // Constrains the resizing to the div.
                       })
                      .draggable({ 
                         // Settings that execute when the dialog is dragged. If parent isn't 
                         // used the text content will have dragging enabled.
-                        containment: workspace, // The element the dialog is constrained to.
+                        containment: newCanal.workspace, // The element the dialog is constrained to.
                         opacity: 0.7
                      });
 
+    // setup the on-resize callback
+    newCanal.workspace.resize(onCanalWorkspaceResize);
+    // and hide the workspace for now
+    newCanal.workspace.hide();
 
-
-
-    workspace.resize(onCanalWorkspaceResize);
-    workspace.hide();
-
+    // setup the control
     row_content.find('ul.tabs li:first').addClass('active');
     row_content.find('.block div').hide();
     row_content.find('.block div:first').show();
-
     row_content.find('ul.tabs li').click(onCanalTabSelected);
-
     row_content.find(".canal-row-content").resizable({
         maxHeight: 600,
         minHeight: 300,
         handles: 's',
         resize: function (ev, ui) {
             var content = $(this);
-            console.log("h: " + content.innerHeight());
-            workspace.resize();
+            newCanal.workspace.resize();
         }
     });
 
-    libraryL.appendTo(dialogL);
-    dialogL.parent().appendTo(workspace);
+    // finalize the dialog widget and add it to the workspace
+    newCanal.dialog.library.appendTo(newCanal.dialog.widget);
+    newCanal.dialog.widget.parent().appendTo(newCanal.workspace);
 
-
+    // refresh all
     $("#canal-rows").accordion("refresh");
 }
