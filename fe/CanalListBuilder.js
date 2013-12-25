@@ -34,13 +34,10 @@ function onCanalTabSelected() {
 
     if(activeTabRef == '#workspace') {
         activeTab.resize();
-        //var dialogL = activeTab.find('#dialogL');   
-        //var toolbarD = activeTab.find("#toolbar");
-        contextCanal.dialog.widget.dialog('open');
-        contextCanal.dialog.widget.parent().css({'display':' block', 
-                              'top': contextCanal.dialog.top, 
-                              'left': contextCanal.dialog.left});
-        contextCanal.dialog.widget.parent().find("*").show();
+        if(!contextCanal.dialog.minimized) {
+            showLibraryDialog();
+        }
+        // show the toolbar
         contextCanal.dialog.toolbar.show();
         // get the canvas element, add it to the active tab, and show
         var canalschemeD = $('#canal-scheme');  
@@ -52,6 +49,8 @@ function onCanalTabSelected() {
         //canvasD.css({'display':'block'});
         // resize the activeTab
         //activeTab.resize();
+        var a = contextCanal.dialog.widget;
+        var b = a.parent();//.minimize();
     } 
     return false;
 }
@@ -65,6 +64,9 @@ function onCanalWorkspaceResize() {
 
     $('canvas').height(self.height()-4);
     $('canvas').width(self.width()-4);
+    Canalada.canvas.setWidth(self.width-4);
+    Canalada.canvas.setHeight(self.height-4);
+    Canalada.canvas.calcOffset();
 
     var a = $('#canal-scheme').height();
 }
@@ -75,8 +77,24 @@ function onDialogLDrag(event, ui) {
     contextCanal.dialog.left = position.left;
 }
 
+function onDialogMinimize(event, ui) {
+    console.log('minimize');
+    contextCanal.dialog.minimized = true;
+}
 
+function onDialogUnminimize(event, ui) {
+    console.log('unminimize');
+    contextCanal.dialog.minimized = false;
+    showLibraryDialog();
+}
 
+function showLibraryDialog() {
+    contextCanal.dialog.widget.dialog('open');
+    contextCanal.dialog.widget.parent().css({'display':' block', 
+                                  'top': contextCanal.dialog.top, 
+                                  'left': contextCanal.dialog.left});
+    contextCanal.dialog.widget.parent().find("*").show();
+}
 function buildCanals() {
     var stop = false;
     $("#canal-rows a").click(function(event) {
@@ -181,6 +199,8 @@ function createCanalRow() {
     newCanal.dialog.widget.dialog({width: '150px', minimize: newCanal.dialog.toolbar, 
                  autoOpen:false, maximize: false, close: false, 
                  drag: onDialogLDrag,
+                 beforeMinimize: onDialogMinimize,
+                 beforeUnminimize: onDialogUnminimize,
             })
             .parent().resizable({ 
                         // Settings that will execute when resized.
