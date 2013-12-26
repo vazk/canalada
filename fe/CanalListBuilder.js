@@ -11,9 +11,20 @@ function onCanalToBeSelected(event, ui) {
     if(ui.newPanel.length != 0) {
         var row_content = $(ui.newPanel).parent();
         contextCanal = row_content.data('canalData');
-        var canalschemeD = $('#canal-scheme');   
-        var workspaceD = ui.newPanel.find('#workspace');
-        canalschemeD.appendTo(workspaceD);
+        contextCanal.canalscheme.appendTo(contextCanal.workspace);
+    }
+}
+
+function onCanalSchemeDrop(event, ui) {
+    var modelName = event.toElement.attributes.ctype.nodeValue;
+    console.log('dropped: ', modelName);
+    var model = Canalada.actorClassRegistry[modelName];
+    if(model) {
+        var inst = new model();
+        var offset = {x: ui.position.left,
+                      y: ui.position.top};
+        inst.setPositionByOrigin(offset,'center','center');
+        Canalada.addActor(inst);
     }
 }
 
@@ -40,17 +51,15 @@ function onCanalTabSelected() {
         // show the toolbar
         contextCanal.dialog.toolbar.show();
         // get the canvas element, add it to the active tab, and show
-        var canalschemeD = $('#canal-scheme');  
-        canalschemeD.show(); 
-        canalschemeD.find("*").show();
+        //var canalschemeD = $('#canal-scheme');  
+        contextCanal.canalscheme.show(); 
+        contextCanal.canalscheme.find("*").show();
         //var canvasD = $('canvas');   
         //canvasD.appendTo(activeTab);
         //canalschemeD.css({'display':'block'});
         //canvasD.css({'display':'block'});
         // resize the activeTab
         //activeTab.resize();
-        var a = contextCanal.dialog.widget;
-        var b = a.parent();//.minimize();
     } 
     return false;
 }
@@ -64,11 +73,9 @@ function onCanalWorkspaceResize() {
 
     $('canvas').height(self.height()-4);
     $('canvas').width(self.width()-4);
-    Canalada.canvas.setWidth(self.width-4);
-    Canalada.canvas.setHeight(self.height-4);
+    Canalada.canvas.setWidth(self.width()-4);
+    Canalada.canvas.setHeight(self.height()-4);
     Canalada.canvas.calcOffset();
-
-    var a = $('#canal-scheme').height();
 }
 
 function onDialogLDrag(event, ui) {
@@ -119,7 +126,10 @@ function buildCanals() {
                 stop = true;
             }
         });
-
+    $('#canal-scheme').droppable({
+        accept: 'img',
+        drop: onCanalSchemeDrop,
+    });
 }
 
 
@@ -160,6 +170,7 @@ function createCanalRow() {
             library:$('#library').clone(),
             toolbar:row_content.find('#toolbar'),
         },
+        canalscheme: $('#canal-scheme')
     };
     // add it to the list
     loadedCanals.push(newCanal);
@@ -194,8 +205,6 @@ function createCanalRow() {
                         }
                    });
 
-
-
     newCanal.dialog.widget.dialog({width: '150px', minimize: newCanal.dialog.toolbar, 
                  autoOpen:false, maximize: false, close: false, 
                  drag: onDialogLDrag,
@@ -217,7 +226,16 @@ function createCanalRow() {
                         containment: newCanal.workspace, // The element the dialog is constrained to.
                         opacity: 0.7
                      });
-
+    newCanal.dialog.library.find('img').draggable({
+                        helper: 'clone',
+                        appendTo: newCanal.canalscheme,
+                        scroll: false,
+                        zIndex: 100000,
+                        containment: newCanal.canalscheme,
+                        start: function( event, ui ) { 
+                            console.log('drag start: ', event.target.attributes.ctype);
+                        }
+                    });
     // setup the on-resize callback
     newCanal.workspace.resize(onCanalWorkspaceResize);
     // and hide the workspace for now

@@ -82,7 +82,7 @@ function loadLibraries(library) {
             var module_icon = document.createElement('img');
             module_icon.setAttribute('src', module['src']);
             module_icon.setAttribute('ctype', module.info['module']);
-            module_icon.addEventListener('dragstart', handleDragStart, false);
+            //module_icon.addEventListener('dragstart', handleDragStart, false);
             //module_icon.addEventListener('dragend', function(e){console.log("end")}, false);
             module_li.appendChild(module_icon);
             body_ul.appendChild(module_li);
@@ -103,7 +103,7 @@ function setupDragDrop() {
         }
         return false;
     }
-    
+    /*
     function handleDragOver(e) {
         if (e.preventDefault) {
             e.preventDefault(); // Necessary. Allows us to drop.
@@ -140,11 +140,14 @@ function setupDragDrop() {
     }
 
     // Bind the event listeners for the canvas
+    */
     var canvasContainer = document.getElementById('canal-scheme');
+    /*
     canvasContainer.addEventListener('dragenter', handleDragEnter, false);
     canvasContainer.addEventListener('dragover',  handleDragOver, false);
     canvasContainer.addEventListener('dragleave', handleDragLeave, false);
     canvasContainer.addEventListener('drop',      handleDrop, false);
+    */
     canvasContainer.addEventListener('keydown',   handleKeyDown, false);
 }
     
@@ -152,6 +155,7 @@ function setupDragDrop() {
 function setupCanvas() {
     Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
     Canalada.canvas.selection = false;
+
     Canalada.canvas.findTarget = (function(originalFn) {
         return function() {
             var target = originalFn.apply(this, arguments);
@@ -265,7 +269,7 @@ function start()
     Canalada.canvas.on({
         'object:moving'           : Canalada.onObjectMoving,
         'mouse:up'                : Canalada.onMouseUp,
-        'mouse:down'              	: Canalada.onMouseDown
+        'mouse:down'              : Canalada.onMouseDown
     });
     //main.resize();
 }
