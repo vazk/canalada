@@ -34,8 +34,8 @@ function onCanalSchemeDrop(event, ui) {
     var model = Canalada.actorClassRegistry[modelName];
     if(model) {
         var inst = new model();
-        var offset = {x: ui.position.left,
-                      y: ui.position.top};
+        var offset = {x: ui.position.left + ui.helper.width()/2,
+                      y: ui.position.top + ui.helper.height()/2};
         inst.setPositionByOrigin(offset,'center','center');
         Canalada.addActor(inst);
     }
@@ -158,9 +158,6 @@ function createCanalRow() {
                   "     <p>Lorem, nunc.</p>" + 
                   "   </div>" + 
                   "   <div id=\"workspace\">" + 
-                  //"       <div id=\"canal\" tabindex=\"1\">" + 
-                  //"           <canvas id=\"canal-canvas\" style=\"z-index: 1\"></canvas>" + 
-                  //"       </div> " + 
                   "       <div id=\"dialogL\" title=\"Actor Library\" display=\"none\"> </div>" +
                   "       <div id=\"toolbar\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
@@ -203,7 +200,6 @@ function createCanalRow() {
                         heightStyle: 'content',
                         activate: function() {
                           console.log('activate');
-                          //alert(ui.newHeader.text());  // For instance.
                         }
                    })
                    .sortable({
@@ -213,7 +209,6 @@ function createCanalRow() {
                           stop = true;
                         },
                         update: function() {
-                          //alert( $(this).sortable('serialize') );
                         }
                    });
 
