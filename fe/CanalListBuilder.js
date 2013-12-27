@@ -12,6 +12,7 @@ function onCanalToBeSelected(event, ui) {
         var row_content = $(ui.newPanel).parent();
         contextCanal = row_content.data('canalData');
         contextCanal.canalscheme.appendTo(contextCanal.workspace);
+        Canalada.canvas.calcOffset();
     }
 }
 
@@ -54,6 +55,8 @@ function onCanalTabSelected() {
         //var canalschemeD = $('#canal-scheme');  
         contextCanal.canalscheme.show(); 
         contextCanal.canalscheme.find("*").show();
+        Canalada.canvas.calcOffset();
+
         //var canvasD = $('canvas');   
         //canvasD.appendTo(activeTab);
         //canalschemeD.css({'display':'block'});
@@ -102,6 +105,7 @@ function showLibraryDialog() {
                                   'left': contextCanal.dialog.left});
     contextCanal.dialog.widget.parent().find("*").show();
 }
+
 function buildCanals() {
     var stop = false;
     $("#canal-rows a").click(function(event) {
@@ -124,6 +128,7 @@ function buildCanals() {
             handle: "a.handle",
             stop: function() {
                 stop = true;
+                Canalada.canvas.calcOffset();
             }
         });
     $('#canal-scheme').droppable({
