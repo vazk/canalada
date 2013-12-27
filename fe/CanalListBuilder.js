@@ -9,11 +9,23 @@ function onCanalToBeSelected(event, ui) {
     var e = ui.oldPanel.length;
 
     if(ui.newPanel.length != 0) {
+        // keep the old data first (if exists)
+        if(contextCanal) {
+            contextCanal.canalcontent = Canalada.serialize();
+            Canalada.reset();
+        }
+        // find and set the right context
         var row_content = $(ui.newPanel).parent();
         contextCanal = row_content.data('canalData');
         contextCanal.canalscheme.appendTo(contextCanal.workspace);
-        Canalada.canvas.calcOffset();
+        // load the content back
+        Canalada.deserialize(contextCanal.canalcontent);
     }
+}
+
+function onCanalSelected(event, ui) {
+    Canalada.canvas.calcOffset();
+    Canalada.canvas.renderAll();
 }
 
 function onCanalSchemeDrop(event, ui) {
@@ -52,17 +64,10 @@ function onCanalTabSelected() {
         // show the toolbar
         contextCanal.dialog.toolbar.show();
         // get the canvas element, add it to the active tab, and show
-        //var canalschemeD = $('#canal-scheme');  
         contextCanal.canalscheme.show(); 
         contextCanal.canalscheme.find("*").show();
         Canalada.canvas.calcOffset();
-
-        //var canvasD = $('canvas');   
-        //canvasD.appendTo(activeTab);
-        //canalschemeD.css({'display':'block'});
-        //canvasD.css({'display':'block'});
-        // resize the activeTab
-        //activeTab.resize();
+        Canalada.canvas.renderAll();
     } 
     return false;
 }
@@ -121,7 +126,8 @@ function buildCanals() {
             collapsible: true,
             active: false,
             heightStyle: "content",
-            beforeActivate: onCanalToBeSelected
+            beforeActivate: onCanalToBeSelected,
+            activate: onCanalSelected,
         })
         .sortable({
             axis: "y",
@@ -175,7 +181,8 @@ function createCanalRow() {
             library:$('#library').clone(),
             toolbar:row_content.find('#toolbar'),
         },
-        canalscheme: $('#canal-scheme')
+        canalscheme: $('#canal-scheme'),
+        canalcontent: {},
     };
     // add it to the list
     loadedCanals.push(newCanal);

@@ -160,7 +160,7 @@ function setupCanvas() {
         return function() {
             var target = originalFn.apply(this, arguments);
             var e = arguments[0];
-            if(target == null || e.type !== 'mousedown')
+            if(!target || e.type != 'mousedown')
                 return target;
             
             if(target.ctype === 'Actor') {
