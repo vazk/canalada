@@ -232,7 +232,19 @@ function setupSocket()
         console.log(cdata);
     });
 }
+/*
+var PIXEL_RATIO = (function () {
+    var ctx = document.createElement("canvas").getContext("2d"),
+        dpr = window.devicePixelRatio || 1,
+        bsr = ctx.webkitBackingStorePixelRatio ||
+              ctx.mozBackingStorePixelRatio ||
+              ctx.msBackingStorePixelRatio ||
+              ctx.oBackingStorePixelRatio ||
+              ctx.backingStorePixelRatio || 1;
 
+    return dpr / bsr;
+})();
+*/
 function start()
 {
     //window.addEventListener('resize', main.resize, false);

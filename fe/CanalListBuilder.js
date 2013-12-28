@@ -2,12 +2,13 @@ var contextCanal = undefined;
 var loadedCanals = [];
 
 function onCanalToBeSelected(event, ui) {
+    /*
     var a = $(this);
     var b = ui.newHeader.length;
     var c = ui.newPanel.length;
     var d = ui.oldHeader.length;
     var e = ui.oldPanel.length;
-
+    */
     if(ui.newPanel.length != 0) {
         // keep the old data first (if exists)
         if(contextCanal) {
@@ -58,11 +59,11 @@ function onCanalTabSelected() {
 
     if(activeTabRef == '#workspace') {
         activeTab.resize();
-        if(!contextCanal.dialog.minimized) {
-            showLibraryDialog();
+        if(!contextCanal.actor_panel.minimized) {
+            showActorPanel();
         }
         // show the toolbar
-        contextCanal.dialog.toolbar.show();
+        contextCanal.actor_panel.toolbar.show();
         // get the canvas element, add it to the active tab, and show
         contextCanal.canalscheme.show(); 
         contextCanal.canalscheme.find("*").show();
@@ -72,43 +73,50 @@ function onCanalTabSelected() {
     return false;
 }
 
-function onCanalWorkspaceResize() {
-    var self = $(this);
+function onCanalWorkspaceResize(event) {
+    var self = $(event.currentTarget);//$(this);
     var parent = self.closest('.ui-accordion-content');
-    var oHeight = parent.innerHeight();
-    var tabs = parent.find('.tabs');
-    self.height(oHeight-tabs.height()-3);
+    var oHeight = parent.height();//parent.innerHeight();
+    self.height(oHeight-self[0].offsetTop);
 
-    $('canvas').height(self.height()-4);
-    $('canvas').width(self.width()-4);
+    //var ratio = PIXEL_RATIO;
+    var htmlcanvas = $('canvas');
+    htmlcanvas.height(self.height());
+    htmlcanvas.width(self.width());
+    /*
+    htmlcanvas.css({'height': self.height()-4 + 'px',
+                    'width': self.width()-4 + 'px'});
+    htmlcanvas[0].getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+    */
+
     Canalada.canvas.setWidth(self.width()-4);
     Canalada.canvas.setHeight(self.height()-4);
     Canalada.canvas.calcOffset();
 }
 
-function onDialogLDrag(event, ui) {
+function onActorPanelDrag(event, ui) {
     var position = $(event.target).parent().position();
-    contextCanal.dialog.top = position.top;
-    contextCanal.dialog.left = position.left;
+    contextCanal.actor_panel.top = position.top;
+    contextCanal.actor_panel.left = position.left;
 }
 
-function onDialogMinimize(event, ui) {
+function onActorPanelMinimize(event, ui) {
     console.log('minimize');
-    contextCanal.dialog.minimized = true;
+    contextCanal.actor_panel.minimized = true;
 }
 
-function onDialogUnminimize(event, ui) {
+function onActorPanelUnminimize(event, ui) {
     console.log('unminimize');
-    contextCanal.dialog.minimized = false;
-    showLibraryDialog();
+    contextCanal.actor_panel.minimized = false;
+    showActorPanel();
 }
 
-function showLibraryDialog() {
-    contextCanal.dialog.widget.dialog('open');
-    contextCanal.dialog.widget.parent().css({'display':' block', 
-                                  'top': contextCanal.dialog.top, 
-                                  'left': contextCanal.dialog.left});
-    contextCanal.dialog.widget.parent().find("*").show();
+function showActorPanel() {
+    contextCanal.actor_panel.widget.dialog('open');
+    contextCanal.actor_panel.widget.parent().css({'display':' block', 
+                                  'top': contextCanal.actor_panel.top, 
+                                  'left': contextCanal.actor_panel.left});
+    contextCanal.actor_panel.widget.parent().find("*").show();
 }
 
 function buildCanals() {
@@ -158,7 +166,7 @@ function createCanalRow() {
                   "     <p>Lorem, nunc.</p>" + 
                   "   </div>" + 
                   "   <div id=\"workspace\">" + 
-                  "       <div id=\"dialogL\" title=\"Actor Library\" display=\"none\"> </div>" +
+                  "       <div id=\"actor-panel-widget\" title=\"Actor Library\" display=\"none\"> </div>" +
                   "       <div id=\"toolbar\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
                   "  </section>" + 
@@ -172,11 +180,11 @@ function createCanalRow() {
     var newCanal = { 
         id: loadedCanals.length,
         workspace: row_content.find('#workspace'),
-        dialog:{
-            top:5, left:5, minimized:false,
-            widget:row_content.find('#dialogL'),
-            library:$('#library').clone(),
-            toolbar:row_content.find('#toolbar'),
+        actor_panel: {
+            top: 5, left: 5, minimized: false,
+            widget: row_content.find('#actor-panel-widget'),
+            library: $('#library').clone(),
+            toolbar: row_content.find('#toolbar'),
         },
         canalscheme: $('#canal-scheme'),
         canalcontent: {},
@@ -187,14 +195,14 @@ function createCanalRow() {
     row_content.data('canalData', newCanal);
 
     var stop = false;
-    newCanal.dialog.library.find('h3').click(function( event ) {
+    newCanal.actor_panel.library.find('h3').click(function( event ) {
                           if(stop) {
                             event.stopImmediatePropagation();
                             event.preventDefault();
                             stop = false;
                           }
                         });
-    newCanal.dialog.library.accordion({
+    newCanal.actor_panel.library.accordion({
                         header: '> div > h3',
                         collapsible: true,
                         heightStyle: 'content',
@@ -211,19 +219,19 @@ function createCanalRow() {
                         update: function() {
                         }
                    });
-
-    newCanal.dialog.widget.dialog({width: '150px', minimize: newCanal.dialog.toolbar, 
+    // setup the actor-panel widget
+    newCanal.actor_panel.widget.dialog({width: '120px', minimize: newCanal.actor_panel.toolbar, 
                  autoOpen:false, maximize: false, close: false, 
-                 drag: onDialogLDrag,
-                 beforeMinimize: onDialogMinimize,
-                 beforeUnminimize: onDialogUnminimize,
+                 drag: onActorPanelDrag,
+                 beforeMinimize: onActorPanelMinimize,
+                 beforeUnminimize: onActorPanelUnminimize,
             })
             .parent().resizable({ 
                         // Settings that will execute when resized.
                         maxHeight: 380,
                         minHeight: 170,
                         maxWidth: 180,
-                        minWidth: 140,
+                        minWidth: 100,
                         handles: 'n, e, s, w',
                         containment: newCanal.workspace // Constrains the resizing to the div.
                       })
@@ -233,7 +241,20 @@ function createCanalRow() {
                         containment: newCanal.workspace, // The element the dialog is constrained to.
                         opacity: 0.7
                      });
-    newCanal.dialog.library.find('img').draggable({
+    // set additional styles
+    var ap_parent = newCanal.actor_panel.widget.parent();
+    newCanal.actor_panel.widget.css({'padding': '0px 0px',
+                                     'margin': '0px, 0px, 0px, 0px'
+                                    });
+    ap_parent.find('.ui-dialog-titlebar').css({'font-size': '0.6em', 
+                                               'line-height': '0.9em',
+                                                'padding': '0px, 0px',
+                                                'margin': '0px, 0px, 0px, 0px'
+                                              });
+    ap_parent.find('.ui-dialog-titlebar-minimize').css({'right':'0.3em'});
+
+    // set the drag callbacks on actor-panel icons
+    newCanal.actor_panel.library.find('img').draggable({
                         helper: 'clone',
                         appendTo: newCanal.canalscheme,
                         scroll: false,
@@ -264,8 +285,8 @@ function createCanalRow() {
     });
 
     // finalize the dialog widget and add it to the workspace
-    newCanal.dialog.library.appendTo(newCanal.dialog.widget);
-    newCanal.dialog.widget.parent().appendTo(newCanal.workspace);
+    newCanal.actor_panel.library.appendTo(newCanal.actor_panel.widget);
+    newCanal.actor_panel.widget.parent().appendTo(newCanal.workspace);
 
     // refresh all
     $("#canal-rows").accordion("refresh");

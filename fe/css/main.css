@@ -5,6 +5,11 @@ body, html {
     margin: 0;
 }
 
+* {
+    /*font-family: 'Lato', sans-serif;*/
+    font-family: 'Exo 2', sans-serif;
+}
+
 div#library {
     width: auto;
     height: 140px;
@@ -121,15 +126,6 @@ ul#grid {
     background-color: #aaa; 
 }
 
-#dialogL, 
-.ui-dialog-titlebar{
-    padding: 0px 0px;
-    margin: 0px, 0px, 0px, 0px;
-    font-size: 0.6em;
-    /*height: 1.1em; /* or whatever you want */
-    line-height: 0.9em;
-}
-
 #canal-rows {
     height: auto;
     background-color: white;
@@ -164,6 +160,9 @@ ul#grid {
 .canal-row-new:hover {
     vertical-align:middle;
     opacity:1.0;
+    border: 2px solid #d0d0d0;
+    border-right: 0;
+    border-radius: 3px 0 0 3px;
 }
 
 #canal-rows * .ui-accordion-header { 
