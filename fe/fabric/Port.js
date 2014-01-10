@@ -9,7 +9,7 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
          'pStroke' : '#30407a',
          'pStrokeWidth' : 2,
          'pStrokeSelect' : '#ad2e3a',
-         'pFont' :  '10px Helvetica'
+         'pFont' :  '11.5px Lato'
 ,        },
     rx: 3,
     ry: 3,
