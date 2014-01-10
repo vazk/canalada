@@ -30,7 +30,7 @@ Canalada.addActor = function(actor) {
         fillShadow: true, 
         strokeShadow: true 
     };
-    actor.actorRect.setShadow(shadow);
+    //actor.actorRect.setShadow(shadow);
     Canalada.canvas.add(actor);
 }
 
@@ -45,7 +45,7 @@ Canalada.addLink = function(link) {
         fillShadow: true, 
         strokeShadow: true 
     };
-    link.setShadow(shadow);
+    //link.setShadow(shadow);
     Canalada.canvas.add(link);
 }
 
