@@ -2,10 +2,10 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
 
     ctype: 'Actor',
   
-    C : {'pHeight':10,
-         'pWidth': 16,
-         'pPadding' : 24,
-         'pSpacing' : 6,
+    C : {'pHeight':8,
+         'pWidth': 14,
+         'pPadding' : 20,
+         'pSpacing' : 5,
          'pTextMaxWidth' : 40,
          'pStroke' : '#444',
          'pStrokeSelect' : '#ad2e3a'

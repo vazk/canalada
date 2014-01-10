@@ -1,15 +1,15 @@
 
 Canalada.Port = fabric.util.createClass(fabric.Rect, {
-    C : {'pHeight':10,
-         'pWidth': 12,
-         'pPadding' : 24,
-         'pSpacing' : 6,
+    C : {'pHeight':8,
+         'pWidth': 10,
+         'pPadding' : 20,
+         'pSpacing' : 5,
          'pFill' : '#ffffff',
          'pFillSelect' : '#ad2e3a',
          'pStroke' : '#30407a',
-         'pStrokeWidth' : 2,
+         'pStrokeWidth' : 1,
          'pStrokeSelect' : '#ad2e3a',
-         'pFont' :  '11.5px Lato'
+         'pFont' :  '9.5px Lato'
 ,        },
     rx: 3,
     ry: 3,
