@@ -9,12 +9,13 @@ function onCanalToBeSelected(event, ui) {
     var d = ui.oldHeader.length;
     var e = ui.oldPanel.length;
     */
+    // keep the old data first (if exists)
+    if(contextCanal) {
+        showCtrlRightBlock(false);
+        contextCanal.canalcontent = Canalada.serialize();
+        Canalada.reset();
+    }
     if(ui.newPanel.length != 0) {
-        // keep the old data first (if exists)
-        if(contextCanal) {
-            contextCanal.canalcontent = Canalada.serialize();
-            Canalada.reset();
-        }
         // find and set the right context
         var row_content = $(ui.newPanel).parent();
         contextCanal = row_content.data('canalData');
@@ -25,8 +26,11 @@ function onCanalToBeSelected(event, ui) {
 }
 
 function onCanalSelected(event, ui) {
-    Canalada.canvas.calcOffset();
-    Canalada.canvas.renderAll();
+    if(ui.newPanel.length != 0) {
+        showCtrlRightBlock(true);
+        Canalada.canvas.calcOffset();
+        Canalada.canvas.renderAll();
+    }
 }
 
 function onCanalSchemeDrop(event, ui) {
@@ -111,6 +115,25 @@ function onActorPanelUnminimize(event, ui) {
     showActorPanel();
 }
 
+function onSaveBtnClick(event) {
+        event.stopPropagation();
+        console.log('canalhead save span!');
+        //$(this).prev('span').find('input:radio').prop('checked', true);
+};
+
+function onResetBtnClick(event) {
+        event.stopPropagation();
+        console.log('canalhead reset span!');
+        //$(this).prev('span').find('input:radio').prop('checked', true);
+};
+
+function onActiveBtnClick(event) {
+        event.stopPropagation();
+        console.log('canalhead active span!');
+        //$(this).prev('span').find('input:radio').prop('checked', true);
+};
+
+
 function showActorPanel() {
     contextCanal.actor_panel.widget.dialog('open');
     contextCanal.actor_panel.widget.parent().css({'display':' block', 
@@ -118,6 +141,26 @@ function showActorPanel() {
                                   'left': contextCanal.actor_panel.left});
     contextCanal.actor_panel.widget.parent().find("*").show();
 }
+
+function showCtrlRightBlock(flag) {
+    var rblock = contextCanal.header.find('.ctrl_right_block');
+    if(flag) {
+        rblock.show();//css({'display':'block'});
+    } else {
+        rblock.hide();//css({'display':'none'});
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 function buildCanals() {
     var stop = false;
@@ -129,7 +172,7 @@ function buildCanals() {
         }
     });
     $("#canal-rows").accordion({
-            header: "> div > a",
+            header: "> div > canalhead",
             icons: false,
             collapsible: true,
             active: false,
@@ -145,6 +188,9 @@ function buildCanals() {
                 Canalada.canvas.calcOffset();
             }
         });
+
+
+    // support drop on the canvas
     $('#canal-scheme').droppable({
         accept: 'img',
         drop: onCanalSchemeDrop,
@@ -154,7 +200,18 @@ function buildCanals() {
 
 function createCanalRow() {
     var content = "<div>" +
-                  "<a href=\"#\" class=\"handle\" height=10px>Section 1</a>" + 
+                  "<canalhead>" + 
+                      "<div class=\"info_left_block\">"+
+                          "<a href=\"#\" class=\"handle\" height=10px>Section 1 </a>" + 
+                      "</div>" +
+                      "<div class=\"ctrl_right_block\">"+
+                        "<span class=\"btn\" onclick=\"onSaveBtnClick(event)\">Save</span>" + 
+                        "<span class=\"btn\" onclick=\"onResetBtnClick(event)\">Reset</span>" + 
+                      "</div>" +
+                      "<div class=\"ctrl_state_block\">"+
+                        "<span class=\"indicator\" onclick=\"onActiveBtnClick(event)\">active</span>" + 
+                      "</div>" +
+                  "</canalhead>" +
                   "<div class=\"canal-row-content\">" + 
                   " <ul class=\"tabs\">" + 
                   "   <li><a href=\"#properties\">Properties</a></li>" + 
@@ -179,6 +236,7 @@ function createCanalRow() {
     // create the data to be associated with canal
     var newCanal = { 
         id: loadedCanals.length,
+        header: row_content.find('canalhead'),
         workspace: row_content.find('#workspace'),
         actor_panel: {
             top: 5, left: 5, minimized: false,
