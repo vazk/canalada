@@ -16,12 +16,18 @@ function onCanalToBeSelected(event, ui) {
         Canalada.reset();
     }
     if(ui.newPanel.length != 0) {
+
+        ui.newHeader.css({'background-color':'#CBCBC1'});
+
         // find and set the right context
         var row_content = $(ui.newPanel).parent();
         contextCanal = row_content.data('canalData');
         contextCanal.canalscheme.appendTo(contextCanal.workspace);
         // load the content back
         Canalada.deserialize(contextCanal.canalcontent);
+    }
+    if(ui.oldPanel.length != 0) {
+        ui.oldHeader.css({'background-color':'#E5E5E0'});    
     }
 }
 
@@ -202,7 +208,7 @@ function createCanalRow() {
     var content = "<div>" +
                   "<canalhead>" + 
                       "<div class=\"info_left_block\">"+
-                          "<a href=\"#\" class=\"handle\" height=10px>Section 1 </a>" + 
+                          "<a href=\"#\" class=\"handle\">Section 1 </a>" + 
                       "</div>" +
                       "<div class=\"ctrl_right_block\">"+
                         "<span class=\"btn\" onclick=\"onSaveBtnClick(event)\">Save</span>" + 

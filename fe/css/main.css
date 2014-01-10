@@ -69,7 +69,7 @@ ul#grid {
 }
   
 #grid li img {
-  background-color: white;
+  background-color: #F6F6F6;
   padding: 4px;
   margin: 0px;
   width: 24px;
@@ -80,7 +80,7 @@ ul#grid {
     border: 1px solid grey;
     position:absolute;
     float: top;
-    background: white;
+    background: #F6F6F6;
     left: 3px;
     right: 3px;
     top: 0px;
@@ -121,16 +121,16 @@ ul#grid {
 }
 
 #toolbar a:hover { 
-    color: white; 
+    color: #F6F6F6; 
     background-color: #aaa; 
 }
 
 #canal-rows {
     height: auto;
-    background-color: white;
+    background-color: #F6F6F6;
     /*margin: 1px 0 0 0;
     padding: 4px 2px;*/
-    border: 2px solid #d0d0d0;
+    border: 2px solid #000000;
     border-right: 0;
     border-radius: 3px 0 0 3px;
     position: relative;
@@ -151,7 +151,7 @@ ul#grid {
 .canal-row-new { 
     opacity:0.4;
     height: auto;
-    background-color: white;
+    background-color: #F6F6F6;
     padding: 8px 8px;
     position: relative;
 }
@@ -164,10 +164,10 @@ ul#grid {
 }
 
 #canal-rows * .ui-accordion-header { 
-    background-color: white; 
+    background-color: #E5E5E1; 
     background-image:none;
     font-size: 10pt;  
-    line-height: 16pt; 
+    line-height: 13pt; 
 }
 
 #canal-rows > div > .ui-state-active { 
@@ -182,7 +182,7 @@ ul#grid {
 
 .canal-row-content {
     position: relative;
-    background: white;
+    background: #F6F6F6;
     margin: 1px, 0px, 0px, 0px;
     padding: 1px, 0px, 0px, 0px;
     /*left:0px;
@@ -217,7 +217,7 @@ ul.tabs li.active {
   background: gray;
 }
 ul.tabs li.active a {
-  color: white;
+  color: #F6F6F6;
 }
 .clr {
   clear: both;
@@ -227,8 +227,8 @@ span.btn{
     padding:8px 6px;
     cursor:pointer;
     font-size: 1em;
-    color:#0000FF;
-    background-color:#eee;
+    color: #063E53;
+    background:none;
     -moz-border-radius:1px;
     -webkit-border-radius:1px;
     -moz-box-shadow:#999 2px 0px 3px;
@@ -243,8 +243,8 @@ span.indicator{
     cursor:pointer;
     /*font:11px/14px Arial, Helvetica, sans-serif;*/
     font-size: 1em;
-    color:#0000FF;
-    background-color:#eee;
+    color:#063E53;
+    background:none;
     -moz-border-radius:1px;
     -webkit-border-radius:1px;
     position: relative;
@@ -252,12 +252,12 @@ span.indicator{
 }
 
 span.btn:hover{
-    background-color:#0000FF;
+    background-color:#063E53;
     color:#FFFFFF;
 }
 
 span.indicator:hover{
-    background-color:#0000FF;
+    background-color:#063E53;
     color:#FFFFFF;
 }
 
@@ -288,6 +288,10 @@ span.indicator:hover{
     padding: 3px, 3px, 3px, 3px;*/
     width: 200px;
     /*float: left;*/
+}
+
+div.info_left_block a.handle {
+    color: #063E53;
 }
 
 
