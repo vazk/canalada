@@ -3,29 +3,33 @@ doctype html
 html(lang="en")
     head
         title Canalada
-        link(rel="stylesheet", href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css")
-        script(src="http://code.jquery.com/jquery-1.9.1.js")
-        script(src="http://code.jquery.com/ui/1.10.3/jquery-ui.js")
-        script(src='/js/socket.io.min.js')       
-        script(src="dist/all.js")
-        script(src="dist/Canalada.js")
-        script(src="dist/Port.js")
-        script(src="dist/Actor.js")
-        script(src="dist/Link.js")
-        script(src="dist/main.js")
-        link(rel="stylesheet", href="main.css")
+        link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet')
+        link(rel='stylesheet', href='tpt/jquery/css/smoothness/jquery-ui-1.10.3.custom.css')
+        link(rel='stylesheet', href='tpt/jquery/css/jquery.ui.dialog.minmax.css' )
+        script(src='tpt/jquery/js/jquery-1.9.1.js')
+        script(src='tpt/jquery/js/jquery-ui-1.10.3.custom.js')
+        script(src='tpt/jquery/js/jquery.ui.dialog.minmax.js')
+        script(src='tpt/socket.io/socket.io.min.js')       
+        script(src='tpt/fabric/all.js')
+        script(src='installed_modules/index.js')
+        script(src='js/Canalada.js')
+        script(src='js/Port.js')
+        script(src='js/Module.js')
+        script(src='js/Link.js')
+        script(src='js/CanalListBuilder.js')
+        script(src='js/main.js')
+        link(rel='stylesheet', href='css/main.css')
     
     body
         div#top-workspace
-        div#bottom-workspace
-            div#library
-            div#canal(tabindex="1")    
-                div#menu(style="z-index: 2")
-                    ul
-                        li(style="cursor: pointer",onclick="Canalada.save()") Save
-                        li(style="cursor: pointer",onclick="Canalada.open()") Open
-                canvas#canal-canvas(style="z-index: 1")
+            div#canal-rows
+            div.canal-row-new(onclick='createCanalRow()) 
+                image(type='image', src='batch/32x32/add.png', width=20)
+                label Create new canal
+            div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
+                canvas#canal-canvas
+                div#library(hidden)
             
-        script(type="text/javascript").start
+        script(type='text/javascript').start
             start();
         
