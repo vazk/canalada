@@ -15,12 +15,12 @@ Canalada.selectState = {
     item: null
 };
 
-Canalada.actorClassRegistry = {};
-Canalada.actors = [];
+Canalada.moduleClassRegistry = {};
+Canalada.modules = [];
 Canalada.links = [];
 
-Canalada.addActor = function(actor) {
-    this.actors.push(actor);
+Canalada.addModule = function(module) {
+    this.modules.push(module);
     var shadow = {
         color: 'rgba(0,0,0,0.6)',
         blur: 20,    
@@ -30,8 +30,8 @@ Canalada.addActor = function(actor) {
         fillShadow: true, 
         strokeShadow: true 
     };
-    //actor.actorRect.setShadow(shadow);
-    Canalada.canvas.add(actor);
+    //module.moduleRect.setShadow(shadow);
+    Canalada.canvas.add(module);
 }
 
 Canalada.addLink = function(link) {
@@ -49,15 +49,15 @@ Canalada.addLink = function(link) {
     Canalada.canvas.add(link);
 }
 
-Canalada.removeActor = function(actor) {
-    var si = Canalada.actors.indexOf(actor);
+Canalada.removeModule = function(module) {
+    var si = Canalada.modules.indexOf(module);
     if(~si) {
-        Canalada.actors.splice(si,1);
-        Canalada.canvas.remove(actor);
+        Canalada.modules.splice(si,1);
+        Canalada.canvas.remove(module);
         var attachedLinks = [];
         for(var i = 0; i < Canalada.links.length; ++i) {
             var lnk = Canalada.links[i];
-            if(lnk.porta.actor === actor || lnk.portb.actor === actor) {
+            if(lnk.porta.module === module || lnk.portb.module === module) {
                 attachedLinks.push(lnk);
             }
         }
@@ -82,8 +82,8 @@ Canalada.removeLink = function(link) {
 
 Canalada.onKeyDown = function(e) {
     if((e.keyCode == 8 || e.keyCode == 46) && Canalada.selectState.item) {
-        if(Canalada.selectState.item.ctype == 'Actor') {
-            Canalada.removeActor(Canalada.selectState.item);
+        if(Canalada.selectState.item.ctype == 'Module') {
+            Canalada.removeModule(Canalada.selectState.item);
         } else
         if(Canalada.selectState.item.ctype == 'Link') {
             Canalada.removeLink(Canalada.selectState.item);
@@ -101,13 +101,13 @@ Canalada.onMouseDown = function(e) {
     }
     if(e.target) {
         if(Canalada.linkState.sport) {
-            Canalada.linkState.sport.actor.bringToFront();
+            Canalada.linkState.sport.module.bringToFront();
             Canalada.linkState.sport.select(true);
             Canalada.linkState.down = true;
             Canalada.linkState.marker.bringToFront();
             Canalada.linkState.line.bringToFront();
         } else
-        if(e.target.ctype == 'Actor') {
+        if(e.target.ctype == 'Module') {
             e.target.select(true);
             e.target.bringToFront();
             Canalada.selectState.item = e.target;
@@ -154,14 +154,14 @@ Canalada.onObjectMoving = function(e) {
         var candidate = null;
         var candidatept = null;
 
-        actors = Canalada.actors;
-        for(var i = 0; i < actors.length; ++i) {
-            if(actors[i] === Canalada.linkState.sport.actor) {
+        modules = Canalada.modules;
+        for(var i = 0; i < modules.length; ++i) {
+            if(modules[i] === Canalada.linkState.sport.module) {
                 continue;
             }
-            var acenter = actors[i].getCenterPoint();
-            for(var j = 0; j < actors[i].ports.length; ++j) {
-                var port = actors[i].ports[j];
+            var acenter = modules[i].getCenterPoint();
+            for(var j = 0; j < modules[i].ports.length; ++j) {
+                var port = modules[i].ports[j];
                 var pcenter = port.getCenterPoint();
                 pcenter.x += acenter.x;
                 pcenter.y += acenter.y;
@@ -196,10 +196,10 @@ Canalada.onObjectMoving = function(e) {
         Canalada.linkState.line._setWidthHeight();
         Canalada.canvas.renderAll();
     } else 
-    if(e.target.ctype && e.target.ctype === 'Actor') {
+    if(e.target.ctype && e.target.ctype === 'Module') {
         for(var i = 0; i < Canalada.links.length; ++i) {
             var lnk = Canalada.links[i];
-            if(lnk.porta.actor === e.target || lnk.portb.actor === e.target) {
+            if(lnk.porta.module === e.target || lnk.portb.module === e.target) {
                 lnk.setup();
             }
         }
@@ -251,7 +251,7 @@ Canalada.textWidth = function(text, fontProp) {
 
 Canalada.reset = function() {
     Canalada.canvas.clear();
-    Canalada.actors = [];
+    Canalada.modules = [];
     Canalada.links = [];
     Canalada.linkState.down = false;
     Canalada.marker = null;
@@ -262,36 +262,36 @@ Canalada.reset = function() {
 }
 
 Canalada.serialize = function() {
-    var actors = [];
-    for(var i = 0; i < Canalada.actors.length; ++i) {
-        var actorData = {};
-        actorData["model"] = Canalada.actors[i].model();
-        actorData["properties"] = Canalada.actors[i].serialize();
-        actors.push(actorData);
+    var modules = [];
+    for(var i = 0; i < Canalada.modules.length; ++i) {
+        var moduleData = {};
+        moduleData["model"] = Canalada.modules[i].model();
+        moduleData["properties"] = Canalada.modules[i].serialize();
+        modules.push(moduleData);
     }
     var links = [];
     for(var i = 0; i < Canalada.links.length; ++i) {
         links.push(Canalada.links[i].serialize());
     }
     return {
-              "actors" : actors,
+              "modules" : modules,
               "links"  : links
            };
 }
 
 
 Canalada.deserialize = function(data) {
-    var actors = data.actors;
-    if(actors) {
-        for(var i = 0; i < actors.length; ++i) {
-            var modelName = actors[i].model;
-            var modelProps = actors[i].properties;
-            var model = Canalada.actorClassRegistry[modelName];
+    var modules = data.modules;
+    if(modules) {
+        for(var i = 0; i < modules.length; ++i) {
+            var modelName = modules[i].model;
+            var modelProps = modules[i].properties;
+            var model = Canalada.moduleClassRegistry[modelName];
             if(model && modelProps) {
                 var inst = new model();
                 inst.left = modelProps.left;
                 inst.top = modelProps.top;
-                Canalada.addActor(inst);
+                Canalada.addModule(inst);
             }
         }
     }
@@ -306,9 +306,9 @@ Canalada.deserialize = function(data) {
 }
 
 
-Canalada.registerActorClass = function(actorModel, actorClass) {
-    actorClass.model = actorModel;
-    Canalada.actorClassRegistry[actorModel] = actorClass;
+Canalada.registerModuleClass = function(moduleModel, moduleClass) {
+    moduleClass.model = moduleModel;
+    Canalada.moduleClassRegistry[moduleModel] = moduleClass;
 }
 
 Canalada.save = function() {

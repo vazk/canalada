@@ -317,8 +317,8 @@ div.info_left_block a.handle {
     right: 0.2em;
 }
 
-#actor-library-widget,
-#actor-properties-widget {
+#module-library-widget,
+#module-properties-widget {
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }

@@ -13,7 +13,7 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
 ,        },
     rx: 3,
     ry: 3,
-    initialize: function(name, actor, options) {
+    initialize: function(name, module, options) {
         this.options || (options = {});
         this.width = this.C.pWidth;
         this.height = this.C.pHeight;
@@ -21,7 +21,7 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
         this.stroke = this.C.pStroke;
         this.strokeWidth = this.C.pStrokeWidth;
         this.name =  name;
-        this.actor = actor;
+        this.module = module;
         this.links = [];
         this.textWidth = Canalada.textWidth(this.name, this.C.pFont);
         this.selectCnt = 0;
@@ -42,8 +42,8 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
 Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
     ctype : 'OutPort',
     setup: function(index) {
-        var w = this.actor.actorRect.width;
-        var h = this.actor.actorRect.height;
+        var w = this.module.moduleRect.width;
+        var h = this.module.moduleRect.height;
         this.left = w/2 - this.C.pWidth/2 + 4;
         this.top = -h/2 + this.C.pPadding + index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
     },
@@ -52,17 +52,17 @@ Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
         ctx.font = this.C.pFont
         ctx.fillStyle = 'black';
         ctx.fillText(this.name,
-                     -this.width/2 - 3 - Math.min(this.actor.C.pTextMaxWidth, this.textWidth),
+                     -this.width/2 - 3 - Math.min(this.module.C.pTextMaxWidth, this.textWidth),
                      -this.height/2 + 9,
-                     this.actor.C.pTextMaxWidth);
+                     this.module.C.pTextMaxWidth);
     }
 });
 
 Canalada.InPort = fabric.util.createClass(Canalada.Port, {
     ctype : 'InPort',
     setup: function(index) {
-        var w = this.actor.actorRect.width;
-        var h = this.actor.actorRect.height;
+        var w = this.module.moduleRect.width;
+        var h = this.module.moduleRect.height;
         this.left = -w/2 + this.C.pWidth/2 - 4;
         this.top = -h/2 + this.C.pPadding + index * (this.C.pHeight + this.C.pSpacing) + this.C.pHeight/2;
     },
@@ -73,7 +73,7 @@ Canalada.InPort = fabric.util.createClass(Canalada.Port, {
         ctx.fillText(this.name,
                      this.width/2 + 3,
                      -this.height/2 + 9,
-                     this.actor.C.pTextMaxWidth);
+                     this.module.C.pTextMaxWidth);
 
     }
 });

@@ -28,8 +28,8 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
         if(!this.porta || !this.portb) {
             return;
         }
-        var ac = this.porta.actor.getCenterPoint();
-        var bc = this.portb.actor.getCenterPoint();
+        var ac = this.porta.module.getCenterPoint();
+        var bc = this.portb.module.getCenterPoint();
         var apc = this.porta.getCenterPoint();
         var bpc = this.portb.getCenterPoint();
 
@@ -79,17 +79,17 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
     },
     serialize: function() {
         var data = {};
-        data.porta = {"actor_id": Canalada.actors.indexOf(this.porta.actor), 
+        data.porta = {"module_id": Canalada.modules.indexOf(this.porta.module), 
                       "name": this.porta.name};
-        data.portb = {"actor_id": Canalada.actors.indexOf(this.portb.actor), 
+        data.portb = {"module_id": Canalada.modules.indexOf(this.portb.module), 
                       "name": this.portb.name};
         return data;
     },
     deserialize: function(data) {
-        var actora = Canalada.actors[data.porta.actor_id];
-        var actorb = Canalada.actors[data.portb.actor_id];
-        this.porta = actora.getPortByName(data.porta.name);
-        this.portb = actorb.getPortByName(data.portb.name);
+        var modulea = Canalada.modules[data.porta.module_id];
+        var moduleb = Canalada.modules[data.portb.module_id];
+        this.porta = modulea.getPortByName(data.porta.name);
+        this.portb = moduleb.getPortByName(data.portb.name);
         this.setup();
     }
 });

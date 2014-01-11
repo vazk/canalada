@@ -1,6 +1,6 @@
-Canalada.Actor = fabric.util.createClass(fabric.Group, {
+Canalada.Module = fabric.util.createClass(fabric.Group, {
 
-    ctype: 'Actor',
+    ctype: 'Module',
   
     C : {'pHeight':8,
          'pWidth': 14,
@@ -26,7 +26,7 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
               fontSize: this.C.pTitleFontSize,
               fontWeight: 'bold',
             });
-        this.actorRect = new fabric.Rect({
+        this.moduleRect = new fabric.Rect({
               left: 100,
               top: 100,
               strokeWidth: 1,
@@ -36,7 +36,7 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
               hasBorders : false,
               hasControls : false
             });
-        this.actorRect.hasBorders = this.actorRect.hasControls = false;
+        this.moduleRect.hasBorders = this.moduleRect.hasControls = false;
     },
 
     setup: function() {
@@ -58,9 +58,9 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
         var numPorts = Math.max(inCount, outCount);
         var w = 2 * this.C.pWidth + inMaxWidth + outMaxWidth;
         var h = numPorts * (this.C.pHeight + this.C.pSpacing) + this.C.pPadding;
-        this.actorRect.width = w;
-        this.actorRect.height = h;
-        this.addWithUpdate(this.actorRect);
+        this.moduleRect.width = w;
+        this.moduleRect.height = h;
+        this.addWithUpdate(this.moduleRect);
         this.add(this.titleText);
         this.titleText.left = -this.width/2 + this.titleText.width/2 + 2,
         this.titleText.top = -this.height/2 + this.titleText.height/2,
@@ -105,7 +105,7 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
 
     //toObject: function() {
     //    return fabric.util.object.extend(this.callSuper('toObject'), {
-    //        Actor: this.get('Actor')
+    //        Module: this.get('Module')
     //    });
     //},
 
@@ -144,7 +144,7 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
 
 
 
-FileWriterActor = fabric.util.createClass(Canalada.Actor, {
+FileWriterModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
         this.callSuper('initialize', {'aname':'FW'});
         this.addInPort('file_name');
@@ -154,7 +154,7 @@ FileWriterActor = fabric.util.createClass(Canalada.Actor, {
     }
 });
 
-FileReaderActor = fabric.util.createClass(Canalada.Actor, {
+FileReaderModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
         this.callSuper('initialize', {'aname':'FR'});
         this.addInPort('file_name');
@@ -164,7 +164,7 @@ FileReaderActor = fabric.util.createClass(Canalada.Actor, {
     }
 });
 
-EmailClientActor = fabric.util.createClass(Canalada.Actor, {
+EmailClientModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
         this.callSuper('initialize', {'aname':'EmC'});
         this.addInPort('file_name');
@@ -174,7 +174,7 @@ EmailClientActor = fabric.util.createClass(Canalada.Actor, {
     }
 });
 
-DropboxWriterActor = fabric.util.createClass(Canalada.Actor, {
+DropboxWriterModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
         this.callSuper('initialize', {'aname':'DbxW'});
         this.addInPort('file');
@@ -183,7 +183,7 @@ DropboxWriterActor = fabric.util.createClass(Canalada.Actor, {
     }
 });
 
-DropboxReaderActor = fabric.util.createClass(Canalada.Actor, {
+DropboxReaderModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
         this.callSuper('initialize', {'aname':'DbxR'});
         this.addOutPort('file');
@@ -192,7 +192,7 @@ DropboxReaderActor = fabric.util.createClass(Canalada.Actor, {
     }
 });
 
-YoutubeDownloaderActor = fabric.util.createClass(Canalada.Actor, {
+YoutubeDownloaderModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
         this.callSuper('initialize', {'aname':'YtD'});
         this.addInPort('url');
@@ -202,7 +202,7 @@ YoutubeDownloaderActor = fabric.util.createClass(Canalada.Actor, {
     }
 });
 
-MediaConverterActor = fabric.util.createClass(Canalada.Actor, {
+MediaConverterModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
         this.callSuper('initialize', {'aname':'MC'});
         this.addInPort('ifile');
@@ -212,11 +212,11 @@ MediaConverterActor = fabric.util.createClass(Canalada.Actor, {
     }
 });
 
-Canalada.registerActorClass('FileWriter', FileWriterActor);
-Canalada.registerActorClass('FileReader', FileReaderActor);
-Canalada.registerActorClass('EmailClient', EmailClientActor);
-Canalada.registerActorClass('DropboxWriter', DropboxWriterActor);
-Canalada.registerActorClass('DropboxReader', DropboxReaderActor);
-Canalada.registerActorClass('YoutubeDownloader', YoutubeDownloaderActor);
-Canalada.registerActorClass('MediaConverter', MediaConverterActor);
+Canalada.registerModuleClass('FileWriter', FileWriterModule);
+Canalada.registerModuleClass('FileReader', FileReaderModule);
+Canalada.registerModuleClass('EmailClient', EmailClientModule);
+Canalada.registerModuleClass('DropboxWriter', DropboxWriterModule);
+Canalada.registerModuleClass('DropboxReader', DropboxReaderModule);
+Canalada.registerModuleClass('YoutubeDownloader', YoutubeDownloaderModule);
+Canalada.registerModuleClass('MediaConverter', MediaConverterModule);
 

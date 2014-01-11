@@ -113,11 +113,11 @@ function setupDragDrop() {
     
     function handleDrop(e) {
         var modelName = e.dataTransfer.getData("module");
-        var model = Canalada.actorClassRegistry[modelName];
+        var model = Canalada.moduleClassRegistry[modelName];
         if(model) {
             var inst = new model();
             inst.setPositionByOrigin({x:e.offsetX,y:e.offsetY},'center','center');
-            Canalada.addActor(inst);
+            Canalada.addModule(inst);
         }
         if (e.stopPropagation) {
             e.stopPropagation(); // stops the browser from redirecting.
@@ -163,13 +163,13 @@ function setupCanvas() {
             if(!target || e.type != 'mousedown')
                 return target;
             
-            if(target.ctype === 'Actor') {
+            if(target.ctype === 'Module') {
                 var p = target.getSelectedItem({x:e.offsetX, y:e.offsetY});
                 if(p && (p.ctype === 'InPort' || p.ctype === 'OutPort')) {
                     var portCenter = p.getCenterPoint();
-                    var actorCenter = target.getCenterPoint();
-                    Canalada.linkState.x = portCenter.x + actorCenter.x;//mouse.x;
-                    Canalada.linkState.y = portCenter.y + actorCenter.y;//mouse.y;
+                    var moduleCenter = target.getCenterPoint();
+                    Canalada.linkState.x = portCenter.x + moduleCenter.x;//mouse.x;
+                    Canalada.linkState.y = portCenter.y + moduleCenter.y;//mouse.y;
                     Canalada.linkState.sport = p;
                     var endpt = new fabric.Circle({
                                     radius: 3,
