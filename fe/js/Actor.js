@@ -8,16 +8,24 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
          'pSpacing' : 5,
          'pTextMaxWidth' : 40,
          'pStroke' : '#444',
-         'pStrokeSelect' : '#ad2e3a'
+         'pStrokeSelect' : '#ad2e3a',
+         'pFont' :  'Lato',
+         'pTitleFontSize': 10.5
          },
     
-    //model: null,
+    title: '',
     
     initialize: function(options) {
-        this.callSuper('initialize', options);
+        this.aname = options.aname;
+        this.callSuper('initialize');
         this.hasBorders = false;
         this.hasControls = false;
         this.ports = [];
+        this.titleText = new fabric.Text(this.aname, {
+              fontFamily: this.C.pFont,
+              fontSize: this.C.pTitleFontSize,
+              fontWeight: 'bold',
+            });
         this.actorRect = new fabric.Rect({
               left: 100,
               top: 100,
@@ -53,6 +61,9 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
         this.actorRect.width = w;
         this.actorRect.height = h;
         this.addWithUpdate(this.actorRect);
+        this.add(this.titleText);
+        this.titleText.left = -this.width/2 + this.titleText.width/2 + 2,
+        this.titleText.top = -this.height/2 + this.titleText.height/2,
 
         inCount = 0; outCount = 0;
         for(var i = 0; i < this.ports.length; ++i) {
@@ -134,8 +145,8 @@ Canalada.Actor = fabric.util.createClass(fabric.Group, {
 
 
 FileWriterActor = fabric.util.createClass(Canalada.Actor, {
-    initialize: function(options) {
-        this.callSuper('initialize', options);
+    initialize: function() {
+        this.callSuper('initialize', {'aname':'FW'});
         this.addInPort('file_name');
         this.addInPort('file_data');
         this.addOutPort('result');
@@ -144,8 +155,8 @@ FileWriterActor = fabric.util.createClass(Canalada.Actor, {
 });
 
 FileReaderActor = fabric.util.createClass(Canalada.Actor, {
-    initialize: function(options) {
-        this.callSuper('initialize', options);
+    initialize: function() {
+        this.callSuper('initialize', {'aname':'FR'});
         this.addInPort('file_name');
         this.addOutPort('file_data');
         this.addOutPort('result');
@@ -154,8 +165,8 @@ FileReaderActor = fabric.util.createClass(Canalada.Actor, {
 });
 
 EmailClientActor = fabric.util.createClass(Canalada.Actor, {
-    initialize: function(options) {
-        this.callSuper('initialize', options);
+    initialize: function() {
+        this.callSuper('initialize', {'aname':'EmC'});
         this.addInPort('file_name');
         this.addOutPort('file_data');
         this.addOutPort('status');
@@ -164,8 +175,8 @@ EmailClientActor = fabric.util.createClass(Canalada.Actor, {
 });
 
 DropboxWriterActor = fabric.util.createClass(Canalada.Actor, {
-    initialize: function(options) {
-        this.callSuper('initialize', options);
+    initialize: function() {
+        this.callSuper('initialize', {'aname':'DbxW'});
         this.addInPort('file');
         this.addOutPort('status');
         this.setup();
@@ -173,8 +184,8 @@ DropboxWriterActor = fabric.util.createClass(Canalada.Actor, {
 });
 
 DropboxReaderActor = fabric.util.createClass(Canalada.Actor, {
-    initialize: function(options) {
-        this.callSuper('initialize', options);
+    initialize: function() {
+        this.callSuper('initialize', {'aname':'DbxR'});
         this.addOutPort('file');
         this.addOutPort('status');
         this.setup();
@@ -182,8 +193,8 @@ DropboxReaderActor = fabric.util.createClass(Canalada.Actor, {
 });
 
 YoutubeDownloaderActor = fabric.util.createClass(Canalada.Actor, {
-    initialize: function(options) {
-        this.callSuper('initialize', options);
+    initialize: function() {
+        this.callSuper('initialize', {'aname':'YtD'});
         this.addInPort('url');
         this.addOutPort('file');
         this.addOutPort('status');
@@ -192,8 +203,8 @@ YoutubeDownloaderActor = fabric.util.createClass(Canalada.Actor, {
 });
 
 MediaConverterActor = fabric.util.createClass(Canalada.Actor, {
-    initialize: function(options) {
-        this.callSuper('initialize', options);
+    initialize: function() {
+        this.callSuper('initialize', {'aname':'MC'});
         this.addInPort('ifile');
         this.addOutPort('ofile');
         this.addOutPort('status');

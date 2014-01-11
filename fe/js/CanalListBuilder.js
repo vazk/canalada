@@ -69,11 +69,14 @@ function onCanalTabSelected() {
 
     if(activeTabRef == '#workspace') {
         activeTab.resize();
-        if(!contextCanal.actor_panel.minimized) {
-            showActorPanel();
+        if(!contextCanal.actor_lib_panel.minimized) {
+            showActorLibraryPanel();
+        }
+        if(!contextCanal.actor_prop_panel.minimized) {
+            showActorPropertiesPanel();
         }
         // show the toolbar
-        contextCanal.actor_panel.toolbar.show();
+        contextCanal.toolbar.show();
         // get the canvas element, add it to the active tab, and show
         contextCanal.canalscheme.show(); 
         contextCanal.canalscheme.find("*").show();
@@ -104,48 +107,70 @@ function onCanalWorkspaceResize(event) {
     Canalada.canvas.calcOffset();
 }
 
-function onActorPanelDrag(event, ui) {
+function onActorLibraryPanelDrag(event, ui) {
     var position = $(event.target).parent().position();
-    contextCanal.actor_panel.top = position.top;
-    contextCanal.actor_panel.left = position.left;
+    contextCanal.actor_lib_panel.top = position.top;
+    contextCanal.actor_lib_panel.left = position.left;
 }
 
-function onActorPanelMinimize(event, ui) {
+function onActorLibraryPanelMinimize(event, ui) {
     console.log('minimize');
-    contextCanal.actor_panel.minimized = true;
+    contextCanal.actor_lib_panel.minimized = true;
 }
 
-function onActorPanelUnminimize(event, ui) {
+function onActorLibraryPanelUnminimize(event, ui) {
     console.log('unminimize');
-    contextCanal.actor_panel.minimized = false;
-    showActorPanel();
+    contextCanal.actor_lib_panel.minimized = false;
+    showActorLibraryPanel();
+}
+
+function onActorPropertiesPanelDrag(event, ui) {
+    var position = $(event.target).parent().position();
+    contextCanal.actor_prop_panel.top = position.top;
+    contextCanal.actor_prop_panel.left = position.left;
+}
+
+function onActorPropertiesPanelMinimize(event, ui) {
+    console.log('minimize');
+    contextCanal.actor_prop_panel.minimized = true;
+}
+
+function onActorPropertiesPanelUnminimize(event, ui) {
+    console.log('unminimize');
+    contextCanal.actor_prop_panel.minimized = false;
+    showActorPropertiesPanel();
 }
 
 function onSaveBtnClick(event) {
         event.stopPropagation();
         console.log('canalhead save span!');
-        //$(this).prev('span').find('input:radio').prop('checked', true);
 };
 
 function onResetBtnClick(event) {
         event.stopPropagation();
         console.log('canalhead reset span!');
-        //$(this).prev('span').find('input:radio').prop('checked', true);
 };
 
 function onActiveBtnClick(event) {
         event.stopPropagation();
         console.log('canalhead active span!');
-        //$(this).prev('span').find('input:radio').prop('checked', true);
 };
 
 
-function showActorPanel() {
-    contextCanal.actor_panel.widget.dialog('open');
-    contextCanal.actor_panel.widget.parent().css({'display':' block', 
-                                  'top': contextCanal.actor_panel.top, 
-                                  'left': contextCanal.actor_panel.left});
-    contextCanal.actor_panel.widget.parent().find("*").show();
+function showActorLibraryPanel() {
+    contextCanal.actor_lib_panel.widget.dialog('open');
+    contextCanal.actor_lib_panel.widget.parent().css({'display':' block', 
+                                  'top': contextCanal.actor_lib_panel.top, 
+                                  'left': contextCanal.actor_lib_panel.left});
+    contextCanal.actor_lib_panel.widget.parent().find("*").show();
+}
+
+function showActorPropertiesPanel() {
+    contextCanal.actor_prop_panel.widget.dialog('open');
+    contextCanal.actor_prop_panel.widget.parent().css({'display':' block', 
+                                  'top': contextCanal.actor_prop_panel.top, 
+                                  'left': contextCanal.actor_prop_panel.left});
+    contextCanal.actor_prop_panel.widget.parent().find("*").show();
 }
 
 function showCtrlRightBlock(flag) {
@@ -229,7 +254,8 @@ function createCanalRow() {
                   "     <p>Lorem, nunc.</p>" + 
                   "   </div>" + 
                   "   <div id=\"workspace\">" + 
-                  "       <div id=\"actor-panel-widget\" title=\"Actor Library\" display=\"none\"> </div>" +
+                  "       <div id=\"actor-library-widget\" title=\"Library\" display=\"none\"> </div>" +
+                  "       <div id=\"actor-properties-widget\" title=\"Properties\" display=\"none\"> </div>" +
                   "       <div id=\"toolbar\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
                   "  </section>" + 
@@ -244,12 +270,16 @@ function createCanalRow() {
         id: loadedCanals.length,
         header: row_content.find('canalhead'),
         workspace: row_content.find('#workspace'),
-        actor_panel: {
+        actor_lib_panel: {
             top: 5, left: 5, minimized: false,
-            widget: row_content.find('#actor-panel-widget'),
+            widget: row_content.find('#actor-library-widget'),
             library: $('#library').clone(),
-            toolbar: row_content.find('#toolbar'),
         },
+        actor_prop_panel: {
+            top: 15, left: 15, minimized: false,
+            widget: row_content.find('#actor-properties-widget'),
+        },
+        toolbar: row_content.find('#toolbar'),
         canalscheme: $('#canal-scheme'),
         canalcontent: {},
     };
@@ -259,14 +289,14 @@ function createCanalRow() {
     row_content.data('canalData', newCanal);
 
     var stop = false;
-    newCanal.actor_panel.library.find('h3').click(function( event ) {
+    newCanal.actor_lib_panel.library.find('h3').click(function( event ) {
                           if(stop) {
                             event.stopImmediatePropagation();
                             event.preventDefault();
                             stop = false;
                           }
                         });
-    newCanal.actor_panel.library.accordion({
+    newCanal.actor_lib_panel.library.accordion({
                         header: '> div > h3',
                         collapsible: true,
                         heightStyle: 'content',
@@ -283,12 +313,26 @@ function createCanalRow() {
                         update: function() {
                         }
                    });
+
+    // set the drag callbacks on actor-lib-panel icons
+    newCanal.actor_lib_panel.library.find('img').draggable({
+                        helper: 'clone',
+                        appendTo: newCanal.canalscheme,
+                        scroll: false,
+                        zIndex: 100000,
+                        containment: newCanal.canalscheme,
+                        start: function( event, ui ) { 
+                            console.log('drag start: ', event.target.attributes.ctype);
+                        }
+                    });
+
+
     // setup the actor-panel widget
-    newCanal.actor_panel.widget.dialog({width: '120px', minimize: newCanal.actor_panel.toolbar, 
+    newCanal.actor_lib_panel.widget.dialog({width: '120px', minimize: newCanal.toolbar, 
                  autoOpen:false, maximize: false, close: false, 
-                 drag: onActorPanelDrag,
-                 beforeMinimize: onActorPanelMinimize,
-                 beforeUnminimize: onActorPanelUnminimize,
+                 drag: onActorLibraryPanelDrag,
+                 beforeMinimize: onActorLibraryPanelMinimize,
+                 beforeUnminimize: onActorLibraryPanelUnminimize,
             })
             .parent().resizable({ 
                         // Settings that will execute when resized.
@@ -305,29 +349,33 @@ function createCanalRow() {
                         containment: newCanal.workspace, // The element the dialog is constrained to.
                         opacity: 0.7
                      });
-    // set additional styles
-    var ap_parent = newCanal.actor_panel.widget.parent();
-    newCanal.actor_panel.widget.css({'padding': '0px 0px',
-                                     'margin': '0px, 0px, 0px, 0px'
-                                    });
-    ap_parent.find('.ui-dialog-titlebar').css({'font-size': '0.6em', 
-                                               'line-height': '0.9em',
-                                                'padding': '0px, 0px',
-                                                'margin': '0px, 0px, 0px, 0px'
-                                              });
-    ap_parent.find('.ui-dialog-titlebar-minimize').css({'right':'0.3em'});
 
-    // set the drag callbacks on actor-panel icons
-    newCanal.actor_panel.library.find('img').draggable({
-                        helper: 'clone',
-                        appendTo: newCanal.canalscheme,
-                        scroll: false,
-                        zIndex: 100000,
-                        containment: newCanal.canalscheme,
-                        start: function( event, ui ) { 
-                            console.log('drag start: ', event.target.attributes.ctype);
-                        }
-                    });
+
+    // setup the actor-panel widget
+    newCanal.actor_prop_panel.widget.dialog({width: '160px', minimize: newCanal.toolbar, 
+                 autoOpen:false, maximize: false, close: false, 
+                 drag: onActorPropertiesPanelDrag,
+                 beforeMinimize: onActorPropertiesPanelMinimize,
+                 beforeUnminimize: onActorPropertiesPanelUnminimize,
+            })
+            .parent().resizable({ 
+                        // Settings that will execute when resized.
+                        maxHeight: 800,
+                        minHeight: 100,
+                        maxWidth: 800,
+                        minWidth: 100,
+                        handles: 'n, e, s, w',
+                        containment: newCanal.workspace // Constrains the resizing to the div.
+                      })
+                     .draggable({ 
+                        // Settings that execute when the dialog is dragged. If parent isn't 
+                        // used the text content will have dragging enabled.
+                        containment: newCanal.workspace, // The element the dialog is constrained to.
+                        opacity: 0.7
+                     });
+
+
+
     // setup the on-resize callback
     newCanal.workspace.resize(onCanalWorkspaceResize);
     // and hide the workspace for now
@@ -349,8 +397,9 @@ function createCanalRow() {
     });
 
     // finalize the dialog widget and add it to the workspace
-    newCanal.actor_panel.library.appendTo(newCanal.actor_panel.widget);
-    newCanal.actor_panel.widget.parent().appendTo(newCanal.workspace);
+    newCanal.actor_lib_panel.library.appendTo(newCanal.actor_lib_panel.widget);
+    newCanal.actor_lib_panel.widget.parent().appendTo(newCanal.workspace);
+    newCanal.actor_prop_panel.widget.parent().appendTo(newCanal.workspace);
 
     // refresh all
     $("#canal-rows").accordion("refresh");

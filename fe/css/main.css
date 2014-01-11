@@ -107,7 +107,8 @@ ul#grid {
     position: absolute;
     bottom: 3px;
     left: 0px; 
-    width: 100px;
+    /*width: 100px;*/
+    width: auto;
     background-color: transparent;
     font-size: 0.6em;
     z-index: 5;
@@ -303,11 +304,21 @@ div.info_left_block a.handle {
     border: none;
 }
 
-.ui-dialog .ui-dialog-titlebar { 
-  background: none;
-  padding: .2em .3em; 
+.ui-dialog-titlebar { 
+    background: none;
+    font-size: 0.6em; 
+    line-height: 0.9em;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 .ui-dialog .ui-dialog-titlebar-minimize {
     background: none;
+    right: 0.2em;
+}
+
+#actor-library-widget,
+#actor-properties-widget {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }

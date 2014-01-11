@@ -205,6 +205,32 @@ Canalada.onObjectMoving = function(e) {
         }
         Canalada.canvas.renderAll();
     }
+    preventLeaving(e);
+}
+
+function preventLeaving(e) {
+    var activeObject = e.target;
+    if(activeObject.left - (activeObject.currentWidth/2) < 0) {
+        activeObject.left = activeObject.currentWidth/2; 
+    }
+    if(activeObject.top - (activeObject.currentHeight/2) < 0) {
+        activeObject.top = activeObject.currentHeight/2;
+    }
+    if(activeObject.left + (activeObject.currentWidth/2) > Canalada.canvas.getWidth()) {
+        var positionX = Canalada.canvas.getWidth() - activeObject.currentWidth/2;
+        activeObject.left = (positionX > Canalada.canvas.getWidth()/2) ? positionX : Canalada.canvas.getWidth()/2;
+    }
+    if(activeObject.top + (activeObject.currentHeight/2) > Canalada.canvas.getHeight()) {
+        var positionY = Canalada.canvas.getHeight() - (activeObject.currentHeight/2);
+        activeObject.top = (positionY > Canalada.canvas.getHeight()/2) ? positionY : Canalada.canvas.getHeight()/2;
+    }
+
+    if(activeObject.currentWidth > Canalada.canvas.getWidth()) {
+        activeObject.scaleX = Canalada.canvas.getWidth() / activeObject.width;
+    }
+    if(activeObject.currentHeight > Canalada.canvas.getHeight()) {
+        activeObject.scaleY = Canalada.canvas.getHeight() / activeObject.height;
+    }
 }
 
 Canalada.textWidth = function(text, fontProp) {

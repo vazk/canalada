@@ -247,24 +247,24 @@ var PIXEL_RATIO = (function () {
 */
 function start()
 {
-    //window.addEventListener('resize', main.resize, false);
+    window.addEventListener('resize', onCanalWorkspaceResize, false);
 
     var library = {image:
         [
-         {'src':'image/Disk.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileWriter'}},
-         {'src':'image/Folder.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'FileReader'}},
-         {'src':'image/Mail-2.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'EmailClient'}},
-         {'src':'image/Mobile.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'DropboxWriter'}},
-         {'src':'image/PaperClip.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'DropboxReader'}},
-         {'src':'image/Rss.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'YoutubeDownloader'}},
-         {'src':'image/Lock.png',
-          'info':{'title':'Globe','author':'vazkus','description':'globe bla.','module':'MediaConverter'}}
+         {'src':'batch/32x32/in.png',
+          'info':{'author':'vazkus','description':'globe bla.','module':'FileWriter'}},
+         {'src':'batch/32x32/out.png',
+          'info':{'author':'vazkus','description':'globe bla.','module':'FileReader'}},
+         {'src':'batch/32x32/@.png',
+          'info':{'author':'vazkus','description':'globe bla.','module':'EmailClient'}},
+         {'src':'batch/32x32/cloud-upload.png',
+          'info':{'author':'vazkus','description':'globe bla.','module':'DropboxWriter'}},
+         {'src':'batch/32x32/cloud-download.png',
+          'info':{'author':'vazkus','description':'globe bla.','module':'DropboxReader'}},
+         {'src':'batch/32x32/marquee-download.png',
+          'info':{'author':'vazkus','description':'globe bla.','module':'YoutubeDownloader'}},
+         {'src':'batch/32x32/repeat-2.png',
+          'info':{'author':'vazkus','description':'globe bla.','module':'MediaConverter'}}
         ]
     };
 
@@ -280,6 +280,7 @@ function start()
     
     Canalada.canvas.on({
         'object:moving'           : Canalada.onObjectMoving,
+        'object:scaling'          : Canalada.preventLeaving,
         'mouse:up'                : Canalada.onMouseUp,
         'mouse:down'              : Canalada.onMouseDown
     });
