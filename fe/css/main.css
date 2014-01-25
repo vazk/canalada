@@ -145,8 +145,9 @@ ul#grid {
 
 .canal-row-new, 
 .canal-row-new > label, 
-.canal-row-new > input {
+.canal-row-new > img {
     vertical-align:middle;
+    padding: 4px;
 }
 
 .canal-row-new { 

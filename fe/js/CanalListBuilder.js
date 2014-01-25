@@ -399,6 +399,12 @@ function createCanalRow() {
     // finalize the dialog widget and add it to the workspace
     newCanal.module_lib_panel.library.appendTo(newCanal.module_lib_panel.widget);
     newCanal.module_lib_panel.widget.parent().appendTo(newCanal.workspace);
+
+    var content = jQuery("<div>").load('installed_modules/EmailClient/property_page.html', 
+                                       function() {
+                                            console.log("content loaded!");
+                                       });
+    content.appendTo(newCanal.module_prop_panel.widget);
     newCanal.module_prop_panel.widget.parent().appendTo(newCanal.workspace);
 
     // refresh all

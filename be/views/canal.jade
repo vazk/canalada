@@ -23,12 +23,12 @@ html(lang="en")
     body
         div#top-workspace
             div#canal-rows
-            div.canal-row-new(onclick='createCanalRow()) 
+            div.canal-row-new(onclick='createCanalRow()') 
                 image(type='image', src='batch/32x32/add.png', width=20)
                 label Create new canal
             div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
                 canvas#canal-canvas
-                div#library(hidden)
+            div#library(hidden)
             
         script(type='text/javascript').start
             start();

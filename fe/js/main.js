@@ -80,8 +80,8 @@ function loadLibraries(library) {
             var module = library[category][index];
             var module_li = document.createElement('li');
             var module_icon = document.createElement('img');
-            module_icon.setAttribute('src', module['src']);
-            module_icon.setAttribute('ctype', module.info['module']);
+            module_icon.setAttribute('src', module.icon);
+            module_icon.setAttribute('ctype', module.module);
             //module_icon.addEventListener('dragstart', handleDragStart, false);
             //module_icon.addEventListener('dragend', function(e){console.log("end")}, false);
             module_li.appendChild(module_icon);
@@ -249,6 +249,7 @@ function start()
 {
     window.addEventListener('resize', onCanalWorkspaceResize, false);
 
+/*
     var library = {image:
         [
          {'src':'batch/32x32/in.png',
@@ -267,10 +268,11 @@ function start()
           'info':{'author':'vazkus','description':'globe bla.','module':'MediaConverter'}}
         ]
     };
+*/
 
     buildCanals();
     
-    loadLibraries(library);
+    loadLibraries(InstalledModules.library);
     
     setupDragDrop();
     

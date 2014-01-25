@@ -16,12 +16,12 @@ Canalada.Module = fabric.util.createClass(fabric.Group, {
     title: '',
     
     initialize: function(options) {
-        this.aname = options.aname;
+        this.mname = options.mname;
         this.callSuper('initialize');
         this.hasBorders = false;
         this.hasControls = false;
         this.ports = [];
-        this.titleText = new fabric.Text(this.aname, {
+        this.titleText = new fabric.Text(this.mname, {
               fontFamily: this.C.pFont,
               fontSize: this.C.pTitleFontSize,
               fontWeight: 'bold',
@@ -146,7 +146,7 @@ Canalada.Module = fabric.util.createClass(fabric.Group, {
 
 FileWriterModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'aname':'FW'});
+        this.callSuper('initialize', {'mname':'FW'});
         this.addInPort('file_name');
         this.addInPort('file_data');
         this.addOutPort('result');
@@ -156,7 +156,7 @@ FileWriterModule = fabric.util.createClass(Canalada.Module, {
 
 FileReaderModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'aname':'FR'});
+        this.callSuper('initialize', {'mname':'FR'});
         this.addInPort('file_name');
         this.addOutPort('file_data');
         this.addOutPort('result');
@@ -166,7 +166,7 @@ FileReaderModule = fabric.util.createClass(Canalada.Module, {
 
 EmailClientModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'aname':'EmC'});
+        this.callSuper('initialize', {'mname':'EmC'});
         this.addInPort('file_name');
         this.addOutPort('file_data');
         this.addOutPort('status');
@@ -176,7 +176,7 @@ EmailClientModule = fabric.util.createClass(Canalada.Module, {
 
 DropboxWriterModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'aname':'DbxW'});
+        this.callSuper('initialize', {'mname':'DbxW'});
         this.addInPort('file');
         this.addOutPort('status');
         this.setup();
@@ -185,7 +185,7 @@ DropboxWriterModule = fabric.util.createClass(Canalada.Module, {
 
 DropboxReaderModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'aname':'DbxR'});
+        this.callSuper('initialize', {'mname':'DbxR'});
         this.addOutPort('file');
         this.addOutPort('status');
         this.setup();
@@ -194,7 +194,7 @@ DropboxReaderModule = fabric.util.createClass(Canalada.Module, {
 
 YoutubeDownloaderModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'aname':'YtD'});
+        this.callSuper('initialize', {'mname':'YtD'});
         this.addInPort('url');
         this.addOutPort('file');
         this.addOutPort('status');
@@ -204,7 +204,7 @@ YoutubeDownloaderModule = fabric.util.createClass(Canalada.Module, {
 
 MediaConverterModule = fabric.util.createClass(Canalada.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'aname':'MC'});
+        this.callSuper('initialize', {'mname':'MC'});
         this.addInPort('ifile');
         this.addOutPort('ofile');
         this.addOutPort('status');
