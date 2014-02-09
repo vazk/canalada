@@ -29,7 +29,7 @@ io.on('connection', function(socket) {
     	//_.findWhere(participants, {id: socket.id}).name = data.name;
     	//io.sockets.emit("nameChanged", {id: data.id, name: data.name});
     	console.log("wrote: " + cdata);
-    	var fileName = cdata.name + ".canal";
+    	var fileName = cdata.id + ".canal";
     	fs.writeFile(fileName, JSON.stringify(cdata), function (err) {
   			if (err) 
   				console.log(err);
@@ -37,14 +37,14 @@ io.on('connection', function(socket) {
   				console.log("successfully wrote " + fileName);
 		});
     });
-	socket.on('requestReadCanal', function(cdata) {
+	socket.on('requestLoadCanal', function(cdata) {
 		//participants.push({id: data.id, name: data.name});
 		//io.sockets.emit("newConnection", {participants:participants});
-		var fileName = cdata.name + ".canal";
+		var fileName = cdata.id + ".canal";
 	 	fs.readFile(fileName, function (err, data) {
   			if (err) throw err;
   			console.log("read: " + data);
-  			socket.emit('responseReadCanal', JSON.parse(data));
+  			socket.emit('responseLoadCanal', JSON.parse(data));
 		});
 	});
 });

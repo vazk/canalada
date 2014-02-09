@@ -107,6 +107,20 @@ function onCanalWorkspaceResize(event) {
     Canalada.canvas.calcOffset();
 }
 
+function workspaceResize(wWidth, wHeight, tOffset, pHeight) {
+    contextCanal.workspace.height(pHeight-tOffset);
+
+    //var ratio = PIXEL_RATIO;
+    var htmlcanvas = $('canvas');
+    htmlcanvas.width(wWidth);
+    htmlcanvas.height(wHeight);
+    
+    Canalada.canvas.setWidth(wWidth-4);
+    Canalada.canvas.setHeight(wHeight-4);
+    Canalada.canvas.calcOffset();
+}
+
+
 function onModuleLibraryPanelDrag(event, ui) {
     var position = $(event.target).parent().position();
     contextCanal.module_lib_panel.top = position.top;
@@ -141,21 +155,70 @@ function onModulePropertiesPanelUnminimize(event, ui) {
     showModulePropertiesPanel();
 }
 
-function onSaveBtnClick(event) {
-        event.stopPropagation();
-        console.log('canalhead save span!');
+function onSaveBtnClick(event, ui) {
+    event.stopPropagation();
+    contextCanal.canalcontent = Canalada.serialize();
+    Canalada.socket.emit('requestSaveCanal', {
+                 name: contextCanal.name,
+                 id: contextCanal.id,
+                 content: contextCanal.canalcontent,
+                 /*
+                 lib_panel: {
+                         top: contextCanal.module_lib_panel.top,
+                         left: contextCanal.module_lib_panel.left,
+                         minimized: contextCanal.module_lib_panel.minimized,
+                     },
+                 prop_panel: {
+                         top: contextCanal.module_prop_panel.top,
+                         left: contextCanal.module_prop_panel.left,
+                         minimized: contextCanal.module_prop_panel.minimized,
+                     },
+                 */
+                 workspace: {
+                         width: contextCanal.workspace.width(),
+                         height: contextCanal.workspace.height(),
+                         toffset: contextCanal.workspace[0].offsetTop,
+                         pheight: contextCanal.workspace.closest('.ui-accordion-content').height(),
+                     }
+                });
+    console.log('canal save request sent!');
 };
 
 function onResetBtnClick(event) {
-        event.stopPropagation();
-        console.log('canalhead reset span!');
+    event.stopPropagation();
+    Canalada.socket.emit('requestLoadCanal',
+                         {id: contextCanal.id});
+    console.log('canal load request sent!');
 };
+
 
 function onActiveBtnClick(event) {
         event.stopPropagation();
         console.log('canalhead active span!');
 };
 
+function onCanalLoaded(cdata) {
+    var canal = contextCanal;
+    canal.name = cdata.name;
+    canal.canalcontent = cdata.content;
+    /*
+    canal.module_lib_panel.top = cdata.lib_panel.top;
+    canal.module_lib_panel.left = cdata.lib_panel.left;
+    canal.module_lib_panel.minimized = cdata.lib_panel.minimized;
+    canal.module_prop_panel.top = cdata.prop_panel.top;
+    canal.module_prop_panel.left = cdata.prop_panel.left;
+    canal.module_prop_panel.minimized = cdata.prop_panel.minimized;
+    */
+    var wWidth = cdata.workspace.width;
+    var wHeight = cdata.workspace.height;
+    var tOffset = cdata.workspace.toffset;
+    var pHeight = cdata.workspace.pheight;
+    console.log('canal data loaded!');
+    
+    workspaceResize(wWidth, wHeight, tOffset, pHeight);
+    Canalada.deserialize(canal.canalcontent);   
+    onCanalTabSelected();
+}
 
 function showModuleLibraryPanel() {
     contextCanal.module_lib_panel.widget.dialog('open');
@@ -176,9 +239,9 @@ function showModulePropertiesPanel() {
 function showCtrlRightBlock(flag) {
     var rblock = contextCanal.header.find('.ctrl_right_block');
     if(flag) {
-        rblock.show();//css({'display':'block'});
+        rblock.show();
     } else {
-        rblock.hide();//css({'display':'none'});
+        rblock.hide();
     }
 }
 
@@ -267,6 +330,7 @@ function createCanalRow() {
 
     // create the data to be associated with canal
     var newCanal = { 
+        name: 'dummy',
         id: loadedCanals.length,
         header: row_content.find('canalhead'),
         workspace: row_content.find('#workspace'),

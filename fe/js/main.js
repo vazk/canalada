@@ -225,11 +225,12 @@ function setupSocket()
         console.log('Connected ' + sessionId);  
 
         //socket.emit('requestSaveCanal', {name: 'blabla', canal: {pam: 'parampampam'}}); 
-        //socket.emit('requestReadCanal', {name: 'blabla'}); 
+        //socket.emit('requestLoadCanal', {name: 'blabla'}); 
     });
-    Canalada.socket.on('responseReadCanal', function(cdata) {
-        Canalada.onOpenData(cdata);
-        console.log(cdata);
+    Canalada.socket.on('responseLoadCanal', function(cdata) {
+        //Canalada.onOpenData(cdata);
+        //console.log(cdata);
+        onCanalLoaded(cdata);
     });
 }
 /*
@@ -278,7 +279,7 @@ function start()
     
     setupCanvas();
     
-    //setupSocket();
+    setupSocket();
     
     Canalada.canvas.on({
         'object:moving'           : Canalada.onObjectMoving,
