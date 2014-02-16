@@ -3,10 +3,7 @@ var app = express();
 var http = require("http").createServer(app);
 var io = require("socket.io").listen(http);
 var _ = require("lodash");
-var fs = require("fs");	
-var ThreadManager = require("./ThreadManager.js").ThreadManager;
-
-var tm = new ThreadManager({numberOfThreads:4});
+var fs = require("fs");
 
 app.set("ipaddr", "127.0.0.1");
 app.set("port", 8080);
@@ -48,7 +45,6 @@ io.on('connection', function(socket) {
   			console.log("read: " + data);
   			socket.emit('responseLoadCanal', JSON.parse(data));
 		});
-		tm.doBla();
 	});
 });
 

@@ -82,6 +82,9 @@ var BEInputPort = BEPortBase.augment(function() {
 	};
 	this.pull = function() {
 		if(this.hasLink()) {
+			return this.link.pull();
+		} else {
+			return undefined;
 		}
 	};
 	this.setLink = function(link) {
@@ -112,7 +115,7 @@ var BEOutputPort = BEPortBase.augment(function() {
 	};
 });
 
-var BEModuleBase = Object.augment(function() {
+var BEModule = Object.augment(function() {
 	this.constructor = function(name) {
 		this.name = name;
     	this.inputPorts = [];
@@ -137,33 +140,29 @@ var BEModuleBase = Object.augment(function() {
 
     this.execute = function () {
     	// check input ports for data
-    	console.log("c1");
     	var inputs = {};
-    	var i, port;
-    	for(i = 0, total = this.inputPorts.length; i < total; ++i) {
+    	var port;
+    	for(var i = 0, total = this.inputPorts.length; i < total; ++i) {
     		port = this.inputPorts[i];
     		if(!port.hasData() && port.isMandatory()) {
-    			console.log("c2");
     			return;
     		}
   		}
   		// now check the outputs to make sure the previous data is consumed
-  	   	for(i = 0, total = this.outputPorts.length; i < total; ++i) {
+  	   	for(var i = 0, total = this.outputPorts.length; i < total; ++i) {
   	   		port = this.outputPorts[i];
     		if(port.hasData() && !port.isOverwritable()) {
     			return;
     		}
   		}
 
-  		console.log("c3");
-       	for(i = 0, total = this.inputPorts.length; i < total; ++i) {
+       	for(var i = 0, total = this.inputPorts.length; i < total; ++i) {
     		port = this.inputPorts[i];
     		if(!port.hasData() && port.isMandatory()) {
     			return;
     		}
     		inputs[port.name] = port.pull();
   		}
-
   		wd.submitJob({
 				moduleName: this.name,
 				input: inputs
@@ -172,30 +171,9 @@ var BEModuleBase = Object.augment(function() {
 });
 
 
-function testBECore() {
-	//var op = new OutputPort();
-	//var ip = new InputPort();
-	//op.buzz();
-	//ip.buzz();
-
-	var m1 = new BEModuleBase();
-	var m2 = new BEModuleBase();
-
-	var paaa = m1.addOutputPort("aaa");
-	var pbbb = m2.addInputPort("bbb");
-
-	var l = new BELink();
-	l.setFromPort(m1.outputPorts[0]);
-	l.setToPort(m2.inputPorts[0]);
-
-	paaa.push("bpooo");
-	paaa.push("apooo");
-	m1.outputPorts[0].push("popoq");
-}
-
 exports.assert = assert;
 exports.BELink = BELink;
 exports.BEInputPort = BEInputPort;
 exports.BEOutputPort = BEOutputPort;
-exports.BEModuleBase = BEModuleBase;
+exports.BEModule = BEModule;
 

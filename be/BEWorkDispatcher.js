@@ -43,7 +43,6 @@ var BEWorkDispatcher = function(numWorkers) {
 		var context = this;
 		for(var i = 0;  i < this.numWorkers; ++i) {
 			var wrkr = ChildProcess.fork('BEWorker.js', [9999, i]);
-			console.log('N', require('./BEModuleRegistry'));
 			wrkr.workerId = i;
 			wrkr.socket = null;
 			this.workers.push(wrkr);
@@ -60,8 +59,8 @@ var BEWorkDispatcher = function(numWorkers) {
 		var server = require('net').createServer();
 
 		server.on('connection', function (socket) {
-			socket = new JSONSocket(socket);
 			console.log("S: connected from: ", socket.remoteAddress);
+			socket = new JSONSocket(socket);
 
 			socket.on('message', function(m) {
 				console.log('S: @message: ', JSON.stringify(m));

@@ -1,5 +1,5 @@
 var JSONSocket = require('json-socket');
-var ModuleRegistry = require('./BEModuleRegistry');
+var ModuleFactory = require('./BEModuleFactory');
 
 var BEWorker = function(serverPort, workerId) {
 	this.serverPort = serverPort;
@@ -7,9 +7,9 @@ var BEWorker = function(serverPort, workerId) {
 
 	this.runJob = function(job) {
 		console.log('C[', context.workerId, ']: processing [',job.moduleName,']...');
-		var module = ModuleRegistry.module(job.moduleName);
 		var outputs = {};
-		module.process(job.input, outputs);
+		var processor = ModuleFactory.processor(job.moduleName);
+		processor(job.input, outputs);
 		this.socket.sendMessage({
 									msg:'done',
 									status:'ok',
@@ -17,6 +17,7 @@ var BEWorker = function(serverPort, workerId) {
 									workerId: this.workerId
 								});
 	};
+	
 	this.initialize = function() {
 		context = this;
 		context.socket = new JSONSocket(new net.Socket()); //Decorate a standard net.Socket with JsonSocket
@@ -28,7 +29,6 @@ var BEWorker = function(serverPort, workerId) {
 									  	workerId: context.workerId
 								  	});
 				context.socket.sendMessage({a:'a'});
-				console.log('C: done');
 		});
 
 		context.socket.on('message', function(m) {
