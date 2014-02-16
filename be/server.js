@@ -3,7 +3,10 @@ var app = express();
 var http = require("http").createServer(app);
 var io = require("socket.io").listen(http);
 var _ = require("lodash");
-var fs = require("fs");
+var fs = require("fs");	
+var ThreadManager = require("./ThreadManager.js").ThreadManager;
+
+var tm = new ThreadManager({numberOfThreads:4});
 
 app.set("ipaddr", "127.0.0.1");
 app.set("port", 8080);
@@ -39,13 +42,13 @@ io.on('connection', function(socket) {
     });
 	socket.on('requestLoadCanal', function(cdata) {
 		//participants.push({id: data.id, name: data.name});
-		//io.sockets.emit("newConnection", {participants:participants});
-		var fileName = cdata.id + ".canal";
+ 		var fileName = cdata.id + ".canal";
 	 	fs.readFile(fileName, function (err, data) {
   			if (err) throw err;
   			console.log("read: " + data);
   			socket.emit('responseLoadCanal', JSON.parse(data));
 		});
+		tm.doBla();
 	});
 });
 
