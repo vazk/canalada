@@ -11,7 +11,8 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "jade");
 
 app.use(express.bodyParser());
-app.use(express.static(__dirname + "/../fe"));
+//app.use(express.static(__dirname + "/../fe"));
+app.use(express.static(__dirname + "/.."));
 //app.use(express.static(__dirname + "/../fe/tpt"));
 
 

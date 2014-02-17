@@ -1,4 +1,4 @@
-Canalada.Module = fabric.util.createClass(fabric.Group, {
+FE.Module = fabric.util.createClass(fabric.Group, {
 
     ctype: 'Module',
   
@@ -78,7 +78,7 @@ Canalada.Module = fabric.util.createClass(fabric.Group, {
             this.add(p);
             p.setCoords();
         }
-        Canalada.canvas.renderAll();
+        FE.canvas.renderAll();
     },
 
     getPortByName: function(name) {
@@ -110,12 +110,12 @@ Canalada.Module = fabric.util.createClass(fabric.Group, {
     //},
 
     addInPort : function(portName) {
-        var port = new Canalada.InPort(portName, this);
+        var port = new FE.InPort(portName, this);
         this.ports.push(port);
     },
 
     addOutPort : function(portName) {
-        var port = new Canalada.OutPort(portName, this);
+        var port = new FE.OutPort(portName, this);
         this.ports.push(port);
     },
 
@@ -144,7 +144,7 @@ Canalada.Module = fabric.util.createClass(fabric.Group, {
 
 
 
-FileWriterModule = fabric.util.createClass(Canalada.Module, {
+FileWriterModule = fabric.util.createClass(FE.Module, {
     initialize: function() {
         this.callSuper('initialize', {'mname':'FW'});
         this.addInPort('file_name');
@@ -154,7 +154,7 @@ FileWriterModule = fabric.util.createClass(Canalada.Module, {
     }
 });
 
-FileReaderModule = fabric.util.createClass(Canalada.Module, {
+FileReaderModule = fabric.util.createClass(FE.Module, {
     initialize: function() {
         this.callSuper('initialize', {'mname':'FR'});
         this.addInPort('file_name');
@@ -164,9 +164,9 @@ FileReaderModule = fabric.util.createClass(Canalada.Module, {
     }
 });
 
-EmailClientModule = fabric.util.createClass(Canalada.Module, {
+EmailClientModule = fabric.util.createClass(FE.Module, {
     initialize: function() {
-        this.callSuper('initialize', {'mname':'EmC'});
+        this.callSuper('initialize', {'mname':'EmXXC'});
         this.addInPort('file_name');
         this.addOutPort('file_data');
         this.addOutPort('status');
@@ -174,7 +174,7 @@ EmailClientModule = fabric.util.createClass(Canalada.Module, {
     }
 });
 
-DropboxWriterModule = fabric.util.createClass(Canalada.Module, {
+DropboxWriterModule = fabric.util.createClass(FE.Module, {
     initialize: function() {
         this.callSuper('initialize', {'mname':'DbxW'});
         this.addInPort('file');
@@ -183,7 +183,7 @@ DropboxWriterModule = fabric.util.createClass(Canalada.Module, {
     }
 });
 
-DropboxReaderModule = fabric.util.createClass(Canalada.Module, {
+DropboxReaderModule = fabric.util.createClass(FE.Module, {
     initialize: function() {
         this.callSuper('initialize', {'mname':'DbxR'});
         this.addOutPort('file');
@@ -192,7 +192,7 @@ DropboxReaderModule = fabric.util.createClass(Canalada.Module, {
     }
 });
 
-YoutubeDownloaderModule = fabric.util.createClass(Canalada.Module, {
+YoutubeDownloaderModule = fabric.util.createClass(FE.Module, {
     initialize: function() {
         this.callSuper('initialize', {'mname':'YtD'});
         this.addInPort('url');
@@ -202,7 +202,7 @@ YoutubeDownloaderModule = fabric.util.createClass(Canalada.Module, {
     }
 });
 
-MediaConverterModule = fabric.util.createClass(Canalada.Module, {
+MediaConverterModule = fabric.util.createClass(FE.Module, {
     initialize: function() {
         this.callSuper('initialize', {'mname':'MC'});
         this.addInPort('ifile');
@@ -212,11 +212,11 @@ MediaConverterModule = fabric.util.createClass(Canalada.Module, {
     }
 });
 
-Canalada.registerModuleClass('FileWriter', FileWriterModule);
-Canalada.registerModuleClass('FileReader', FileReaderModule);
-Canalada.registerModuleClass('EmailClient', EmailClientModule);
-Canalada.registerModuleClass('DropboxWriter', DropboxWriterModule);
-Canalada.registerModuleClass('DropboxReader', DropboxReaderModule);
-Canalada.registerModuleClass('YoutubeDownloader', YoutubeDownloaderModule);
-Canalada.registerModuleClass('MediaConverter', MediaConverterModule);
+FE.registerModuleClass('FileWriter', FileWriterModule);
+FE.registerModuleClass('FileReader', FileReaderModule);
+FE.registerModuleClass('EmailClient', EmailClientModule);
+FE.registerModuleClass('DropboxWriter', DropboxWriterModule);
+FE.registerModuleClass('DropboxReader', DropboxReaderModule);
+FE.registerModuleClass('YoutubeDownloader', YoutubeDownloaderModule);
+FE.registerModuleClass('MediaConverter', MediaConverterModule);
 

@@ -21,9 +21,9 @@ main.resize = function(outter) {
     canvasDiv.width(canvasWidth + 'px');
     canvasDiv.height(canvasHeight - 1 + 'px');
     canvasSelf.offset({'left':0,'top':0});
-    Canalada.canvas.setWidth(canvasWidth);
-    Canalada.canvas.setHeight(canvasHeight-1);
-    Canalada.canvas.calcOffset();
+    FE.canvas.setWidth(canvasWidth);
+    FE.canvas.setHeight(canvasHeight-1);
+    FE.canvas.calcOffset();
 
 
     /*
@@ -48,9 +48,9 @@ main.resize = function(outter) {
     canvasDiv.style.height = canvasHeight - 1 + 'px';
     canvasSelf.style.top = 0;
     canvasSelf.style.left = 0;
-    Canalada.canvas.setWidth(canvasWidth);
-    Canalada.canvas.setHeight(canvasHeight-1);
-    Canalada.canvas.calcOffset();
+    FE.canvas.setWidth(canvasWidth);
+    FE.canvas.setHeight(canvasHeight-1);
+    FE.canvas.calcOffset();
     */
 
 };
@@ -97,7 +97,7 @@ function loadLibraries(library) {
 function setupDragDrop() {
   
     function handleKeyDown(e) {
-        Canalada.onKeyDown(e);
+        FE.onKeyDown(e);
         if (e.preventDefault) {
             e.preventDefault();
         }
@@ -113,11 +113,11 @@ function setupDragDrop() {
     
     function handleDrop(e) {
         var modelName = e.dataTransfer.getData("module");
-        var model = Canalada.moduleClassRegistry[modelName];
+        var model = FE.moduleClassRegistry[modelName];
         if(model) {
             var inst = new model();
             inst.setPositionByOrigin({x:e.offsetX,y:e.offsetY},'center','center');
-            Canalada.addModule(inst);
+            FE.addModule(inst);
         }
         if (e.stopPropagation) {
             e.stopPropagation(); // stops the browser from redirecting.
@@ -153,10 +153,10 @@ function setupDragDrop() {
     
     
 function setupCanvas() {
-    Canalada.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
-    Canalada.canvas.selection = false;
+    FE.canvas = new fabric.Canvas('canal-canvas', { backgroundColor:'#fff' });
+    FE.canvas.selection = false;
 
-    Canalada.canvas.findTarget = (function(originalFn) {
+    FE.canvas.findTarget = (function(originalFn) {
         return function() {
             var target = originalFn.apply(this, arguments);
             var e = arguments[0];
@@ -168,21 +168,21 @@ function setupCanvas() {
                 if(p && (p.ctype === 'InPort' || p.ctype === 'OutPort')) {
                     var portCenter = p.getCenterPoint();
                     var moduleCenter = target.getCenterPoint();
-                    Canalada.linkState.x = portCenter.x + moduleCenter.x;//mouse.x;
-                    Canalada.linkState.y = portCenter.y + moduleCenter.y;//mouse.y;
-                    Canalada.linkState.sport = p;
+                    FE.linkState.x = portCenter.x + moduleCenter.x;//mouse.x;
+                    FE.linkState.y = portCenter.y + moduleCenter.y;//mouse.y;
+                    FE.linkState.sport = p;
                     var endpt = new fabric.Circle({
                                     radius: 3,
-                                    left: Canalada.linkState.x,
-                                    top: Canalada.linkState.y,
+                                    left: FE.linkState.x,
+                                    top: FE.linkState.y,
                                     stroke: '#444',
                                     hasBorders : false,
                                     hasControls : false});
                     var ln = new fabric.Line(
-                                    [Canalada.linkState.x,
-                                     Canalada.linkState.y,
-                                     Canalada.linkState.x,
-                                     Canalada.linkState.y],
+                                    [FE.linkState.x,
+                                     FE.linkState.y,
+                                     FE.linkState.x,
+                                     FE.linkState.y],
                                     {
                                         strokeDashArray: [5, 5],
                                         stroke: '#444',
@@ -190,16 +190,16 @@ function setupCanvas() {
                                         hasBorders: false,
                                         hasControls: false
                                     });
-                    Canalada.canvas.add(endpt);
-                    Canalada.canvas.add(ln);
-                    Canalada.linkState.marker = endpt;
-                    Canalada.linkState.line = ln;
-                    return Canalada.linkState.marker;
+                    FE.canvas.add(endpt);
+                    FE.canvas.add(ln);
+                    FE.linkState.marker = endpt;
+                    FE.linkState.line = ln;
+                    return FE.linkState.marker;
                 }
             }
             return target;
         };
-    })(Canalada.canvas.findTarget);
+    })(FE.canvas.findTarget);
 }
 
 
@@ -211,7 +211,7 @@ function setupSocket()
     Note we don't specify a port since we set up our server
     to run on port 8080
     */
-    Canalada.socket = io.connect(serverBaseUrl);
+    FE.socket = io.connect(serverBaseUrl);
 
     //We'll save our session ID in a variable for later
     var sessionId = '';
@@ -220,15 +220,15 @@ function setupSocket()
     event "connect" is emitted. Let's get the session ID and
     log it.
     */
-    Canalada.socket.on('connect', function () {
-        sessionId = Canalada.socket.socket.sessionid;
+    FE.socket.on('connect', function () {
+        sessionId = FE.socket.socket.sessionid;
         console.log('Connected ' + sessionId);  
 
         //socket.emit('requestSaveCanal', {name: 'blabla', canal: {pam: 'parampampam'}}); 
         //socket.emit('requestLoadCanal', {name: 'blabla'}); 
     });
-    Canalada.socket.on('responseLoadCanal', function(cdata) {
-        //Canalada.onOpenData(cdata);
+    FE.socket.on('responseLoadCanal', function(cdata) {
+        //FE.onOpenData(cdata);
         //console.log(cdata);
         onCanalLoaded(cdata);
     });
@@ -281,11 +281,11 @@ function start()
     
     setupSocket();
     
-    Canalada.canvas.on({
-        'object:moving'           : Canalada.onObjectMoving,
-        'object:scaling'          : Canalada.preventLeaving,
-        'mouse:up'                : Canalada.onMouseUp,
-        'mouse:down'              : Canalada.onMouseDown
+    FE.canvas.on({
+        'object:moving'           : FE.onObjectMoving,
+        'object:scaling'          : FE.preventLeaving,
+        'mouse:up'                : FE.onMouseUp,
+        'mouse:down'              : FE.onMouseDown
     });
     //main.resize();
 }

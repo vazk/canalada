@@ -1,14 +1,19 @@
+var augment = require("augment");
 var JSONSocket = require('json-socket');
 var ModuleFactory = require('./BEModuleFactory');
 
-var BEWorker = function(serverPort, workerId) {
-	this.serverPort = serverPort;
-	this.workerId = workerId;
+
+Worker = Object.augment(function() {
+	
+	this.constructor = function(serverPort, workerId) {
+		this.serverPort = serverPort;
+		this.workerId = workerId;
+	};
 
 	this.runJob = function(job) {
 		console.log('C[', context.workerId, ']: processing [',job.moduleName,']...');
 		var outputs = {};
-		var processor = ModuleFactory.processor(job.moduleName);
+		var processor = ModuleFactory.processor(job.moduleName).process;
 		processor(job.input, outputs);
 		this.socket.sendMessage({
 									msg:'done',
@@ -17,7 +22,7 @@ var BEWorker = function(serverPort, workerId) {
 									workerId: this.workerId
 								});
 	};
-	
+
 	this.initialize = function() {
 		context = this;
 		context.socket = new JSONSocket(new net.Socket()); //Decorate a standard net.Socket with JsonSocket
@@ -28,7 +33,6 @@ var BEWorker = function(serverPort, workerId) {
 									  	msg: 'connected',
 									  	workerId: context.workerId
 								  	});
-				context.socket.sendMessage({a:'a'});
 		});
 
 		context.socket.on('message', function(m) {
@@ -37,7 +41,7 @@ var BEWorker = function(serverPort, workerId) {
 		});
 
 	};
-};
+});
 
 
 
@@ -45,5 +49,5 @@ var net = require('net');
 var serverPort = process.argv[2];
 var workerId = process.argv[3];
 
-var wrkr = new BEWorker(serverPort, workerId);
+var wrkr = new Worker(serverPort, workerId);
 wrkr.initialize();

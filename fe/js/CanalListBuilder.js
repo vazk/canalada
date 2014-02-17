@@ -12,8 +12,8 @@ function onCanalToBeSelected(event, ui) {
     // keep the old data first (if exists)
     if(contextCanal) {
         showCtrlRightBlock(false);
-        contextCanal.canalcontent = Canalada.serialize();
-        Canalada.reset();
+        contextCanal.canalcontent = FE.serialize();
+        FE.reset();
     }
     if(ui.newPanel.length != 0) {
 
@@ -24,7 +24,7 @@ function onCanalToBeSelected(event, ui) {
         contextCanal = row_content.data('canalData');
         contextCanal.canalscheme.appendTo(contextCanal.workspace);
         // load the content back
-        Canalada.deserialize(contextCanal.canalcontent);
+        FE.deserialize(contextCanal.canalcontent);
     }
     if(ui.oldPanel.length != 0) {
         ui.oldHeader.css({'background-color':'#E5E5E0'});    
@@ -34,21 +34,21 @@ function onCanalToBeSelected(event, ui) {
 function onCanalSelected(event, ui) {
     if(ui.newPanel.length != 0) {
         showCtrlRightBlock(true);
-        Canalada.canvas.calcOffset();
-        Canalada.canvas.renderAll();
+        FE.canvas.calcOffset();
+        FE.canvas.renderAll();
     }
 }
 
 function onCanalSchemeDrop(event, ui) {
     var modelName = event.toElement.attributes.ctype.nodeValue;
     console.log('dropped: ', modelName);
-    var model = Canalada.moduleClassRegistry[modelName];
+    var model = FE.moduleClassRegistry[modelName];
     if(model) {
         var inst = new model();
         var offset = {x: ui.position.left + ui.helper.width()/2,
                       y: ui.position.top + ui.helper.height()/2};
         inst.setPositionByOrigin(offset,'center','center');
-        Canalada.addModule(inst);
+        FE.addModule(inst);
     }
 }
 
@@ -80,8 +80,8 @@ function onCanalTabSelected() {
         // get the canvas element, add it to the active tab, and show
         contextCanal.canalscheme.show(); 
         contextCanal.canalscheme.find("*").show();
-        Canalada.canvas.calcOffset();
-        Canalada.canvas.renderAll();
+        FE.canvas.calcOffset();
+        FE.canvas.renderAll();
     } 
     return false;
 }
@@ -102,9 +102,9 @@ function onCanalWorkspaceResize(event) {
     htmlcanvas[0].getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
     */
 
-    Canalada.canvas.setWidth(self.width()-4);
-    Canalada.canvas.setHeight(self.height()-4);
-    Canalada.canvas.calcOffset();
+    FE.canvas.setWidth(self.width()-4);
+    FE.canvas.setHeight(self.height()-4);
+    FE.canvas.calcOffset();
 }
 
 function workspaceResize(wWidth, wHeight, tOffset, pHeight) {
@@ -115,9 +115,9 @@ function workspaceResize(wWidth, wHeight, tOffset, pHeight) {
     htmlcanvas.width(wWidth);
     htmlcanvas.height(wHeight);
     
-    Canalada.canvas.setWidth(wWidth-4);
-    Canalada.canvas.setHeight(wHeight-4);
-    Canalada.canvas.calcOffset();
+    FE.canvas.setWidth(wWidth-4);
+    FE.canvas.setHeight(wHeight-4);
+    FE.canvas.calcOffset();
 }
 
 
@@ -157,8 +157,8 @@ function onModulePropertiesPanelUnminimize(event, ui) {
 
 function onSaveBtnClick(event, ui) {
     event.stopPropagation();
-    contextCanal.canalcontent = Canalada.serialize();
-    Canalada.socket.emit('requestSaveCanal', {
+    contextCanal.canalcontent = FE.serialize();
+    FE.socket.emit('requestSaveCanal', {
                  name: contextCanal.name,
                  id: contextCanal.id,
                  content: contextCanal.canalcontent,
@@ -186,7 +186,7 @@ function onSaveBtnClick(event, ui) {
 
 function onResetBtnClick(event) {
     event.stopPropagation();
-    Canalada.socket.emit('requestLoadCanal',
+    FE.socket.emit('requestLoadCanal',
                          {id: contextCanal.id});
     console.log('canal load request sent!');
 };
@@ -216,7 +216,7 @@ function onCanalLoaded(cdata) {
     console.log('canal data loaded!');
     
     workspaceResize(wWidth, wHeight, tOffset, pHeight);
-    Canalada.deserialize(canal.canalcontent);   
+    FE.deserialize(canal.canalcontent);   
     onCanalTabSelected();
 }
 
@@ -279,7 +279,7 @@ function buildCanals() {
             handle: "a.handle",
             stop: function() {
                 stop = true;
-                Canalada.canvas.calcOffset();
+                FE.canvas.calcOffset();
             }
         });
 

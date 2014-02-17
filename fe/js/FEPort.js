@@ -1,5 +1,5 @@
 
-Canalada.Port = fabric.util.createClass(fabric.Rect, {
+FE.Port = fabric.util.createClass(fabric.Rect, {
     C : {'pHeight':8,
          'pWidth': 10,
          'pPadding' : 20,
@@ -23,7 +23,7 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
         this.name =  name;
         this.module = module;
         this.links = [];
-        this.textWidth = Canalada.textWidth(this.name, this.C.pFont);
+        this.textWidth = FE.textWidth(this.name, this.C.pFont);
         this.selectCnt = 0;
     },
     select: function(flag) {
@@ -39,7 +39,7 @@ Canalada.Port = fabric.util.createClass(fabric.Rect, {
     }
 });
 
-Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
+FE.OutPort = fabric.util.createClass(FE.Port, {
     ctype : 'OutPort',
     setup: function(index) {
         var w = this.module.moduleRect.width;
@@ -58,7 +58,7 @@ Canalada.OutPort = fabric.util.createClass(Canalada.Port, {
     }
 });
 
-Canalada.InPort = fabric.util.createClass(Canalada.Port, {
+FE.InPort = fabric.util.createClass(FE.Port, {
     ctype : 'InPort',
     setup: function(index) {
         var w = this.module.moduleRect.width;

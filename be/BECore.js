@@ -1,5 +1,5 @@
 var augment = require("augment");
-var wd = require('./BEWorkDispatcher');
+var wd = require('./WorkDispatcher');
 
 function assert(condition, message) {
     if (!condition) {
@@ -7,10 +7,12 @@ function assert(condition, message) {
     }
 }
 
+BE ={};
 
-
-var BELink = Object.augment(function() {
-	this.constructor = function (){
+BE.Link = Object.augment(function() {
+	this.constructor = function (canalId, itemId){
+		this.canalId = canalId;
+	    this.itemId = itemId;
 		this.toPort = null;
 		this.fromPort = null;
 		this.data = null;
@@ -51,7 +53,7 @@ var BELink = Object.augment(function() {
 });
 
 
-var BEPortBase = Object.augment(function() {
+BE.Port = Object.augment(function() {
 	this.constructor = function() {
 		this.name = null;
 		this.link = null;
@@ -76,7 +78,7 @@ var BEPortBase = Object.augment(function() {
 
 });
 
-var BEInputPort = BEPortBase.augment(function() {
+BE.InputPort = BE.Port.augment(function() {
 	this.constructor = function() {
 		this.mandatory = true;
 	};
@@ -96,7 +98,7 @@ var BEInputPort = BEPortBase.augment(function() {
 	};
 });
 
-var BEOutputPort = BEPortBase.augment(function() {
+BE.OutputPort = BE.Port.augment(function() {
 	this.constructor = function() {
 		this.overwritable = false;
 	};
@@ -115,15 +117,17 @@ var BEOutputPort = BEPortBase.augment(function() {
 	};
 });
 
-var BEModule = Object.augment(function() {
-	this.constructor = function(name) {
+BE.Module = Object.augment(function() {
+	this.constructor = function(name, canalId, itemId) {
 		this.name = name;
+	    this.canalId = canalId;
+	    this.itemId = itemId;
     	this.inputPorts = [];
 	    this.outputPorts = [];
 	};
 
     this.addInputPort = function(portName) {
-    	var port = new BEInputPort();
+    	var port = new BE.InputPort();
     	port.name = portName;
     	port.setModule(this);
         this.inputPorts.push(port);
@@ -131,7 +135,7 @@ var BEModule = Object.augment(function() {
     };
 
     this.addOutputPort = function(portName) {
-    	var port = new BEOutputPort();
+    	var port = new BE.OutputPort();
     	port.name = portName;
         port.setModule(this);
         this.outputPorts.push(port);
@@ -165,15 +169,35 @@ var BEModule = Object.augment(function() {
   		}
   		wd.submitJob({
 				moduleName: this.name,
+				canalId: this.canalId,
+				itemId: this.itemId,
 				input: inputs
 			});
     };
 });
 
+BE.Canal = Object.augment(function(){
+	State = { 
+				RUNNING:0, 
+				PAUSED:1,
+			}; 
+	this.constructor = function(canalId, fecanal) {
+		this.canalId = canalId;
+		this.state = State.PAUSED;
+		this.items = [];
+		console.log('BECanal ctor, canalId:', this.canalId);
+	};
+
+	this.run = function() {
+		this.state = State.RUNNING;
+	};
+
+	this.pause = function() {
+		this.state = State.PAUSED;
+	};
+
+});
 
 exports.assert = assert;
-exports.BELink = BELink;
-exports.BEInputPort = BEInputPort;
-exports.BEOutputPort = BEOutputPort;
-exports.BEModule = BEModule;
+exports.BE = BE;
 

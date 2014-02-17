@@ -1,5 +1,5 @@
 
-Canalada.Link = fabric.util.createClass(fabric.Path, {
+FE.Link = fabric.util.createClass(fabric.Path, {
     C : {'pStroke': 'black',
          'pStrokeSelect' : '#ad2e3a',
          'pStrokeWidth':3,
@@ -79,15 +79,15 @@ Canalada.Link = fabric.util.createClass(fabric.Path, {
     },
     serialize: function() {
         var data = {};
-        data.porta = {"module_id": Canalada.modules.indexOf(this.porta.module), 
+        data.porta = {"module_id": FE.modules.indexOf(this.porta.module), 
                       "name": this.porta.name};
-        data.portb = {"module_id": Canalada.modules.indexOf(this.portb.module), 
+        data.portb = {"module_id": FE.modules.indexOf(this.portb.module), 
                       "name": this.portb.name};
         return data;
     },
     deserialize: function(data) {
-        var modulea = Canalada.modules[data.porta.module_id];
-        var moduleb = Canalada.modules[data.portb.module_id];
+        var modulea = FE.modules[data.porta.module_id];
+        var moduleb = FE.modules[data.portb.module_id];
         this.porta = modulea.getPortByName(data.porta.name);
         this.portb = moduleb.getPortByName(data.portb.name);
         this.setup();
