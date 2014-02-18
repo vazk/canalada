@@ -7,7 +7,6 @@ InstalledModules.register = function(module, library) {
         url: '../installed_modules/' + module + '/Properties.js', 
         success: function(data){
             var props = eval(data);
-            console.log('XXXXXX: ', props);
             props.icon = '../installed_modules/' + module + '/' + props.icon;
             props.module = module;
             library.push(props);
@@ -18,7 +17,6 @@ InstalledModules.register = function(module, library) {
         url: '../installed_modules/' + module + '/IO.js', 
         success: function(data){
             var io = eval(data);
-            console.log('YYYYYY: ', io);
             FE.registerModuleClass(module, io);
         },
         dataType: "text"
@@ -32,6 +30,9 @@ InstalledModules.library = {
 }
 
 InstalledModules.register('EmailClient', InstalledModules.library.comm);
+InstalledModules.register('FileReader', InstalledModules.library.database);
+InstalledModules.register('FileWriter', InstalledModules.library.database);
+
 
 /*        [
          {'src':'batch/32x32/in.png',

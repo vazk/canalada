@@ -310,10 +310,14 @@ FE.registerModuleClass = function(moduleName, moduleIO) {
     var moduleClass =  new fabric.util.createClass(FE.Module, {
         initialize: function() {
             this.callSuper('initialize', {'mname': moduleName});
-            for(var i = 0, total = moduleIO.input.length; i < total; ++i) 
-                this.addInputPort(moduleIO.input[i]);
-            for(var i = 0, total = moduleIO.output.length; i < total; ++i) 
-                this.addOutputPort(moduleIO.output[i]); 
+            if(moduleIO.input !== undefined) {
+                for(var i = 0, total = moduleIO.input.length; i < total; ++i) 
+                    this.addInputPort(moduleIO.input[i]);
+            }
+            if(moduleIO.output !== undefined) {
+                for(var i = 0, total = moduleIO.output.length; i < total; ++i) 
+                    this.addOutputPort(moduleIO.output[i]); 
+            }
             this.setup();
         }
     });
