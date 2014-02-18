@@ -109,12 +109,12 @@ FE.Module = fabric.util.createClass(fabric.Group, {
     //    });
     //},
 
-    addInPort : function(portName) {
+    addInputPort : function(portName) {
         var port = new FE.InPort(portName, this);
         this.ports.push(port);
     },
 
-    addOutPort : function(portName) {
+    addOutputPort : function(portName) {
         var port = new FE.OutPort(portName, this);
         this.ports.push(port);
     },
@@ -137,86 +137,3 @@ FE.Module = fabric.util.createClass(fabric.Group, {
         return data;   
     }
 });
-
-
-
-
-
-
-
-FileWriterModule = fabric.util.createClass(FE.Module, {
-    initialize: function() {
-        this.callSuper('initialize', {'mname':'FW'});
-        this.addInPort('file_name');
-        this.addInPort('file_data');
-        this.addOutPort('result');
-        this.setup();
-    }
-});
-
-FileReaderModule = fabric.util.createClass(FE.Module, {
-    initialize: function() {
-        this.callSuper('initialize', {'mname':'FR'});
-        this.addInPort('file_name');
-        this.addOutPort('file_data');
-        this.addOutPort('result');
-        this.setup();
-    }
-});
-
-EmailClientModule = fabric.util.createClass(FE.Module, {
-    initialize: function() {
-        this.callSuper('initialize', {'mname':'EmXXC'});
-        this.addInPort('file_name');
-        this.addOutPort('file_data');
-        this.addOutPort('status');
-        this.setup();
-    }
-});
-
-DropboxWriterModule = fabric.util.createClass(FE.Module, {
-    initialize: function() {
-        this.callSuper('initialize', {'mname':'DbxW'});
-        this.addInPort('file');
-        this.addOutPort('status');
-        this.setup();
-    }
-});
-
-DropboxReaderModule = fabric.util.createClass(FE.Module, {
-    initialize: function() {
-        this.callSuper('initialize', {'mname':'DbxR'});
-        this.addOutPort('file');
-        this.addOutPort('status');
-        this.setup();
-    }
-});
-
-YoutubeDownloaderModule = fabric.util.createClass(FE.Module, {
-    initialize: function() {
-        this.callSuper('initialize', {'mname':'YtD'});
-        this.addInPort('url');
-        this.addOutPort('file');
-        this.addOutPort('status');
-        this.setup();
-    }
-});
-
-MediaConverterModule = fabric.util.createClass(FE.Module, {
-    initialize: function() {
-        this.callSuper('initialize', {'mname':'MC'});
-        this.addInPort('ifile');
-        this.addOutPort('ofile');
-        this.addOutPort('status');
-        this.setup();
-    }
-});
-
-FE.registerModuleClass('FileWriter', FileWriterModule);
-FE.registerModuleClass('FileReader', FileReaderModule);
-FE.registerModuleClass('EmailClient', EmailClientModule);
-FE.registerModuleClass('DropboxWriter', DropboxWriterModule);
-FE.registerModuleClass('DropboxReader', DropboxReaderModule);
-FE.registerModuleClass('YoutubeDownloader', YoutubeDownloaderModule);
-FE.registerModuleClass('MediaConverter', MediaConverterModule);
-

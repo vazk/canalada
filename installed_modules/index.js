@@ -2,14 +2,27 @@ InstalledModules = {};
 
 
 InstalledModules.register = function(module, library) {
-    $.getJSON('../installed_modules/' + module + '/properties.json')
-      .done(function(json) {
-          json = eval(json);
-          json.icon = '../installed_modules/' + module + '/' + json.icon;
-          json.module = module;
-          library.push(json);
-      })
-      .fail(function(jqxhr, textStatus, error) {});
+
+    $.ajax({
+        url: '../installed_modules/' + module + '/Properties.js', 
+        success: function(data){
+            var props = eval(data);
+            console.log('XXXXXX: ', props);
+            props.icon = '../installed_modules/' + module + '/' + props.icon;
+            props.module = module;
+            library.push(props);
+        },
+        dataType: "text"
+    });
+    $.ajax({
+        url: '../installed_modules/' + module + '/IO.js', 
+        success: function(data){
+            var io = eval(data);
+            console.log('YYYYYY: ', io);
+            FE.registerModuleClass(module, io);
+        },
+        dataType: "text"
+    });
 };
 
 InstalledModules.library = { 
