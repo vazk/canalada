@@ -250,27 +250,6 @@ function start()
 {
     window.addEventListener('resize', onCanalWorkspaceResize, false);
 
-/*
-    var library = {image:
-        [
-         {'src':'batch/32x32/in.png',
-          'info':{'author':'vazkus','description':'globe bla.','module':'FileWriter'}},
-         {'src':'batch/32x32/out.png',
-          'info':{'author':'vazkus','description':'globe bla.','module':'FileReader'}},
-         {'src':'batch/32x32/@.png',
-          'info':{'author':'vazkus','description':'globe bla.','module':'EmailClient'}},
-         {'src':'batch/32x32/cloud-upload.png',
-          'info':{'author':'vazkus','description':'globe bla.','module':'DropboxWriter'}},
-         {'src':'batch/32x32/cloud-download.png',
-          'info':{'author':'vazkus','description':'globe bla.','module':'DropboxReader'}},
-         {'src':'batch/32x32/marquee-download.png',
-          'info':{'author':'vazkus','description':'globe bla.','module':'YoutubeDownloader'}},
-         {'src':'batch/32x32/repeat-2.png',
-          'info':{'author':'vazkus','description':'globe bla.','module':'MediaConverter'}}
-        ]
-    };
-*/
-
     buildCanals();
     
     loadLibraries(InstalledModules.library);

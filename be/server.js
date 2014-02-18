@@ -42,9 +42,21 @@ io.on('connection', function(socket) {
 		//participants.push({id: data.id, name: data.name});
  		var fileName = cdata.id + ".canal";
 	 	fs.readFile(fileName, function (err, data) {
-  			if (err) throw err;
-  			console.log("read: " + data);
-  			socket.emit('responseLoadCanal', JSON.parse(data));
+  			if (err) {
+  				console.log('Error: failed to load the canal-file ', fileName);
+  			} else {
+  				console.log('read: ' + data);
+  				socket.emit('responseLoadCanal', JSON.parse(data));
+  			}
+		});
+	});
+	socket.on('requestDeleteCanal', function(cdata) {
+		//participants.push({id: data.id, name: data.name});
+ 		var fileName = cdata.id + ".canal";
+	 	fs.unlink(fileName, function (err, data) {
+  			if (err) {
+  				console.log('Error: failed to delete the canal-file ', fileName);
+  			}
 		});
 	});
 });

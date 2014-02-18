@@ -1,5 +1,11 @@
-var contextCanal = undefined;
-var loadedCanals = [];
+
+
+var CanalManager = 
+{
+    context: undefined,
+    canals: [],
+    newCanalId: -1,
+};
 
 function onCanalToBeSelected(event, ui) {
     /*
@@ -10,9 +16,9 @@ function onCanalToBeSelected(event, ui) {
     var e = ui.oldPanel.length;
     */
     // keep the old data first (if exists)
-    if(contextCanal) {
+    if(CanalManager.context) {
         showCtrlRightBlock(false);
-        contextCanal.canalcontent = FE.serialize();
+        CanalManager.context.content = FE.serialize();
         FE.reset();
     }
     if(ui.newPanel.length != 0) {
@@ -21,10 +27,10 @@ function onCanalToBeSelected(event, ui) {
 
         // find and set the right context
         var row_content = $(ui.newPanel).parent();
-        contextCanal = row_content.data('canalData');
-        contextCanal.canalscheme.appendTo(contextCanal.workspace);
+        CanalManager.context = row_content.data('canalData');
+        CanalManager.context.scheme.appendTo(CanalManager.context.workspace);
         // load the content back
-        FE.deserialize(contextCanal.canalcontent);
+        FE.deserialize(CanalManager.context.content);
     }
     if(ui.oldPanel.length != 0) {
         ui.oldHeader.css({'background-color':'#E5E5E0'});    
@@ -69,17 +75,17 @@ function onCanalTabSelected() {
 
     if(activeTabRef == '#workspace') {
         activeTab.resize();
-        if(!contextCanal.module_lib_panel.minimized) {
+        if(!CanalManager.context.module_lib_panel.minimized) {
             showModuleLibraryPanel();
         }
-        if(!contextCanal.module_prop_panel.minimized) {
+        if(!CanalManager.context.module_prop_panel.minimized) {
             showModulePropertiesPanel();
         }
         // show the toolbar
-        contextCanal.toolbar.show();
+        CanalManager.context.toolbar.show();
         // get the canvas element, add it to the active tab, and show
-        contextCanal.canalscheme.show(); 
-        contextCanal.canalscheme.find("*").show();
+        CanalManager.context.scheme.show(); 
+        CanalManager.context.scheme.find("*").show();
         FE.canvas.calcOffset();
         FE.canvas.renderAll();
     } 
@@ -108,7 +114,7 @@ function onCanalWorkspaceResize(event) {
 }
 
 function workspaceResize(wWidth, wHeight, tOffset, pHeight) {
-    contextCanal.workspace.height(pHeight-tOffset);
+    CanalManager.context.workspace.height(pHeight-tOffset);
 
     //var ratio = PIXEL_RATIO;
     var htmlcanvas = $('canvas');
@@ -123,74 +129,88 @@ function workspaceResize(wWidth, wHeight, tOffset, pHeight) {
 
 function onModuleLibraryPanelDrag(event, ui) {
     var position = $(event.target).parent().position();
-    contextCanal.module_lib_panel.top = position.top;
-    contextCanal.module_lib_panel.left = position.left;
+    CanalManager.context.module_lib_panel.top = position.top;
+    CanalManager.context.module_lib_panel.left = position.left;
 }
 
 function onModuleLibraryPanelMinimize(event, ui) {
     console.log('minimize');
-    contextCanal.module_lib_panel.minimized = true;
+    CanalManager.context.module_lib_panel.minimized = true;
 }
 
 function onModuleLibraryPanelUnminimize(event, ui) {
     console.log('unminimize');
-    contextCanal.module_lib_panel.minimized = false;
+    CanalManager.context.module_lib_panel.minimized = false;
     showModuleLibraryPanel();
 }
 
 function onModulePropertiesPanelDrag(event, ui) {
     var position = $(event.target).parent().position();
-    contextCanal.module_prop_panel.top = position.top;
-    contextCanal.module_prop_panel.left = position.left;
+    CanalManager.context.module_prop_panel.top = position.top;
+    CanalManager.context.module_prop_panel.left = position.left;
 }
 
 function onModulePropertiesPanelMinimize(event, ui) {
     console.log('minimize');
-    contextCanal.module_prop_panel.minimized = true;
+    CanalManager.context.module_prop_panel.minimized = true;
 }
 
 function onModulePropertiesPanelUnminimize(event, ui) {
     console.log('unminimize');
-    contextCanal.module_prop_panel.minimized = false;
+    CanalManager.context.module_prop_panel.minimized = false;
     showModulePropertiesPanel();
 }
 
 function onSaveBtnClick(event, ui) {
     event.stopPropagation();
-    contextCanal.canalcontent = FE.serialize();
+    CanalManager.context.content = FE.serialize();
     FE.socket.emit('requestSaveCanal', {
-                 name: contextCanal.name,
-                 id: contextCanal.id,
-                 content: contextCanal.canalcontent,
+                 name: CanalManager.context.name,
+                 id: CanalManager.context.id,
+                 content: CanalManager.context.content,
                  /*
                  lib_panel: {
-                         top: contextCanal.module_lib_panel.top,
-                         left: contextCanal.module_lib_panel.left,
-                         minimized: contextCanal.module_lib_panel.minimized,
+                         top: CanalManager.context.module_lib_panel.top,
+                         left: CanalManager.context.module_lib_panel.left,
+                         minimized: CanalManager.context.module_lib_panel.minimized,
                      },
                  prop_panel: {
-                         top: contextCanal.module_prop_panel.top,
-                         left: contextCanal.module_prop_panel.left,
-                         minimized: contextCanal.module_prop_panel.minimized,
+                         top: CanalManager.context.module_prop_panel.top,
+                         left: CanalManager.context.module_prop_panel.left,
+                         minimized: CanalManager.context.module_prop_panel.minimized,
                      },
                  */
                  workspace: {
-                         width: contextCanal.workspace.width(),
-                         height: contextCanal.workspace.height(),
-                         toffset: contextCanal.workspace[0].offsetTop,
-                         pheight: contextCanal.workspace.closest('.ui-accordion-content').height(),
+                         width: CanalManager.context.workspace.width(),
+                         height: CanalManager.context.workspace.height(),
+                         toffset: CanalManager.context.workspace[0].offsetTop,
+                         pheight: CanalManager.context.workspace.closest('.ui-accordion-content').height(),
                      }
                 });
     console.log('canal save request sent!');
 };
 
-function onResetBtnClick(event) {
+function onReloadBtnClick(event) {
     event.stopPropagation();
     FE.socket.emit('requestLoadCanal',
-                         {id: contextCanal.id});
+                         {id: CanalManager.context.id});
     console.log('canal load request sent!');
 };
 
+function onDeleteBtnClick(event) {
+    event.stopPropagation();
+
+    CanalManager.context.row.fadeOut('fast',function(){
+            $(this).remove();
+        });
+
+    // refresh all
+    $("#canal-rows").accordion("refresh");
+
+    FE.socket.emit('requestDeleteCanal',
+                         {id: CanalManager.context.id});
+    console.log('canal delete request sent!');
+};
 
 function onActiveBtnClick(event) {
         event.stopPropagation();
@@ -198,9 +218,9 @@ function onActiveBtnClick(event) {
 };
 
 function onCanalLoaded(cdata) {
-    var canal = contextCanal;
+    var canal = CanalManager.context;
     canal.name = cdata.name;
-    canal.canalcontent = cdata.content;
+    canal.content = cdata.content;
     /*
     canal.module_lib_panel.top = cdata.lib_panel.top;
     canal.module_lib_panel.left = cdata.lib_panel.left;
@@ -216,28 +236,28 @@ function onCanalLoaded(cdata) {
     console.log('canal data loaded!');
     
     workspaceResize(wWidth, wHeight, tOffset, pHeight);
-    FE.deserialize(canal.canalcontent);   
+    FE.deserialize(canal.content);   
     onCanalTabSelected();
 }
 
 function showModuleLibraryPanel() {
-    contextCanal.module_lib_panel.widget.dialog('open');
-    contextCanal.module_lib_panel.widget.parent().css({'display':' block', 
-                                  'top': contextCanal.module_lib_panel.top, 
-                                  'left': contextCanal.module_lib_panel.left});
-    contextCanal.module_lib_panel.widget.parent().find("*").show();
+    CanalManager.context.module_lib_panel.widget.dialog('open');
+    CanalManager.context.module_lib_panel.widget.parent().css({'display':' block', 
+                                  'top': CanalManager.context.module_lib_panel.top, 
+                                  'left': CanalManager.context.module_lib_panel.left});
+    CanalManager.context.module_lib_panel.widget.parent().find("*").show();
 }
 
 function showModulePropertiesPanel() {
-    contextCanal.module_prop_panel.widget.dialog('open');
-    contextCanal.module_prop_panel.widget.parent().css({'display':' block', 
-                                  'top': contextCanal.module_prop_panel.top, 
-                                  'left': contextCanal.module_prop_panel.left});
-    contextCanal.module_prop_panel.widget.parent().find("*").show();
+    CanalManager.context.module_prop_panel.widget.dialog('open');
+    CanalManager.context.module_prop_panel.widget.parent().css({'display':' block', 
+                                  'top': CanalManager.context.module_prop_panel.top, 
+                                  'left': CanalManager.context.module_prop_panel.left});
+    CanalManager.context.module_prop_panel.widget.parent().find("*").show();
 }
 
 function showCtrlRightBlock(flag) {
-    var rblock = contextCanal.header.find('.ctrl_right_block');
+    var rblock = CanalManager.context.header.find('.ctrl_right_block');
     if(flag) {
         rblock.show();
     } else {
@@ -256,41 +276,6 @@ function showCtrlRightBlock(flag) {
 
 
 
-function buildCanals() {
-    var stop = false;
-    $("#canal-rows a").click(function(event) {
-        if (stop) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            stop = false;
-        }
-    });
-    $("#canal-rows").accordion({
-            header: "> div > canalhead",
-            icons: false,
-            collapsible: true,
-            active: false,
-            heightStyle: "content",
-            beforeActivate: onCanalToBeSelected,
-            activate: onCanalSelected,
-        })
-        .sortable({
-            axis: "y",
-            handle: "a.handle",
-            stop: function() {
-                stop = true;
-                FE.canvas.calcOffset();
-            }
-        });
-
-
-    // support drop on the canvas
-    $('#canal-scheme').droppable({
-        accept: 'img',
-        drop: onCanalSchemeDrop,
-    });
-}
-
 
 function createCanalRow() {
     var content = "<div>" +
@@ -300,7 +285,8 @@ function createCanalRow() {
                       "</div>" +
                       "<div class=\"ctrl_right_block\">"+
                         "<span class=\"btn\" onclick=\"onSaveBtnClick(event)\">Save</span>" + 
-                        "<span class=\"btn\" onclick=\"onResetBtnClick(event)\">Reset</span>" + 
+                        "<span class=\"btn\" onclick=\"onReloadBtnClick(event)\">Reload</span>" + 
+                        "<span class=\"btn\" onclick=\"onDeleteBtnClick(event)\">Delete</span>" + 
                       "</div>" +
                       "<div class=\"ctrl_state_block\">"+
                         "<span class=\"indicator\" onclick=\"onActiveBtnClick(event)\">active</span>" + 
@@ -328,27 +314,9 @@ function createCanalRow() {
     var row_content = $(content);
     $('#canal-rows').append(row_content);
 
-    // create the data to be associated with canal
-    var newCanal = { 
-        name: 'dummy',
-        id: loadedCanals.length,
-        header: row_content.find('canalhead'),
-        workspace: row_content.find('#workspace'),
-        module_lib_panel: {
-            top: 5, left: 5, minimized: false,
-            widget: row_content.find('#module-library-widget'),
-            library: $('#library').clone(),
-        },
-        module_prop_panel: {
-            top: 15, left: 15, minimized: false,
-            widget: row_content.find('#module-properties-widget'),
-        },
-        toolbar: row_content.find('#toolbar'),
-        canalscheme: $('#canal-scheme'),
-        canalcontent: {},
-    };
+    var newCanal = new FE.Canal('dummy', CanalManager.newCanalId--, row_content);
     // add it to the list
-    loadedCanals.push(newCanal);
+    CanalManager.canals.push(newCanal);
     // and to the element itself
     row_content.data('canalData', newCanal);
 
@@ -381,10 +349,10 @@ function createCanalRow() {
     // set the drag callbacks on module-lib-panel icons
     newCanal.module_lib_panel.library.find('img').draggable({
                         helper: 'clone',
-                        appendTo: newCanal.canalscheme,
+                        appendTo: newCanal.scheme,
                         scroll: false,
                         zIndex: 100000,
-                        containment: newCanal.canalscheme,
+                        containment: newCanal.scheme,
                         start: function( event, ui ) { 
                             console.log('drag start: ', event.target.attributes.ctype);
                         }
@@ -473,4 +441,42 @@ function createCanalRow() {
 
     // refresh all
     $("#canal-rows").accordion("refresh");
+}
+
+
+
+
+function buildCanals() {
+    var stop = false;
+    $("#canal-rows a").click(function(event) {
+        if (stop) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            stop = false;
+        }
+    });
+    $("#canal-rows").accordion({
+            header: "> div > canalhead",
+            icons: false,
+            collapsible: true,
+            active: false,
+            heightStyle: "content",
+            beforeActivate: onCanalToBeSelected,
+            activate: onCanalSelected,
+        })
+        .sortable({
+            axis: "y",
+            handle: "a.handle",
+            stop: function() {
+                stop = true;
+                FE.canvas.calcOffset();
+            }
+        });
+
+
+    // support drop on the canvas
+    $('#canal-scheme').droppable({
+        accept: 'img',
+        drop: onCanalSchemeDrop,
+    });
 }
