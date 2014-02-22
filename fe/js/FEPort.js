@@ -1,15 +1,15 @@
 
 FE.Port = fabric.util.createClass(fabric.Rect, {
-    C : {'pHeight':8,
-         'pWidth': 10,
-         'pPadding' : 20,
-         'pSpacing' : 5,
+    C : {'pHeight': 10,
+         'pWidth': 12,
+         'pPadding' : 30,
+         'pSpacing' : 12,
          'pFill' : '#ffffff',
          'pFillSelect' : '#ad2e3a',
          'pStroke' : '#30407a',
          'pStrokeWidth' : 1,
          'pStrokeSelect' : '#ad2e3a',
-         'pFont' :  '9.5px Lato'
+         'pFont' :  '10.5px Lato'
 ,        },
     rx: 3,
     ry: 3,
@@ -20,7 +20,9 @@ FE.Port = fabric.util.createClass(fabric.Rect, {
         this.fill = this.C.pFill;
         this.stroke = this.C.pStroke;
         this.strokeWidth = this.C.pStrokeWidth;
-        this.name =  name;
+        //this.name =  name;
+        var maxNameLen = module.C.pMaxPortNameLen;
+        this.name = name.length > maxNameLen ? name.substr(0,maxNameLen-3) + '...' : name;
         this.module = module;
         this.links = [];
         this.textWidth = FE.textWidth(this.name, this.C.pFont);
@@ -52,9 +54,10 @@ FE.OutPort = fabric.util.createClass(FE.Port, {
         ctx.font = this.C.pFont
         ctx.fillStyle = 'black';
         ctx.fillText(this.name,
-                     -this.width/2 - 3 - Math.min(this.module.C.pTextMaxWidth, this.textWidth),
+                     -this.width/2 - 7 - this.textWidth,//Math.min(this.module.C.pTextMaxWidth, this.textWidth),
                      -this.height/2 + 9,
-                     this.module.C.pTextMaxWidth);
+                     this.textWidth);
+                     //this.module.C.pTextMaxWidth);
     }
 });
 
@@ -73,7 +76,8 @@ FE.InPort = fabric.util.createClass(FE.Port, {
         ctx.fillText(this.name,
                      this.width/2 + 3,
                      -this.height/2 + 9,
-                     this.module.C.pTextMaxWidth);
+                     this.textWidth);
+                     //this.module.C.pTextMaxWidth);
 
     }
 });

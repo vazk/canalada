@@ -2,15 +2,19 @@ FE.Module = fabric.util.createClass(fabric.Group, {
 
     ctype: 'Module',
   
-    C : {'pHeight':8,
-         'pWidth': 14,
+    C : {'pHeight':10,
+         'pWidth': 16,
          'pPadding' : 20,
-         'pSpacing' : 5,
-         'pTextMaxWidth' : 40,
-         'pStroke' : '#444',
+         'pSpacing' : 12,
+         //'pTextMaxWidth' : 50,
+         'pMaxPortNameLen' : 15,
+         'pFill' : '#98B1C4',
+         'pTitleFill' : '#2F4E6F',
+         'pStroke' : '#2F4E6F',
          'pStrokeSelect' : '#ad2e3a',
+         'pFontColor': '#FFFFFF',
          'pFont' :  'Lato',
-         'pTitleFontSize': 10.5
+         'pTitleFontSize': 14.5,
          },
     
     title: '',
@@ -24,19 +28,31 @@ FE.Module = fabric.util.createClass(fabric.Group, {
         this.titleText = new fabric.Text(this.mname, {
               fontFamily: this.C.pFont,
               fontSize: this.C.pTitleFontSize,
-              fontWeight: 'bold',
+              //fontWeight: 'bold',
+              stroke: this.C.pFontColor,
             });
         this.moduleRect = new fabric.Rect({
               left: 100,
               top: 100,
               strokeWidth: 1,
               width: 50, height:50,
-              fill: '#fff',
-              stroke: '#444',
+              fill: this.C.pFill,
+              stroke: this.C.pStroke,
               hasBorders : false,
               hasControls : false
             });
         this.moduleRect.hasBorders = this.moduleRect.hasControls = false;
+        this.titleRect = new fabric.Rect({
+              left: 100,
+              top: 100,
+              strokeWidth: 1,
+              width: 50, height:50,
+              fill: this.C.pTitleFill,
+              stroke: this.C.pStroke,
+              hasBorders : false,
+              hasControls : false
+            });
+        this.titleRect.hasBorders = this.titleRect.hasControls = false;
     },
 
     setup: function() {
@@ -61,9 +77,15 @@ FE.Module = fabric.util.createClass(fabric.Group, {
         this.moduleRect.width = w;
         this.moduleRect.height = h;
         this.addWithUpdate(this.moduleRect);
+        
+        this.titleRect.top -= h/2;//this.moduleRect.top;
+        this.titleRect.width = w;
+        this.titleRect.height = this.titleText.height + 4;
+        this.addWithUpdate(this.titleRect);
+
         this.add(this.titleText);
-        this.titleText.left = -this.width/2 + this.titleText.width/2 + 2,
-        this.titleText.top = -this.height/2 + this.titleText.height/2,
+        this.titleText.left = -this.width/2 + this.titleText.width/2 + 6,
+        this.titleText.top = -this.height/2 + this.titleText.height/2 + 2,
 
         inCount = 0; outCount = 0;
         for(var i = 0; i < this.ports.length; ++i) {
