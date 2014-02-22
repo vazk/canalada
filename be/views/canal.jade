@@ -9,28 +9,62 @@ html(lang="en")
         script(src='fe/tpt/jquery/js/jquery-1.9.1.js')
         script(src='fe/tpt/jquery/js/jquery-ui-1.10.3.custom.js')
         script(src='fe/tpt/jquery/js/jquery.ui.dialog.minmax.js')
+        script(src='fe/tpt/layout/js/jquery.layout-latest.js')
         script(src='fe/tpt/socket.io/socket.io.min.js')       
         script(src='fe/tpt/fabric/all.js')
-        script(src='installed_modules/index.js')
         script(src='fe/js/FE.js')
+        script(src='installed_modules/index.js')
         script(src='fe/js/FEPort.js')
         script(src='fe/js/FEModule.js')
         script(src='fe/js/FELink.js')
         script(src='fe/js/FECanal.js')
         script(src='fe/js/CanalListBuilder.js')
         script(src='fe/js/FEMain.js')
+
+        link(rel='stylesheet', href='fe/tpt/layout/css/layout-default-1.2.0.css')
         link(rel='stylesheet', href='fe/css/main.css')
     
     body
-        div#top-workspace
-            div#canal-rows
-            div.canal-row-new(onclick='createCanalRow()') 
-                image(type='image', src='fe/batch/32x32/add.png', width=20)
-                label Create new canal
-            div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
-                canvas#canal-canvas
-            div#library(hidden)
+        //div#top-workspace
+        //    div#canal-rows
+        //    div.canal-row-new(onclick='createCanalRow()') 
+        //        image(type='image', src='fe/batch/32x32/add.png', width=20)
+        //        label Create new canal
+        //    div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
+        //        canvas#canal-canvas
+        //    div#library(hidden)
             
-        script(type='text/javascript').start
-            start();
+
+        // THIS IS THE CENTER WORKSPACE DIV
+        div.ui-layout-center 
+            // THIS IS THE CANAL DIV
+            div.ui-layout-center West - Center
+                div#canal-rows
+                div.canal-row-new(onclick='createCanalRow()') 
+                    image(type='image', src='fe/batch/32x32/add.png', width=20)
+                    label Create new canal
+
+                div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
+                    canvas#canal-canvas
+
+                div#library(hidden)
+
+            // THIS IS THE LOG DIV
+            div.ui-layout-south  West - South 
+
+        // THIS IS THE LEFT SIDE DIV
+        div.ui-layout-west
+
+
+
+
+
+
+        script.
+            $(document).ready(function () {
+                start();
+            });
+
+
+
         

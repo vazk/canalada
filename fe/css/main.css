@@ -75,18 +75,6 @@ ul#grid {
   width: 24px;
   height: 24px;
 }
- 
-#top-workspace {
-    border: 1px solid grey;
-    position:absolute;
-    float: top;
-    background: #F6F6F6;
-    left: 3px;
-    right: 3px;
-    top: 0px;
-    bottom: 3px;
-    overflow: auto;
-}
 
 #properties,
 #workspace {
@@ -131,8 +119,8 @@ ul#grid {
     background-color: #F6F6F6;
     /*margin: 1px 0 0 0;
     padding: 4px 2px;*/
-    border: 2px solid #000000;
-    border-right: 0;
+    /*border: 2px solid #000000;*/
+    /*border-right: 0;*/
     border-radius: 3px 0 0 3px;
     position: relative;
 }
@@ -323,3 +311,89 @@ div.info_left_block a.handle {
     padding: 0px 0px 0px 0px;
     margin: 0px 0px 0px 0px;
 }
+
+
+
+
+#main-workspace {
+    overflow:   hidden; /* eliminate space for scrollbar in dialog - not needed when using a layout */
+    display:    none;
+    padding:    0;      /* nullify ui-widget-content */
+    padding-top: 4px;   /* add some white-space below titlebar for cosmetics */
+    /* COULD add a border and/or padding if desire a different look...
+    padding:    6px;
+    border:     1px solid #BBB;
+    */
+}
+
+
+
+#main-workspace {
+            /*
+             *  THIS HACK FIXES A DIALOG BOX POSITIONING BUG
+             *  prevents incorrect top/left values that are applied from taking effect
+             *  This page now uses a patched version of UI 1.8.1, so this hack no longer required
+             *  SEE UI Ticket #5662 - http://dev.jqueryui.com/ticket/5662#comment:3 
+            top:        0 !important;
+            left:       0 !important;
+             */
+            /* background:  #AFA; DEBUGGING */
+            /*position: relative; - triggers resizeable._alsoResize bug when using Opera */
+            }
+            #main-workspace .ui-widget-content {
+                /* nullify ui-widget-content bg-image - but KEEP widget bg-color */
+                background-image: none;
+            }
+            #main-workspace .ui-layout-pane {
+                /* start by removing all padding & scrolling */
+                padding:    0;
+                overflow:   hidden;
+            }
+            #main-workspace .pane-header ,
+            #main-workspace .ui-layout-content ,
+            #main-workspace .ui-layout-south {
+                padding:    5px 10px;
+            }
+            #main-workspace .pane-header {
+                border-width:   0 0 1px; /* nullify ui-widget-content border, except bottom */
+            }
+            #main-workspace .pane-footer {
+                border-width:   1px 0 0; /* nullify ui-widget-content border, except top */
+                font-size:      .85em;
+                font-weight:    normal;
+                padding:        2px 10px 4px;
+            }
+            #main-workspace .ui-layout-content {
+                border:         0; /* nullify ui-widget-content border - 'pane' already has this */
+                overflow:       auto;
+            }
+            #main-workspace .ui-layout-south {
+                 /* has ui-widget-header for cosmetics - override defaults */
+                 font-weight:   normal; /* NOT bold in statusbar */
+                 font-size:     .85em;  /* smaller text */
+                 padding-top:   2px;    /* nice and small */
+                 padding-bottom:3px;
+            }
+            #main-workspace .ui-layout-resizer-west {
+                /* NOTE: SOMETHING in the theme CSS is setting opacity here */
+                opacity:    .01;
+                filter:     alpha(opacity=1);
+                background: #F00 url(../lib/img/resizable-w.gif) no-repeat 0 center;
+            }
+            #main-workspace .ui-layout-resizer-west-closed {
+                background-image: url(../lib/img/resizable-e.gif); /* looks better */
+                border:         1px solid #6C0;
+                border-width:   1px 0;
+                opacity:        .70;
+                filter:         alpha(opacity=70);
+            }
+            #main-workspace .ui-layout-resizer-dragging ,
+            #main-workspace .ui-layout-resizer-sliding ,
+            #main-workspace .ui-layout-resizer:hover {
+                opacity:        1;
+                filter:         alpha(opacity=100);
+                }
+                #main-workspace .ui-layout-toggler {
+                    /*background:   #CCC;*/
+                }
+

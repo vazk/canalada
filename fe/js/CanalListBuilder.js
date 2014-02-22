@@ -289,7 +289,7 @@ function createCanalRow() {
                         "<span class=\"btn\" onclick=\"onDeleteBtnClick(event)\">Delete</span>" + 
                       "</div>" +
                       "<div class=\"ctrl_state_block\">"+
-                        "<span class=\"indicator\" onclick=\"onActiveBtnClick(event)\">active</span>" + 
+                        "<span class=\"indicator\" onclick=\"onActiveBtnClick(event)\">Running</span>" + 
                       "</div>" +
                   "</canalhead>" +
                   "<div class=\"canal-row-content\">" + 
@@ -448,6 +448,17 @@ function createCanalRow() {
 
 function buildCanals() {
     var stop = false;
+
+    $('body').layout({
+        minSize:                  100 // ALL panes
+    ,   west__size:               200
+    ,   stateManagement__enabled: true
+    ,   center__childOptions: {
+            minSize:              50  // ALL panes
+        ,   south__size:          100
+        }
+    });
+
     $("#canal-rows a").click(function(event) {
         if (stop) {
             event.stopImmediatePropagation();
@@ -479,4 +490,5 @@ function buildCanals() {
         accept: 'img',
         drop: onCanalSchemeDrop,
     });
+
 }
