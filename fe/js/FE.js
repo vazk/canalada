@@ -32,7 +32,7 @@ FE.addModule = function(module) {
     };
     //module.moduleRect.setShadow(shadow);
     FE.canvas.add(module);
-}
+};
 
 FE.addLink = function(link) {
     this.links.push(link);
@@ -47,7 +47,7 @@ FE.addLink = function(link) {
     };
     //link.setShadow(shadow);
     FE.canvas.add(link);
-}
+};
 
 FE.removeModule = function(module) {
     var si = FE.modules.indexOf(module);
@@ -65,7 +65,7 @@ FE.removeModule = function(module) {
             FE.removeLink(attachedLinks[i]);
         }
     }
-}
+};
 
 FE.removeLink = function(link) {
     var si = FE.links.indexOf(link);
@@ -75,7 +75,7 @@ FE.removeLink = function(link) {
         link.porta.select(false);
         link.portb.select(false);
     }
-}
+};
 
 
 
@@ -92,7 +92,7 @@ FE.onKeyDown = function(e) {
         FE.selectState.item = null;
         FE.canvas.renderAll();
     }
-}
+};
 
 FE.onMouseDown = function(e) {
     if(FE.selectState.item) {
@@ -206,7 +206,7 @@ FE.onObjectMoving = function(e) {
         FE.canvas.renderAll();
     }
     preventLeaving(e);
-}
+};
 
 function preventLeaving(e) {
     var activeObject = e.target;
@@ -231,7 +231,7 @@ function preventLeaving(e) {
     if(activeObject.currentHeight > FE.canvas.getHeight()) {
         activeObject.scaleY = FE.canvas.getHeight() / activeObject.height;
     }
-}
+};
 
 FE.textWidth = function(text, fontProp) {
     var tag = document.createElement("div");
@@ -247,7 +247,7 @@ FE.textWidth = function(text, fontProp) {
     document.body.removeChild(tag);
     
     return result;
-}
+};
 
 FE.reset = function() {
     FE.canvas.clear();
@@ -259,7 +259,7 @@ FE.reset = function() {
     FE.selectState.item = null;
     FE.canvas.renderAll();
 
-}
+};
 
 FE.serialize = function() {
     var modules = [];
@@ -277,7 +277,7 @@ FE.serialize = function() {
               "modules" : modules,
               "links"  : links
            };
-}
+};
 
 
 FE.deserialize = function(data) {
@@ -303,7 +303,7 @@ FE.deserialize = function(data) {
             FE.addLink(lnk);  
         }
     }
-}
+};
 
 
 FE.registerModuleClass = function(moduleName, moduleIO) {
@@ -324,20 +324,23 @@ FE.registerModuleClass = function(moduleName, moduleIO) {
 
     moduleClass.model = moduleName;
     FE.moduleClassRegistry[moduleName] = moduleClass;
-}
+};
 
 FE.save = function() {
     FE.socket.emit('requestSaveCanal', {name: 'trololo', canal: FE.serialize()}); 
     console.log("save function is called");
-}
+};
 
 FE.open = function() {
     FE.reset();
     FE.socket.emit('requestReadCanal', {name: 'trololo'}); 
     console.log("open function is called");
-}
+};
 
 FE.onOpenData = function(cdata) {
     console.log("open function is called, data: " + JSON.stringify(cdata.canal));
     FE.canvas.loadFromJSON(FE.deserialize(cdata.canal));
-}
+};
+
+
+

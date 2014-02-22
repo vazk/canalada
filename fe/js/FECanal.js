@@ -5,7 +5,7 @@ FE.Canal = function(canalName, canalId, cnlElem){
         row: cnlElem,
         // also caching some of the controls for faster/convenient access...
         header: cnlElem.find('canalhead'),
-        workspace: cnlElem.find('#workspace'),
+        workspace: cnlElem.find('#canal-workspace'),
         module_lib_panel: {
             top: 5, left: 5, minimized: false,
             widget: cnlElem.find('#module-library-widget'),

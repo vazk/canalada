@@ -73,13 +73,13 @@ function onCanalTabSelected() {
     
     activeTab.show();
 
-    if(activeTabRef == '#workspace') {
+    if(activeTabRef == '#canal-workspace') {
         activeTab.resize();
-        if(!CanalManager.context.module_lib_panel.minimized) {
-            showModuleLibraryPanel();
-        }
         if(!CanalManager.context.module_prop_panel.minimized) {
             showModulePropertiesPanel();
+        }
+        if(!CanalManager.context.module_lib_panel.minimized) {
+            showModuleLibraryPanel();
         }
         // show the toolbar
         CanalManager.context.toolbar.show();
@@ -110,6 +110,32 @@ function onCanalWorkspaceResize(event) {
 
     FE.canvas.setWidth(self.width()-4);
     FE.canvas.setHeight(self.height()-4);
+
+
+
+
+    if( window.devicePixelRatio !== 1 ){
+ 
+        var c = FE.canvas.getElement(); // canvas = fabric.Canvas
+        var w = c.width, h = c.height;
+        // Scale the canvas up by two for retina
+        // just like for an image
+        c.setAttribute('width', w*window.devicePixelRatio);
+        c.setAttribute('height', h*window.devicePixelRatio);
+        // then use css to bring it back to regular size
+        // or set it here
+        //    c.setAttribute('style', 'width="'+w+'"; height="'+h+'";')
+        // or jQuery  $(c).css('width', w);
+        //      $(c).css('width', w);
+        //      $(c).css('height', h);
+        // finally set the scale of the context
+        c.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
+        console.log('RESCALED: ', w*window.devicePixelRatio, h*window.devicePixelRatio);
+        FE.canvas.renderAll();
+ 
+    }
+
+
     FE.canvas.calcOffset();
 }
 
@@ -210,6 +236,7 @@ function onDeleteBtnClick(event) {
     FE.socket.emit('requestDeleteCanal',
                          {id: CanalManager.context.id});
     console.log('canal delete request sent!');
+    FE.syslog(FE.LOG.I, 'Canal is deleted.');
 };
 
 function onActiveBtnClick(event) {
@@ -234,6 +261,8 @@ function onCanalLoaded(cdata) {
     var tOffset = cdata.workspace.toffset;
     var pHeight = cdata.workspace.pheight;
     console.log('canal data loaded!');
+    FE.syslog(FE.LOG.I, 'Canal is loaded.');
+
     
     workspaceResize(wWidth, wHeight, tOffset, pHeight);
     FE.deserialize(canal.content);   
@@ -294,17 +323,20 @@ function createCanalRow() {
                   "</canalhead>" +
                   "<div class=\"canal-row-content\">" + 
                   " <ul class=\"tabs\">" + 
-                  "   <li><a href=\"#properties\">Properties</a></li>" + 
-                  "   <li><a href=\"#workspace\">Scheme</a></li>" + 
+                  "   <li><a href=\"#canal-log-pane\">Log</a></li>" + 
+                  "   <li><a href=\"#canal-properties\">Properties</a></li>" + 
+                  "   <li><a href=\"#canal-workspace\">Scheme</a></li>" + 
                   " </ul>" + 
                   " <div class=\"clr\"></div>" + 
                   " <section class=\"block\">" + 
-                  "   <div id=\"properties\">" + 
+                  "   <div id=\"canal-log-pane\">" + 
+                  "   </div>" + 
+                  "   <div id=\"canal-properties\">" + 
                   "     <p>Lorem, nunc.</p>" + 
                   "   </div>" + 
-                  "   <div id=\"workspace\">" + 
-                  "       <div id=\"module-library-widget\" title=\"Library\" display=\"none\"> </div>" +
+                  "   <div id=\"canal-workspace\">" + 
                   "       <div id=\"module-properties-widget\" title=\"Properties\" display=\"none\"> </div>" +
+                  "       <div id=\"module-library-widget\" title=\"Library\" display=\"none\"> </div>" +
                   "       <div id=\"toolbar\">&nbsp;&nbsp;&nbsp;</div>" + 
                   "   </div>" + 
                   "  </section>" + 
@@ -429,15 +461,15 @@ function createCanalRow() {
     });
 
     // finalize the dialog widget and add it to the workspace
-    newCanal.module_lib_panel.library.appendTo(newCanal.module_lib_panel.widget);
-    newCanal.module_lib_panel.widget.parent().appendTo(newCanal.workspace);
-
     var content = jQuery("<div>").load('installed_modules/EmailClient/property_page.html', 
                                        function() {
                                             console.log("content loaded!");
                                        });
     content.appendTo(newCanal.module_prop_panel.widget);
     newCanal.module_prop_panel.widget.parent().appendTo(newCanal.workspace);
+
+    newCanal.module_lib_panel.library.appendTo(newCanal.module_lib_panel.widget);
+    newCanal.module_lib_panel.widget.parent().appendTo(newCanal.workspace);
 
     // refresh all
     $("#canal-rows").accordion("refresh");
