@@ -1,6 +1,8 @@
 main = {};
 
 main.resize = function(outter) {
+
+
     return;/*
     var oWidth = outter.innerWidth();
     var oHeight = outter.innerHeight();
@@ -56,6 +58,7 @@ main.resize = function(outter) {
 };
 
 function loadLibraries(library) {
+
     function handleDragStart(e) {
         ctype = e.target.getAttribute('ctype');
         e.dataTransfer.setData("module", ctype);
@@ -252,7 +255,7 @@ function start()
 
     buildCanals();
     
-    loadLibraries(InstalledModules.library);
+    //loadLibraries(InstalledModules.library);
     
     setupDragDrop();
     
