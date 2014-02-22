@@ -1,33 +1,46 @@
-InstalledModules = {};
+InstalledModules = {
+    library : {},
+    numModules: 0,
+    numCallBacks: 0,
+    checkLoadComplete: function() {
+        if(this.numModules * 2 == this.numCallBacks) {
+            loadLibraries(this.library);
+        }
+    },
+    register: function(module, library) {
+        var context = this;
+        context.numModules++;
+        $.ajax({
+            url: '../installed_modules/' + module + '/Properties.js', 
+            success: function(data){
+                var props = eval(data);
+                props.icon = '../installed_modules/' + module + '/' + props.icon;
+                props.module = module;
+                library.push(props);
+                context.numCallBacks++;
+                context.checkLoadComplete();
+            },
+            dataType: "text"
+        });
+        $.ajax({
+            url: '../installed_modules/' + module + '/IO.js', 
+            success: function(data){
+                var io = eval(data);
+                FE.registerModuleClass(module, io);
+                context.numCallBacks++;
+                context.checkLoadComplete();
+            },
+            dataType: "text"
+        });
+    },
 
-
-InstalledModules.register = function(module, library) {
-
-    $.ajax({
-        url: '../installed_modules/' + module + '/Properties.js', 
-        success: function(data){
-            var props = eval(data);
-            props.icon = '../installed_modules/' + module + '/' + props.icon;
-            props.module = module;
-            library.push(props);
-        },
-        dataType: "text"
-    });
-    $.ajax({
-        url: '../installed_modules/' + module + '/IO.js', 
-        success: function(data){
-            var io = eval(data);
-            FE.registerModuleClass(module, io);
-        },
-        dataType: "text"
-    });
 };
 
 InstalledModules.library = { 
-    comm: [],
-    database: [],
-    other: []
-}
+        comm: [],
+        database: [],
+        other: []
+    };
 
 InstalledModules.register('EmailClient', InstalledModules.library.comm);
 InstalledModules.register('FileReader', InstalledModules.library.database);
