@@ -38,8 +38,13 @@ html(lang="en")
                     image(type='image', src='fe/batch/32x32/add.png', width=20)
                     label Create new canal
 
-                div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
-                    canvas#canal-canvas
+                //div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
+                //    canvas#canal-canvas
+
+                div#default-dock(tabindex='1',style='display:none; overflow:none;')
+                    div#canal-scheme(tabindex='1',style='display:none; overflow:none;')
+                        canvas#canal-canvas
+
 
                 div#library(hidden)
 
