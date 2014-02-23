@@ -26,8 +26,7 @@ io.on('connection', function(socket) {
 		//participants = _.without(participants, _.findWhere(participants, {id:socket.id}));
 		//io.sockets.emit("userDisconnected", {id: socket.id, sender: "system"});
 	});
-	socket.on('requestSaveCanal', function(cdata) {
-    	//_.findWhere(participants, {id: socket.id}).name = data.name;
+	socket.on('requestCanalSave', function(cdata) {
     	//io.sockets.emit("nameChanged", {id: data.id, name: data.name});
     	console.log("wrote: " + cdata);
     	var fileName = cdata.id + ".canal";
@@ -38,20 +37,18 @@ io.on('connection', function(socket) {
   				console.log("successfully wrote " + fileName);
 		});
     });
-	socket.on('requestLoadCanal', function(cdata) {
-		//participants.push({id: data.id, name: data.name});
+	socket.on('requestCanalLoad', function(cdata) {
  		var fileName = cdata.id + ".canal";
 	 	fs.readFile(fileName, function (err, data) {
   			if (err) {
   				console.log('Error: failed to load the canal-file ', fileName);
   			} else {
   				console.log('read: ' + data);
-  				socket.emit('responseLoadCanal', JSON.parse(data));
+  				socket.emit('responseCanalLoad', JSON.parse(data));
   			}
 		});
 	});
-	socket.on('requestDeleteCanal', function(cdata) {
-		//participants.push({id: data.id, name: data.name});
+	socket.on('requestCanalDelete', function(cdata) {
  		var fileName = cdata.id + ".canal";
 	 	fs.unlink(fileName, function (err, data) {
   			if (err) {
@@ -59,6 +56,9 @@ io.on('connection', function(socket) {
   			}
 		});
 	});
+  socket.on('requestCanalEnable', function(cdata) {
+    console.log('canal ', cdata.id, ' state enable: ', cdata.enable);
+  });
 });
 
 
