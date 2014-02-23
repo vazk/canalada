@@ -39,7 +39,9 @@ FE.Module = fabric.util.createClass(fabric.Group, {
               fill: this.C.pFill,
               stroke: this.C.pStroke,
               hasBorders : false,
-              hasControls : false
+              hasControls : false,
+              rx: 4,
+              ry: 4,
             });
         this.moduleRect.hasBorders = this.moduleRect.hasControls = false;
         this.titleRect = new fabric.Rect({
@@ -50,7 +52,9 @@ FE.Module = fabric.util.createClass(fabric.Group, {
               fill: this.C.pTitleFill,
               stroke: this.C.pStroke,
               hasBorders : false,
-              hasControls : false
+              hasControls : false,
+              rx: 4,
+              ry: 4,
             });
         this.titleRect.hasBorders = this.titleRect.hasControls = false;
     },

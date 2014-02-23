@@ -5,6 +5,18 @@ var CanalManager =
     context: undefined,
     canals: [],
     newCanalId: -1,
+    defaultDock: $('#default-dock'),
+
+    setContextCanal: function(canal) {
+        if(canal === undefined) {
+            // attach the scheme to the invisible default dock before removing it
+            this.context.scheme.appendTo(this.defaultDock);
+            this.context = undefined;        
+        } else {
+            this.context = canal;
+            this.context.scheme.appendTo(this.context.workspace);
+        }
+    }
 };
 
 function onCanalToBeSelected(event, ui) {
@@ -17,9 +29,10 @@ function onCanalToBeSelected(event, ui) {
     */
     // keep the old data first (if exists)
     if(CanalManager.context) {
-        showCtrlRightBlock(false);
+        showControls(false);
         CanalManager.context.content = FE.serialize();
         FE.reset();
+        CanalManager.setContextCanal();
     }
     if(ui.newPanel.length != 0) {
 
@@ -27,8 +40,10 @@ function onCanalToBeSelected(event, ui) {
 
         // find and set the right context
         var row_content = $(ui.newPanel).parent();
-        CanalManager.context = row_content.data('canalData');
-        CanalManager.context.scheme.appendTo(CanalManager.context.workspace);
+        //CanalManager.context = row_content.data('canalData');
+        //CanalManager.context.scheme.appendTo(CanalManager.context.workspace);
+        var newContext = row_content.data('canalData');
+        CanalManager.setContextCanal(newContext);
         // load the content back
         FE.deserialize(CanalManager.context.content);
     }
@@ -39,7 +54,7 @@ function onCanalToBeSelected(event, ui) {
 
 function onCanalSelected(event, ui) {
     if(ui.newPanel.length != 0) {
-        showCtrlRightBlock(true);
+        showControls(true);
         FE.canvas.calcOffset();
         FE.canvas.renderAll();
     }
@@ -190,7 +205,7 @@ function onModulePropertiesPanelUnminimize(event, ui) {
 function onSaveBtnClick(event, ui) {
     event.stopPropagation();
     CanalManager.context.content = FE.serialize();
-    FE.socket.emit('requestSaveCanal', {
+    FE.socket.emit('requestCanalSave', {
                  name: CanalManager.context.name,
                  id: CanalManager.context.id,
                  content: CanalManager.context.content,
@@ -218,7 +233,7 @@ function onSaveBtnClick(event, ui) {
 
 function onReloadBtnClick(event) {
     event.stopPropagation();
-    FE.socket.emit('requestLoadCanal',
+    FE.socket.emit('requestCanalLoad',
                          {id: CanalManager.context.id});
     console.log('canal load request sent!');
 };
@@ -226,22 +241,59 @@ function onReloadBtnClick(event) {
 function onDeleteBtnClick(event) {
     event.stopPropagation();
 
-    CanalManager.context.row.fadeOut('fast',function(){
+    //$("#canal-rows").accordion("option", "active", 0);
+
+    FE.socket.emit('requestCanalDelete', {id: CanalManager.context.id});
+
+    var accordionElem = CanalManager.context.row;
+    FE.reset();
+    // cleanup of the CanalManager instance
+    var contextId = CanalManager.canals.indexOf(CanalManager.context);
+    console.log('Deleting: ', contextId);
+    CanalManager.canals.splice(contextId,1);
+    CanalManager.setContextCanal(undefined);
+    /*
+    if(CanalManager.canals.length) {
+        // setup the first element as a new context, attach the scheme before removal
+        CanalManager.context.scheme.appendTo(CanalManager.canals[0].workspace);
+        CanalManager.context = CanalManager.canals[0];
+
+    } else {
+        // attach the scheme to the invisible default dock before removing it
+        CanalManager.context.scheme.appendTo($('#default-dock'));
+        CanalManager.context = undefined;
+    }
+    */
+    // delete the accordion element now
+    accordionElem.fadeOut('fast', function(){
             $(this).remove();
         });
+
+
 
     // refresh all
     $("#canal-rows").accordion("refresh");
 
-    FE.socket.emit('requestDeleteCanal',
-                         {id: CanalManager.context.id});
     console.log('canal delete request sent!');
     FE.syslog(FE.LOG.I, 'Canal is deleted.');
 };
 
-function onActiveBtnClick(event) {
-        event.stopPropagation();
-        console.log('canalhead active span!');
+
+
+function onStateBtnClick(event) {
+    event.stopPropagation();
+    console.log('canalhead active span!');
+    CanalManager.context.is_enabled = !CanalManager.context.is_enabled;
+    var state_indicator = CanalManager.context.header.find('.state-indicator')[0];
+    if(CanalManager.context.is_enabled) {
+        state_indicator.innerText = "enabled";
+    } else {
+        state_indicator.innerText = "disabled";
+    }
+    FE.socket.emit('requestCanalEnable', {
+                 id: CanalManager.context.id,
+                 enable: CanalManager.context.is_enabled,
+             });
 };
 
 function onCanalLoaded(cdata) {
@@ -285,16 +337,24 @@ function showModulePropertiesPanel() {
     CanalManager.context.module_prop_panel.widget.parent().find("*").show();
 }
 
-function showCtrlRightBlock(flag) {
-    var rblock = CanalManager.context.header.find('.ctrl_right_block');
-    if(flag) {
-        rblock.show();
-    } else {
-        rblock.hide();
+function showControls(flag, canal) {
+    if(canal === undefined) {
+        canal = CanalManager.context;
+    }
+    if(canal) {
+        var rblock = canal.header.find('.ctrl_right_block');
+        var state_btn = canal.header.find('.state-btn');
+        if(flag) {
+            //state_btn.attr("disabled", true);
+            state_btn.show();
+            rblock.show();
+        } else {
+            //state_btn.attr("disabled", false);
+            state_btn.hide();
+            rblock.hide();
+        }
     }
 }
-
-
 
 
 
@@ -318,7 +378,8 @@ function createCanalRow() {
                         "<span class=\"btn\" onclick=\"onDeleteBtnClick(event)\">Delete</span>" + 
                       "</div>" +
                       "<div class=\"ctrl_state_block\">"+
-                        "<span class=\"indicator\" onclick=\"onActiveBtnClick(event)\">Running</span>" + 
+                        "<span class=\"indicator state-indicator\">disabled</span>" + 
+                        "<span class=\"btn small-btn state-btn\" onclick=\"onStateBtnClick(event)\">Start</span>" + 
                       "</div>" +
                   "</canalhead>" +
                   "<div class=\"canal-row-content\">" + 
@@ -459,6 +520,8 @@ function createCanalRow() {
             newCanal.workspace.resize();
         }
     });
+    
+    showControls(false, newCanal);
 
     // finalize the dialog widget and add it to the workspace
     var content = jQuery("<div>").load('installed_modules/EmailClient/property_page.html', 

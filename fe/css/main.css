@@ -20,6 +20,7 @@ div#library {
     padding: 0.05em 2em;
 }
 
+*,
 #dialogL, 
 #toolbar, 
 #library, 
@@ -215,7 +216,9 @@ ul.tabs li.active a {
 }
 
 span.btn{
+    position: relative;
     padding:8px 6px;
+    margin: 5px 2px;
     cursor:pointer;
     font-size: 1em;
     color: #063E53;
@@ -224,12 +227,14 @@ span.btn{
     -webkit-border-radius:1px;
     -moz-box-shadow:#999 2px 0px 3px;
     -webkit-box-shadow:#999 2px 0px 3px;
-    position: relative;
-    margin: 5px 2px;
+}
+span.small-btn{
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
 span.indicator{
-    padding:8px 6px;
+    padding:8px 14px;
     /*display:inline-block;*/
     cursor:pointer;
     /*font:11px/14px Arial, Helvetica, sans-serif;*/
@@ -240,18 +245,13 @@ span.indicator{
     -webkit-border-radius:1px;
     position: relative;
     margin: 5px 2px;
+    width: 50%;
 }
 
 span.btn:hover{
     background-color:#063E53;
     color:#FFFFFF;
 }
-
-span.indicator:hover{
-    background-color:#063E53;
-    color:#FFFFFF;
-}
-
 
 .ctrl_right_block {
     display: inline-block;

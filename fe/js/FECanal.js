@@ -2,6 +2,7 @@ FE.Canal = function(canalName, canalId, cnlElem){
 	return {
 	    name: canalName,
         id: canalId,
+        is_enabled: false,
         row: cnlElem,
         // also caching some of the controls for faster/convenient access...
         header: cnlElem.find('canalhead'),
