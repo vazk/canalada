@@ -14,7 +14,7 @@ FE.Module = fabric.util.createClass(fabric.Group, {
          'pStrokeSelect' : '#ad2e3a',
          'pFontColor': '#FFFFFF',
          'pFont' :  'Lato',
-         'pTitleFontSize': 14.5,
+         'pTitleFontSize': 13,
          },
     
     title: '',
@@ -53,8 +53,8 @@ FE.Module = fabric.util.createClass(fabric.Group, {
               stroke: this.C.pStroke,
               hasBorders : false,
               hasControls : false,
-              rx: 4,
-              ry: 4,
+              rx: 2,
+              ry: 2,
             });
         this.titleRect.hasBorders = this.titleRect.hasControls = false;
     },
