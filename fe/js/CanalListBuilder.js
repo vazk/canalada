@@ -5,7 +5,7 @@ var CanalManager =
     context: undefined,
     canals: [],
     newCanalId: -1,
-    defaultDock: $('#default-dock'),
+    defaultDock: undefined,
 
     setContextCanal: function(canal) {
         if(canal === undefined) {
@@ -576,4 +576,5 @@ function buildCanals() {
                 FE.canvas.calcOffset();
             }
         });
+    CanalManager.defaultDock = $('#default-dock');
 }
