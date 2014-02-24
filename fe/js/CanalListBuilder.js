@@ -15,6 +15,10 @@ var CanalManager =
         } else {
             this.context = canal;
             this.context.scheme.appendTo(this.context.workspace);
+            $(this.context.scheme).droppable({
+                accept: 'img',
+                drop: onCanalSchemeDrop,
+            });
         }
     }
 };
@@ -40,8 +44,7 @@ function onCanalToBeSelected(event, ui) {
 
         // find and set the right context
         var row_content = $(ui.newPanel).parent();
-        //CanalManager.context = row_content.data('canalData');
-        //CanalManager.context.scheme.appendTo(CanalManager.context.workspace);
+
         var newContext = row_content.data('canalData');
         CanalManager.setContextCanal(newContext);
         // load the content back
@@ -251,7 +254,7 @@ function onDeleteBtnClick(event) {
     var contextId = CanalManager.canals.indexOf(CanalManager.context);
     console.log('Deleting: ', contextId);
     CanalManager.canals.splice(contextId,1);
-    CanalManager.setContextCanal(undefined);
+    CanalManager.setContextCanal();
     /*
     if(CanalManager.canals.length) {
         // setup the first element as a new context, attach the scheme before removal
@@ -578,12 +581,4 @@ function buildCanals() {
                 FE.canvas.calcOffset();
             }
         });
-
-
-    // support drop on the canvas
-    $('#canal-scheme').droppable({
-        accept: 'img',
-        drop: onCanalSchemeDrop,
-    });
-
 }
