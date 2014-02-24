@@ -36,11 +36,11 @@ div#library {
 }
 
 #canal-scheme {
-    position: absolute;
+    /*position: absolute;
     left: 0px;
     right: 1px;
     top: 1px;
-    bottom: 1px;
+    bottom: 1px;*/
 }
 
 canvas {
@@ -85,10 +85,19 @@ ul#grid {
     left:1px;
     right:1px;
     bottom:1px;
-    top:1px;
+    top:5px;
     min-height: 300px;
 }
 
+#canal-log-textbox {
+    /*position: relative; 
+    padding: 3px;
+    /*top: 2px; 
+    left: 2px; 
+    /* right: 2px; 
+    bottom: 2px; */
+    resize:none; 
+}
 
 
 #toolbar { 
@@ -175,7 +184,7 @@ ul#grid {
 .canal-row-content {
     position: relative;
     background: #F6F6F6;
-    margin: 1px, 0px, 0px, 0px;
+    /*margin: 1px, 0px, 0px, 0px;
     padding: 1px, 0px, 0px, 0px;
     /*left:0px;
     right:3px;

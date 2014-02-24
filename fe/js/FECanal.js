@@ -18,6 +18,7 @@ FE.Canal = function(canalName, canalId, cnlElem){
         },
         toolbar: cnlElem.find('#toolbar'),
         scheme: $('#canal-scheme'),
+        log: cnlElem.find('#canal-log-textbox'), 
         content: {},
     };
 };

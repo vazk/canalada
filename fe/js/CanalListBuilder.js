@@ -57,6 +57,7 @@ function onCanalToBeSelected(event, ui) {
 
 function onCanalSelected(event, ui) {
     if(ui.newPanel.length != 0) {
+        onCanalWorkspaceResize();
         showControls(true);
         FE.canvas.calcOffset();
         FE.canvas.renderAll();
@@ -111,25 +112,18 @@ function onCanalTabSelected() {
 }
 
 function onCanalWorkspaceResize(event) {
-    var self = $(event.currentTarget);//$(this);
-    var parent = self.closest('.ui-accordion-content');
-    var oHeight = parent.height();//parent.innerHeight();
-    self.height(oHeight-self[0].offsetTop);
 
-    //var ratio = PIXEL_RATIO;
-    var htmlcanvas = $('canvas');
-    htmlcanvas.height(self.height());
-    htmlcanvas.width(self.width());
-    /*
-    htmlcanvas.css({'height': self.height()-4 + 'px',
-                    'width': self.width()-4 + 'px'});
-    htmlcanvas[0].getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
-    */
+    var self = event ? $(event.target) : $(CanalManager.context.row.find('.canal-row-content'));
+    var b = self[0]; // this is the div
+    var c = $(b).children('ul.tabs')[0];
+    var d = $(b).find('section.block')[0];
 
-    FE.canvas.setWidth(self.width()-4);
-    FE.canvas.setHeight(self.height()-4);
-
-
+    var newWidth = self.width()-8;
+    var newHeight = b.clientHeight-d.offsetTop - 8;
+    CanalManager.context.log.css({'width': newWidth, 'height': newHeight});
+    CanalManager.context.scheme.css({'width': newWidth, 'height': newHeight});
+    FE.canvas.setWidth(newWidth);
+    FE.canvas.setHeight(newHeight);
 
 
     if( window.devicePixelRatio !== 1 ){
@@ -148,9 +142,7 @@ function onCanalWorkspaceResize(event) {
         //      $(c).css('height', h);
         // finally set the scale of the context
         c.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
-        console.log('RESCALED: ', w*window.devicePixelRatio, h*window.devicePixelRatio);
         FE.canvas.renderAll();
- 
     }
 
 
@@ -394,6 +386,7 @@ function createCanalRow() {
                   " <div class=\"clr\"></div>" + 
                   " <section class=\"block\">" + 
                   "   <div id=\"canal-log-pane\">" + 
+                  "       <textarea id=\"canal-log-textbox\"></textarea>" + 
                   "   </div>" + 
                   "   <div id=\"canal-properties\">" + 
                   "     <p>Lorem, nunc.</p>" + 
@@ -505,7 +498,7 @@ function createCanalRow() {
 
 
     // setup the on-resize callback
-    newCanal.workspace.resize(onCanalWorkspaceResize);
+    //newCanal.workspace.resize(onCanalWorkspaceResize);
     // and hide the workspace for now
     newCanal.workspace.hide();
 
@@ -520,7 +513,9 @@ function createCanalRow() {
         handles: 's',
         resize: function (ev, ui) {
             var content = $(this);
-            newCanal.workspace.resize();
+            onCanalWorkspaceResize(ev);
+            //newCanal.workspace.resize();
+
         }
     });
     
