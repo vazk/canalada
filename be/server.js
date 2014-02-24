@@ -16,6 +16,18 @@ app.use(express.static(__dirname + "/.."));
 //app.use(express.static(__dirname + "/../fe/tpt"));
 
 
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
 
 app.get("/", function(req, res) {
 	res.render("canal");
@@ -34,17 +46,17 @@ io.on('connection', function(socket) {
   			if (err) 
   				console.log(err);
   			else 
-  				console.log("successfully wrote " + fileName);
+  				console.log("successfully wrote {0}".format(fileName));
 		});
     });
 	socket.on('requestCanalLoad', function(cdata) {
  		var fileName = cdata.id + ".canal";
 	 	fs.readFile(fileName, function (err, data) {
   			if (err) {
-  				console.log('Error: failed to load the canal-file ', fileName);
+  				console.log('Error: failed to load the canal-file {0}'.format(fileName));
   			} else {
   				console.log('read: ' + data);
-  				socket.emit('responseCanalLoad', JSON.parse(data));
+  				socket.emit('responseCanalLoad {0}'.format(JSON.parse(data)));
   			}
 		});
 	});
@@ -52,12 +64,12 @@ io.on('connection', function(socket) {
  		var fileName = cdata.id + ".canal";
 	 	fs.unlink(fileName, function (err, data) {
   			if (err) {
-  				console.log('Error: failed to delete the canal-file ', fileName);
+  				console.log('Error: failed to delete the canal-file {0}'.format(fileName));
   			}
 		});
 	});
   socket.on('requestCanalEnable', function(cdata) {
-    console.log('canal ', cdata.id, ' state enable: ', cdata.enable);
+    console.log('canal {0} state enable: {1}'.format(cdata.id, cdata.enable));
   });
 });
 
