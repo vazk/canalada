@@ -8,12 +8,12 @@ FE.Canal = function(canalName, canalId, cnlElem){
         header: cnlElem.find('canalhead'),
         workspace: cnlElem.find('#canal-workspace'),
         module_lib_panel: {
-            top: 5, left: 5, minimized: false,
+            top: 35, left: 15, minimized: false,
             widget: cnlElem.find('#module-library-widget'),
             library: $('#library').clone(),
         },
         module_prop_panel: {
-            top: 15, left: 15, minimized: false,
+            top: 35, left: 15, minimized: false,
             widget: cnlElem.find('#module-properties-widget'),
         },
         toolbar: cnlElem.find('#toolbar'),

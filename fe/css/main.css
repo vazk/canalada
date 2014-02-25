@@ -81,12 +81,12 @@ ul#grid {
 #canal-properties,
 #canal-workspace {
     /*border: 2px solid blue;*/
-    position:relative;
+    /*position:relative;
     left:1px;
     right:1px;
     bottom:1px;
     top:5px;
-    min-height: 300px;
+    min-height: 300px;*/
 }
 
 #canal-log-textbox {
@@ -183,7 +183,12 @@ ul#grid {
 
 .canal-row-content {
     position: relative;
+    left:1px;
+    right:1px;
+    top:1px;
+    bottom:1px;
     background: #F6F6F6;
+    min-height: 300px;*/
     /*margin: 1px, 0px, 0px, 0px;
     padding: 1px, 0px, 0px, 0px;
     /*left:0px;
