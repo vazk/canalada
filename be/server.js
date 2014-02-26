@@ -28,6 +28,14 @@ if (!String.prototype.format) {
   };
 }
 
+var now = function() {
+    var d = new Date();
+    return '{2}-{1}-{0} @ {3}:{4}:{5}'.format(d.getDate(),d.getMonth(),d.getFullYear(),
+                                     d.getHours(),d.getMinutes(),d.getSeconds());
+}
+
+
+
 
 app.get("/", function(req, res) {
 	res.render("canal");
@@ -56,7 +64,7 @@ io.on('connection', function(socket) {
   				console.log('Error: failed to load the canal-file {0}'.format(fileName));
   			} else {
   				console.log('read: ' + data);
-  				socket.emit('responseCanalLoad {0}'.format(JSON.parse(data)));
+          socket.emit('responseCanalLoad', data);
   			}
 		});
 	});
@@ -64,12 +72,28 @@ io.on('connection', function(socket) {
  		var fileName = cdata.id + ".canal";
 	 	fs.unlink(fileName, function (err, data) {
   			if (err) {
-  				console.log('Error: failed to delete the canal-file {0}'.format(fileName));
-  			}
+  				  console.log('Error: failed to delete the canal-file {0}'.format(fileName));
+  			} else {
+            socket.emit('systemUpdate', {
+                                event: 'removed', 
+                                id: cdata.id, 
+                                date: '{0}'.format(now()),
+                                msg: 'Canal {0} has been deleted.'.format(cdata.name)
+                            });
+
+        }
 		});
 	});
   socket.on('requestCanalEnable', function(cdata) {
     console.log('canal {0} state enable: {1}'.format(cdata.id, cdata.enable));
+
+    //var now = new Date();
+    //now.format("dd/M/yy h:mm tt");
+    socket.emit('canalUpdate', {
+                        id: cdata.id, 
+                        date: '{0}'.format(now()),
+                        msg: 'test message from canal #{0}'.format(cdata.id),
+                    });
   });
 });
 
