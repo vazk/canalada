@@ -18,7 +18,7 @@ FE.logPrefix = function(logType) {
     return pre;
 }
 
-FE.syslog = function(logType, message) {
+FE.logMessage = function(logType, message, date) {
     document.getElementById("system-log-pane").innerHTML += 
-        '<log><b>' + FE.logPrefix(logType) + '</b>' + message + '</log><br>';
+        '<log><b>[' + date + ']' + FE.logPrefix(logType) + '</b>' + message + '</log><br>';
 }

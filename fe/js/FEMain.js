@@ -235,6 +235,16 @@ function setupSocket()
         //console.log(cdata);
         onCanalLoaded(cdata);
     });
+    FE.socket.on('canalUpdate', function(cupdate) {
+        //FE.onOpenData(cdata);
+        //console.log(cdata);
+        onCanalUpdate(cupdate);
+    });
+    FE.socket.on('systemUpdate', function(supdate) {
+        //FE.onOpenData(cdata);
+        //console.log(cdata);
+        onSystemUpdate(supdate);
+    });
 }
 /*
 var PIXEL_RATIO = (function () {

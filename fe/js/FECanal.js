@@ -20,5 +20,13 @@ FE.Canal = function(canalName, canalId, cnlElem){
         scheme: $('#canal-scheme'),
         log: cnlElem.find('#canal-log-textbox'), 
         content: {},
+
+        /////////////////////////////////////////////////////
+        //// interface									 ////
+        /////////////////////////////////////////////////////
+        logMessage: function(msg, date) {
+        	this.log.append('[' + date + ']: ' + msg + '&#xA;');
+        }
+
     };
 };

@@ -3,7 +3,7 @@
 var CanalManager = 
 {
     context: undefined,
-    canals: [],
+    canals: {},
     newCanalId: -1,
     defaultDock: undefined,
 
@@ -20,6 +20,9 @@ var CanalManager =
                 drop: onCanalSchemeDrop,
             });
         }
+    },
+    getCanal: function(canalId) {
+        return this.canals[canalId];
     }
 };
 
@@ -118,9 +121,9 @@ function onCanalWorkspaceResize(event) {
     var c = $(b).children('ul.tabs')[0];
     var d = $(b).find('section.block')[0];
 
-    var newWidth = self.width()-8;
-    var newHeight = b.clientHeight-d.offsetTop - 8;
-    CanalManager.context.log.css({'width': newWidth, 'height': newHeight});
+    var newWidth = self.width()-2;
+    var newHeight = b.clientHeight-d.offsetTop - 2;
+    CanalManager.context.log.css({'width': newWidth-6, 'height': newHeight-6});
     CanalManager.context.scheme.css({'width': newWidth, 'height': newHeight});
     FE.canvas.setWidth(newWidth);
     FE.canvas.setHeight(newHeight);
@@ -238,27 +241,17 @@ function onDeleteBtnClick(event) {
 
     //$("#canal-rows").accordion("option", "active", 0);
 
-    FE.socket.emit('requestCanalDelete', {id: CanalManager.context.id});
+    FE.socket.emit('requestCanalDelete', {
+                            id: CanalManager.context.id, 
+                            name: CanalManager.context.name,
+                        });
 
     var accordionElem = CanalManager.context.row;
     FE.reset();
-    // cleanup of the CanalManager instance
-    var contextId = CanalManager.canals.indexOf(CanalManager.context);
-    console.log('Deleting: ', contextId);
-    CanalManager.canals.splice(contextId,1);
-    CanalManager.setContextCanal();
-    /*
-    if(CanalManager.canals.length) {
-        // setup the first element as a new context, attach the scheme before removal
-        CanalManager.context.scheme.appendTo(CanalManager.canals[0].workspace);
-        CanalManager.context = CanalManager.canals[0];
 
-    } else {
-        // attach the scheme to the invisible default dock before removing it
-        CanalManager.context.scheme.appendTo($('#default-dock'));
-        CanalManager.context = undefined;
-    }
-    */
+    delete CanalManager.canals[CanalManager.context.id];
+    CanalManager.setContextCanal();
+
     // delete the accordion element now
     accordionElem.fadeOut('fast', function(){
             $(this).remove();
@@ -270,7 +263,6 @@ function onDeleteBtnClick(event) {
     $("#canal-rows").accordion("refresh");
 
     console.log('canal delete request sent!');
-    FE.syslog(FE.LOG.I, 'Canal is deleted.');
 };
 
 
@@ -280,10 +272,13 @@ function onStateBtnClick(event) {
     console.log('canalhead active span!');
     CanalManager.context.is_enabled = !CanalManager.context.is_enabled;
     var state_indicator = CanalManager.context.header.find('.state-indicator')[0];
+    var state_button = CanalManager.context.header.find('.state-button')[0];
     if(CanalManager.context.is_enabled) {
-        state_indicator.innerText = "enabled";
+        state_indicator.innerText = 'enabled';
+        state_button.innerText = 'stop';
     } else {
-        state_indicator.innerText = "disabled";
+        state_indicator.innerText = 'disabled';
+        state_button.innerText = 'start';
     }
     FE.socket.emit('requestCanalEnable', {
                  id: CanalManager.context.id,
@@ -291,6 +286,12 @@ function onStateBtnClick(event) {
              });
 };
 
+
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////   Event Slots
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 function onCanalLoaded(cdata) {
     var canal = CanalManager.context;
     canal.name = cdata.name;
@@ -308,13 +309,28 @@ function onCanalLoaded(cdata) {
     var tOffset = cdata.workspace.toffset;
     var pHeight = cdata.workspace.pheight;
     console.log('canal data loaded!');
-    FE.syslog(FE.LOG.I, 'Canal is loaded.');
 
-    
     workspaceResize(wWidth, wHeight, tOffset, pHeight);
     FE.deserialize(canal.content);   
     onCanalTabSelected();
 }
+
+function onCanalUpdate(cupdate) {
+    console.log('onCanalUpdate: ' + cupdate.id + ', message: ', cupdate.msg);
+    CanalManager.getCanal(cupdate.id).logMessage(cupdate.msg, cupdate.date);
+}
+
+function onSystemUpdate(supdate) {
+    console.log('onSystemUpdate: ' + supdate.event + ', message: ', supdate.msg);
+    FE.logMessage(FE.LOG.I, supdate.msg, supdate.date);
+}
+
+
+
+
+
+
+
 
 function showModuleLibraryPanel() {
     CanalManager.context.module_lib_panel.widget.dialog('open');
@@ -338,7 +354,7 @@ function showControls(flag, canal) {
     }
     if(canal) {
         var rblock = canal.header.find('.ctrl_right_block');
-        var state_btn = canal.header.find('.state-btn');
+        var state_btn = canal.header.find('.state-button');
         if(flag) {
             //state_btn.attr("disabled", true);
             state_btn.show();
@@ -374,7 +390,7 @@ function createCanalRow() {
                       "</div>" +
                       "<div class=\"ctrl_state_block\">"+
                         "<span class=\"indicator state-indicator\">disabled</span>" + 
-                        "<span class=\"btn small-btn state-btn\" onclick=\"onStateBtnClick(event)\">Start</span>" + 
+                        "<span class=\"btn small-btn state-button\" onclick=\"onStateBtnClick(event)\">start</span>" + 
                       "</div>" +
                   "</canalhead>" +
                   "<div class=\"canal-row-content\">" + 
@@ -405,7 +421,7 @@ function createCanalRow() {
 
     var newCanal = new FE.Canal('dummy', CanalManager.newCanalId--, row_content);
     // add it to the list
-    CanalManager.canals.push(newCanal);
+    CanalManager.canals[newCanal.id] = newCanal;
     // and to the element itself
     row_content.data('canalData', newCanal);
 
@@ -567,6 +583,7 @@ function buildCanals() {
             heightStyle: "content",
             beforeActivate: onCanalToBeSelected,
             activate: onCanalSelected,
+            animate: 200,
         })
         .sortable({
             axis: "y",
