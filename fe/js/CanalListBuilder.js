@@ -1,6 +1,7 @@
 
 
-var CanalManager = 
+//var CanalManager = 
+FE.CanalManager = 
 {
     context: undefined,
     canals: {},
@@ -21,10 +22,15 @@ var CanalManager =
             });
         }
     },
+    getContextCanal: function() {
+        return this.context;
+    },
     getCanal: function(canalId) {
         return this.canals[canalId];
-    }
+    },
 };
+
+CM = FE.CanalManager;
 
 function onCanalToBeSelected(event, ui) {
     /*
@@ -35,11 +41,11 @@ function onCanalToBeSelected(event, ui) {
     var e = ui.oldPanel.length;
     */
     // keep the old data first (if exists)
-    if(CanalManager.context) {
+    if(CM.context) {
         showControls(false);
-        CanalManager.context.content = FE.serialize();
+        CM.context.content = FE.serialize();
         FE.reset();
-        CanalManager.setContextCanal();
+        CM.setContextCanal();
     }
     if(ui.newPanel.length != 0) {
 
@@ -49,9 +55,9 @@ function onCanalToBeSelected(event, ui) {
         var row_content = $(ui.newPanel).parent();
 
         var newContext = row_content.data('canalData');
-        CanalManager.setContextCanal(newContext);
+        CM.setContextCanal(newContext);
         // load the content back
-        FE.deserialize(CanalManager.context.content);
+        FE.deserialize(CM.context.content);
     }
     if(ui.oldPanel.length != 0) {
         ui.oldHeader.css({'background-color':'#E5E5E0'});    
@@ -97,17 +103,17 @@ function onCanalTabSelected() {
 
     if(activeTabRef == '#canal-workspace') {
         activeTab.resize();
-        if(!CanalManager.context.module_prop_panel.minimized) {
+        if(!CM.context.module_prop_panel.minimized) {
             showModulePropertiesPanel();
         }
-        if(!CanalManager.context.module_lib_panel.minimized) {
+        if(!CM.context.module_lib_panel.minimized) {
             showModuleLibraryPanel();
         }
         // show the toolbar
-        CanalManager.context.toolbar.show();
+        CM.context.toolbar.show();
         // get the canvas element, add it to the active tab, and show
-        CanalManager.context.scheme.show(); 
-        CanalManager.context.scheme.find("*").show();
+        CM.context.scheme.show(); 
+        CM.context.scheme.find("*").show();
         FE.canvas.calcOffset();
         FE.canvas.renderAll();
     } 
@@ -116,15 +122,15 @@ function onCanalTabSelected() {
 
 function onCanalWorkspaceResize(event) {
 
-    var self = event ? $(event.target) : $(CanalManager.context.row.find('.canal-row-content'));
+    var self = event ? $(event.target) : $(CM.context.row.find('.canal-row-content'));
     var b = self[0]; // this is the div
     var c = $(b).children('ul.tabs')[0];
     var d = $(b).find('section.block')[0];
 
     var newWidth = self.width()-2;
     var newHeight = b.clientHeight-d.offsetTop - 2;
-    CanalManager.context.log.css({'width': newWidth-6, 'height': newHeight-6});
-    CanalManager.context.scheme.css({'width': newWidth, 'height': newHeight});
+    CM.context.log.css({'width': newWidth-6, 'height': newHeight-6});
+    CM.context.scheme.css({'width': newWidth, 'height': newHeight});
     FE.canvas.setWidth(newWidth);
     FE.canvas.setHeight(newHeight);
 
@@ -153,7 +159,7 @@ function onCanalWorkspaceResize(event) {
 }
 
 function workspaceResize(wWidth, wHeight, tOffset, pHeight) {
-    CanalManager.context.workspace.height(pHeight-tOffset);
+    CM.context.workspace.height(pHeight-tOffset);
 
     //var ratio = PIXEL_RATIO;
     var htmlcanvas = $('canvas');
@@ -168,62 +174,62 @@ function workspaceResize(wWidth, wHeight, tOffset, pHeight) {
 
 function onModuleLibraryPanelDrag(event, ui) {
     var position = $(event.target).parent().position();
-    CanalManager.context.module_lib_panel.top = position.top;
-    CanalManager.context.module_lib_panel.left = position.left;
+    CM.context.module_lib_panel.top = position.top;
+    CM.context.module_lib_panel.left = position.left;
 }
 
 function onModuleLibraryPanelMinimize(event, ui) {
     console.log('minimize');
-    CanalManager.context.module_lib_panel.minimized = true;
+    CM.context.module_lib_panel.minimized = true;
 }
 
 function onModuleLibraryPanelUnminimize(event, ui) {
     console.log('unminimize');
-    CanalManager.context.module_lib_panel.minimized = false;
+    CM.context.module_lib_panel.minimized = false;
     showModuleLibraryPanel();
 }
 
 function onModulePropertiesPanelDrag(event, ui) {
     var position = $(event.target).parent().position();
-    CanalManager.context.module_prop_panel.top = position.top;
-    CanalManager.context.module_prop_panel.left = position.left;
+    CM.context.module_prop_panel.top = position.top;
+    CM.context.module_prop_panel.left = position.left;
 }
 
 function onModulePropertiesPanelMinimize(event, ui) {
     console.log('minimize');
-    CanalManager.context.module_prop_panel.minimized = true;
+    CM.context.module_prop_panel.minimized = true;
 }
 
 function onModulePropertiesPanelUnminimize(event, ui) {
     console.log('unminimize');
-    CanalManager.context.module_prop_panel.minimized = false;
+    CM.context.module_prop_panel.minimized = false;
     showModulePropertiesPanel();
 }
 
 function onSaveBtnClick(event, ui) {
     event.stopPropagation();
-    CanalManager.context.content = FE.serialize();
+    CM.context.content = FE.serialize();
     FE.socket.emit('requestCanalSave', {
-                 name: CanalManager.context.name,
-                 id: CanalManager.context.id,
-                 content: CanalManager.context.content,
+                 name: CM.context.name,
+                 id: CM.context.id,
+                 content: CM.context.content,
                  /*
                  lib_panel: {
-                         top: CanalManager.context.module_lib_panel.top,
-                         left: CanalManager.context.module_lib_panel.left,
-                         minimized: CanalManager.context.module_lib_panel.minimized,
+                         top: CM.context.module_lib_panel.top,
+                         left: CM.context.module_lib_panel.left,
+                         minimized: CM.context.module_lib_panel.minimized,
                      },
                  prop_panel: {
-                         top: CanalManager.context.module_prop_panel.top,
-                         left: CanalManager.context.module_prop_panel.left,
-                         minimized: CanalManager.context.module_prop_panel.minimized,
+                         top: CM.context.module_prop_panel.top,
+                         left: CM.context.module_prop_panel.left,
+                         minimized: CM.context.module_prop_panel.minimized,
                      },
                  */
                  workspace: {
-                         width: CanalManager.context.workspace.width(),
-                         height: CanalManager.context.workspace.height(),
-                         toffset: CanalManager.context.workspace[0].offsetTop,
-                         pheight: CanalManager.context.workspace.closest('.ui-accordion-content').height(),
+                         width: CM.context.workspace.width(),
+                         height: CM.context.workspace.height(),
+                         toffset: CM.context.workspace[0].offsetTop,
+                         pheight: CM.context.workspace.closest('.ui-accordion-content').height(),
                      }
                 });
     console.log('canal save request sent!');
@@ -232,7 +238,7 @@ function onSaveBtnClick(event, ui) {
 function onReloadBtnClick(event) {
     event.stopPropagation();
     FE.socket.emit('requestCanalLoad',
-                         {id: CanalManager.context.id});
+                         {id: CM.context.id});
     console.log('canal load request sent!');
 };
 
@@ -242,15 +248,15 @@ function onDeleteBtnClick(event) {
     //$("#canal-rows").accordion("option", "active", 0);
 
     FE.socket.emit('requestCanalDelete', {
-                            id: CanalManager.context.id, 
-                            name: CanalManager.context.name,
+                            id: CM.context.id, 
+                            name: CM.context.name,
                         });
 
-    var accordionElem = CanalManager.context.row;
+    var accordionElem = CM.context.row;
     FE.reset();
 
-    delete CanalManager.canals[CanalManager.context.id];
-    CanalManager.setContextCanal();
+    delete CM.canals[CM.context.id];
+    CM.setContextCanal();
 
     // delete the accordion element now
     accordionElem.fadeOut('fast', function(){
@@ -270,10 +276,10 @@ function onDeleteBtnClick(event) {
 function onStateBtnClick(event) {
     event.stopPropagation();
     console.log('canalhead active span!');
-    CanalManager.context.is_enabled = !CanalManager.context.is_enabled;
-    var state_indicator = CanalManager.context.header.find('.state-indicator')[0];
-    var state_button = CanalManager.context.header.find('.state-button')[0];
-    if(CanalManager.context.is_enabled) {
+    CM.context.is_enabled = !CM.context.is_enabled;
+    var state_indicator = CM.context.header.find('.state-indicator')[0];
+    var state_button = CM.context.header.find('.state-button')[0];
+    if(CM.context.is_enabled) {
         state_indicator.innerText = 'enabled';
         state_button.innerText = 'stop';
     } else {
@@ -281,19 +287,19 @@ function onStateBtnClick(event) {
         state_button.innerText = 'start';
     }
     FE.socket.emit('requestCanalEnable', {
-                 id: CanalManager.context.id,
-                 enable: CanalManager.context.is_enabled,
+                 id: CM.context.id,
+                 enable: CM.context.is_enabled,
              });
 };
 
 
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
-////   Event Slots
+////   Event Slots                                                  ////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 function onCanalLoaded(cdata) {
-    var canal = CanalManager.context;
+    var canal = CM.context;
     canal.name = cdata.name;
     canal.content = cdata.content;
     /*
@@ -317,7 +323,7 @@ function onCanalLoaded(cdata) {
 
 function onCanalUpdate(cupdate) {
     console.log('onCanalUpdate: ' + cupdate.id + ', message: ', cupdate.msg);
-    CanalManager.getCanal(cupdate.id).logMessage(cupdate.msg, cupdate.date);
+    CM.getCanal(cupdate.id).logMessage(cupdate.msg, cupdate.date);
 }
 
 function onSystemUpdate(supdate) {
@@ -333,24 +339,24 @@ function onSystemUpdate(supdate) {
 
 
 function showModuleLibraryPanel() {
-    CanalManager.context.module_lib_panel.widget.dialog('open');
-    CanalManager.context.module_lib_panel.widget.parent().css({'display':' block', 
-                                  'top': CanalManager.context.module_lib_panel.top, 
-                                  'left': CanalManager.context.module_lib_panel.left});
-    CanalManager.context.module_lib_panel.widget.parent().find("*").show();
+    CM.context.module_lib_panel.widget.dialog('open');
+    CM.context.module_lib_panel.widget.parent().css({'display':' block', 
+                                  'top': CM.context.module_lib_panel.top, 
+                                  'left': CM.context.module_lib_panel.left});
+    CM.context.module_lib_panel.widget.parent().find("*").show();
 }
 
 function showModulePropertiesPanel() {
-    CanalManager.context.module_prop_panel.widget.dialog('open');
-    CanalManager.context.module_prop_panel.widget.parent().css({'display':' block', 
-                                  'top': CanalManager.context.module_prop_panel.top, 
-                                  'left': CanalManager.context.module_prop_panel.left});
-    CanalManager.context.module_prop_panel.widget.parent().find("*").show();
+    CM.context.module_prop_panel.widget.dialog('open');
+    CM.context.module_prop_panel.widget.parent().css({'display':' block', 
+                                  'top': CM.context.module_prop_panel.top, 
+                                  'left': CM.context.module_prop_panel.left});
+    CM.context.module_prop_panel.widget.parent().find("*").show();
 }
 
 function showControls(flag, canal) {
     if(canal === undefined) {
-        canal = CanalManager.context;
+        canal = CM.context;
     }
     if(canal) {
         var rblock = canal.header.find('.ctrl_right_block');
@@ -419,9 +425,9 @@ function createCanalRow() {
     var row_content = $(content);
     $('#canal-rows').append(row_content);
 
-    var newCanal = new FE.Canal('dummy', CanalManager.newCanalId--, row_content);
+    var newCanal = new FE.Canal('dummy', CM.newCanalId--, row_content);
     // add it to the list
-    CanalManager.canals[newCanal.id] = newCanal;
+    CM.canals[newCanal.id] = newCanal;
     // and to the element itself
     row_content.data('canalData', newCanal);
 
@@ -538,11 +544,11 @@ function createCanalRow() {
     showControls(false, newCanal);
 
     // finalize the dialog widget and add it to the workspace
-    var content = jQuery("<div>").load('installed_modules/EmailClient/property_page.html', 
-                                       function() {
-                                            console.log("content loaded!");
-                                       });
-    content.appendTo(newCanal.module_prop_panel.widget);
+    //var content = jQuery("<div>").load('installed_modules/EmailClient/property_page.html', 
+    //                                   function() {
+    //                                        console.log("content loaded!");
+    //                                   });
+    //content.appendTo(newCanal.module_prop_panel.widget);
     newCanal.module_prop_panel.widget.parent().appendTo(newCanal.workspace);
 
     newCanal.module_lib_panel.library.appendTo(newCanal.module_lib_panel.widget);
@@ -593,5 +599,5 @@ function buildCanals() {
                 FE.canvas.calcOffset();
             }
         });
-    CanalManager.defaultDock = $('#default-dock');
+    CM.defaultDock = $('#default-dock');
 }
