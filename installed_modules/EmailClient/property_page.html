@@ -2,18 +2,109 @@
     <head>
         <title></title>
         <style TYPE="text/css">
-			.props {
-				line-height: 0.8em;
-    			font-size: 0.7em;
-			    font-family: 'Lato', sans-serif;
-			    height: 0.8em;
-			}
+            .mp-wrapper {
+                margin:0;
+                padding:0;
+                background:#2ca1cc;
+                font-family: "Open Sans",sans-serif;
+                font-size:11px;
+                color:#999;
+                vertical-align:baseline;
+                width:100%;/*400px;*/
+                height:100%;/*400px;*/
+                position:absolute;
+                top:0px;
+                left:0px;
+                bottom:0px;
+                overflow-x:hidden; /*This will hide the Horizontal Scroll bar*/
+            }
+            .mp-section {
+                margin:0px;
+                bottom:0px;
+                width:auto;/*300px;*/
+                float:left;
+                height:100%;
+                text-align:center;
+            }
+            .mp-signup-form {
+                background:#fff;
+                border-radius: 2px;
+                padding:5px;
+                text-align:center;
+                float:left;
+                margin:2em 1em;
+            }
+            .mp-signup-form {
+                width:auto;/*300px;*/
+            }
+            .mp-form-wrapper-01 {
+                margin: 0;
+                padding: 5px 0;
+            }
+            .mp-form-wrapper-01 .mp-inputbox {
+                border: 1px solid #eaedf2;
+                border-radius:3px;
+                height: 12px;
+                padding: 5px 0 5px 14px;
+                width: 84%;
+                outline:none;
+                margin-bottom:5px;
+                font-family: inherit;
+            }
+            .mp-form-wrapper-01 .mp-inputbox {
+                width:88%;
+            }
+            .mp-form-wrapper-01 .mp-name {
+                background:#eaedf2 url(img/user.png) 8px 10px no-repeat;
+            }
+            .mp-form-wrapper-01 .mp-email {
+                background:#eaedf2 url(img/email.png) 8px 10px no-repeat;
+            }
+            .mp-form-wrapper-01 .mp-password {
+                background:#eaedf2 url(img/password.png) 8px 18px no-repeat;
+            }
+            .mp-form-wrapper-01 a.mp-button {
+                background: none repeat scroll 0 0 #14B9D5;
+                border: none;
+                border-radius: 2px 2px 2px 2px;
+                color: #FFFFFF;
+                cursor: pointer;
+                font-family: inherit;
+                font-size: 12px;
+                font-weight: 700;
+                padding: 5px 10px;
+            }
+            .mp-form-wrapper-01 .mp-button:hover {
+                background:#0e778a;
+            }
+            .mp-form-wrapper-01 a.mp-button > i {
+                font-size:10px;
+            }
         </style>
     </head>
-    <body>
-        <p class='props' style="text-align: center;">
-            <small>email &nbsp;<input class='props' name="email" type="text" /></small></p>
-        <p class='props' style="text-align: center;">
-            <small>password &nbsp;<input class='props' name="passwd" type="password" /></small></p>
-    </body>
-</html>
+
+
+
+<body>
+<div class='mp-wrapper'>
+    <!--Signup Section-->
+    <div class="mp-section" id="mp-section2">
+    <div class="mp-signup-form">
+      <h1>EmailClient</h1>
+        <p>Signup using your Email address</p>
+        <div>
+          <form class="mp-form-wrapper-01">
+                  <input id="" class="mp-inputbox mp-name" type="text" placeholder="Your Name" />
+                  <input id="" class="mp-inputbox mp-email" type="text" placeholder="Email id" />
+                  <input id="" class="mp-inputbox mp-password" type="password" placeholder="Password" />
+                  <input id="" class="mp-inputbox mp-password" type="password" placeholder="Confirm Password" />
+                  <p><a href="#" class="mp-button">Create my Account <i class="mp-icon-paper-plane"></i></a></p>
+                  <!--<input id="" type="button" class="button" value="Sign up" />-->
+            </form>
+        </div>
+        <hr />
+        <!--<p><a class="scroll" href="#section1">&laquo; Login here</a></p>-->
+    </div>
+    </div>
+</div>
+<!--END: Signup Section-->

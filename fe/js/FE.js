@@ -16,9 +16,19 @@ FE.selectState = {
 };
 
 FE.moduleClassRegistry = {};
+FE.modulePropPageRegistry = {};
 FE.modules = [];
 FE.links = [];
 
+
+
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////     Canal-Canvas Editing API                               ////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 FE.addModule = function(module) {
     this.modules.push(module);
     var shadow = {
@@ -80,6 +90,11 @@ FE.removeLink = function(link) {
 
 
 
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////        Canvas Slots                                        ////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 FE.onKeyDown = function(e) {
     if((e.keyCode == 8 || e.keyCode == 46) && FE.selectState.item) {
         if(FE.selectState.item.ctype == 'Module') {
@@ -111,6 +126,7 @@ FE.onMouseDown = function(e) {
             e.target.select(true);
             e.target.bringToFront();
             FE.selectState.item = e.target;
+            FE.onModuleSelected(e.target);
         } else
         if(e.target.ctype == 'Link') {
             e.target.select(true);
@@ -261,6 +277,45 @@ FE.reset = function() {
 
 };
 
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////     Module and Property Registration                       ////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+FE.registerModuleClass = function(moduleName, moduleIO) {
+    var moduleClass =  new fabric.util.createClass(FE.Module, {
+        initialize: function() {
+            this.callSuper('initialize', {'mname': moduleName});
+            if(moduleIO.input !== undefined) {
+                for(var i = 0, total = moduleIO.input.length; i < total; ++i) 
+                    this.addInputPort(moduleIO.input[i]);
+            }
+            if(moduleIO.output !== undefined) {
+                for(var i = 0, total = moduleIO.output.length; i < total; ++i) 
+                    this.addOutputPort(moduleIO.output[i]); 
+            }
+            this.setup();
+        }
+    });
+
+    moduleClass.model = moduleName;
+    FE.moduleClassRegistry[moduleName] = moduleClass;
+};
+
+FE.registerModulePropertyPage = function(moduleName, modulePropPage) {
+    var content = jQuery("<div>").append(modulePropPage);
+    FE.modulePropPageRegistry[moduleName] = content;
+}
+
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////     Serialization / Deserialization                        ////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 FE.serialize = function() {
     var modules = [];
     for(var i = 0; i < FE.modules.length; ++i) {
@@ -278,7 +333,6 @@ FE.serialize = function() {
               "links"  : links
            };
 };
-
 
 FE.deserialize = function(data) {
     var modules = data.modules;
@@ -305,27 +359,6 @@ FE.deserialize = function(data) {
     }
 };
 
-
-FE.registerModuleClass = function(moduleName, moduleIO) {
-    var moduleClass =  new fabric.util.createClass(FE.Module, {
-        initialize: function() {
-            this.callSuper('initialize', {'mname': moduleName});
-            if(moduleIO.input !== undefined) {
-                for(var i = 0, total = moduleIO.input.length; i < total; ++i) 
-                    this.addInputPort(moduleIO.input[i]);
-            }
-            if(moduleIO.output !== undefined) {
-                for(var i = 0, total = moduleIO.output.length; i < total; ++i) 
-                    this.addOutputPort(moduleIO.output[i]); 
-            }
-            this.setup();
-        }
-    });
-
-    moduleClass.model = moduleName;
-    FE.moduleClassRegistry[moduleName] = moduleClass;
-};
-
 FE.save = function() {
     FE.socket.emit('requestSaveCanal', {name: 'trololo', canal: FE.serialize()}); 
     console.log("save function is called");
@@ -343,4 +376,13 @@ FE.onOpenData = function(cdata) {
 };
 
 
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+////     Other Signals and Slots                                ////
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+FE.onModuleSelected = function(module) {
+    FE.CanalManager.getContextCanal().onModuleSelected(module)
+};
 

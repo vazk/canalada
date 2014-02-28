@@ -37,6 +37,12 @@ InstalledModules = {
             },
             dataType: "text"
         });
+        $.ajax({
+            url: '../installed_modules/' + modName + '/property_page.html', 
+            success: function(data){
+                FE.registerModulePropertyPage(modName, data);
+            }
+        });
     },
 
 };
