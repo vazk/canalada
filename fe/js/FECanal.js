@@ -26,7 +26,11 @@ FE.Canal = function(canalName, canalId, cnlElem){
         /////////////////////////////////////////////////////
         logMessage: function(msg, date) {
         	this.log.append('[' + date + ']: ' + msg + '&#xA;');
-        }
+        },
+        onModuleSelected: function(module) {
+        	var mpp = FE.modulePropPageRegistry[module.mname];
+        	this.module_prop_panel.widget.append(mpp);
+        },
 
     };
 };
