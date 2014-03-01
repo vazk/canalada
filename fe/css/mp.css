@@ -27,7 +27,7 @@
     border-radius: 2px;
     padding:5px;
     text-align:center;
-    float:left;
+    float:center;
     margin:2em 1em;
 }
 .mp-signup-form {
@@ -49,15 +49,6 @@
 }
 .mp-form-wrapper-01 .mp-inputbox {
     width:88%;
-}
-.mp-form-wrapper-01 .mp-name {
-    background:#eaedf2 url(img/user.png) 8px 10px no-repeat;
-}
-.mp-form-wrapper-01 .mp-email {
-    background:#eaedf2 url(img/email.png) 8px 10px no-repeat;
-}
-.mp-form-wrapper-01 .mp-password {
-    background:#eaedf2 url(img/password.png) 8px 18px no-repeat;
 }
 .mp-form-wrapper-01 a.mp-button {
     background: none repeat scroll 0 0 #14B9D5;

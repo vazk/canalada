@@ -9,18 +9,7 @@ body, html {
     font-family: 'Lato', sans-serif;
 }
 
-div#library {
-    width: auto;
-    height: 140px;
-}
-
-#library * h3{
-    line-height: 0.8em;
-    font-size: 0.5em;
-    padding: 0.05em 2em;
-}
-
-*,
+*:not(.mp-inputbox),
 #dialogL, 
 #toolbar, 
 #library, 
@@ -33,6 +22,17 @@ div#library {
     -moz-user-select: moz-none;
     -ms-user-select: none;
     user-select: none;
+}
+
+div#library {
+    width: auto;
+    height: 140px;
+}
+
+#library * h3{
+    line-height: 0.8em;
+    font-size: 0.5em;
+    padding: 0.05em 2em;
 }
 
 #canal-scheme {
