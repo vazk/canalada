@@ -87,6 +87,7 @@ ul#grid {
     bottom:1px;
     top:5px;
     min-height: 300px;*/
+    overflow: hidden;
 }
 
 #canal-log-textbox {
