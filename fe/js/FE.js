@@ -99,6 +99,7 @@ FE.onKeyDown = function(e) {
     if((e.keyCode == 8 || e.keyCode == 46) && FE.selectState.item) {
         if(FE.selectState.item.ctype == 'Module') {
             FE.removeModule(FE.selectState.item);
+            FE.onModuleDeleted(FE.selectState.item);
         } else
         if(FE.selectState.item.ctype == 'Link') {
             FE.removeLink(FE.selectState.item);
@@ -114,26 +115,31 @@ FE.onMouseDown = function(e) {
         FE.selectState.item.select(false);
         FE.selectState.item = null;
     }
-    if(e.target) {
-        if(FE.linkState.sport) {
-            FE.linkState.sport.module.bringToFront();
-            FE.linkState.sport.select(true);
-            FE.linkState.down = true;
-            FE.linkState.marker.bringToFront();
-            FE.linkState.line.bringToFront();
-        } else
+    var module = undefined;
+    if(e.target) {         
         if(e.target.ctype == 'Module') {
             e.target.select(true);
             e.target.bringToFront();
             FE.selectState.item = e.target;
-            FE.onModuleSelected(e.target);
-        } else
-        if(e.target.ctype == 'Link') {
-            e.target.select(true);
-            e.target.bringToFront();
-            FE.selectState.item = e.target;
+            module = e.target;
+        } else {
+
+            if(FE.linkState.sport) {
+                FE.linkState.sport.module.bringToFront();
+                FE.linkState.sport.select(true);
+                FE.linkState.down = true;
+                FE.linkState.marker.bringToFront();
+                FE.linkState.line.bringToFront();
+            } else 
+            if(e.target.ctype == 'Link') {
+                e.target.select(true);
+                e.target.bringToFront();
+                FE.selectState.item = e.target;
+            }
         }
     }
+    FE.onModuleSelected(module);
+
     FE.canvas.renderAll();
 };
 
@@ -305,7 +311,7 @@ FE.registerModuleClass = function(moduleName, moduleIO) {
 };
 
 FE.registerModulePropertyPage = function(moduleName, modulePropPage) {
-    var content = jQuery("<div>").append(modulePropPage);
+    var content = jQuery(modulePropPage);//jQuery("<div>").append(modulePropPage);
     FE.modulePropPageRegistry[moduleName] = content;
 }
 
@@ -335,16 +341,16 @@ FE.serialize = function() {
 };
 
 FE.deserialize = function(data) {
+    console.log('deserialize: ', data);
     var modules = data.modules;
     if(modules) {
         for(var i = 0; i < modules.length; ++i) {
-            var modelName = modules[i].model;
-            var modelProps = modules[i].properties;
-            var model = FE.moduleClassRegistry[modelName];
-            if(model && modelProps) {
-                var inst = new model();
-                inst.left = modelProps.left;
-                inst.top = modelProps.top;
+            var moduleName = modules[i].model;
+            var moduleData = modules[i].properties;
+            var module = FE.moduleClassRegistry[moduleName];
+            if(module && moduleData) {
+                var inst = new module();
+                inst.deserialize(moduleData);
                 FE.addModule(inst);
             }
         }
@@ -373,6 +379,7 @@ FE.open = function() {
 FE.onOpenData = function(cdata) {
     console.log("open function is called, data: " + JSON.stringify(cdata.canal));
     FE.canvas.loadFromJSON(FE.deserialize(cdata.canal));
+    FE.CanalManager.getContextCanal().onModuleSelected(undefined);
 };
 
 
@@ -383,6 +390,9 @@ FE.onOpenData = function(cdata) {
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 FE.onModuleSelected = function(module) {
-    FE.CanalManager.getContextCanal().onModuleSelected(module)
+    FE.CanalManager.getContextCanal().onModuleSelected(module);
+};
+FE.onModuleDeleted = function(module) {
+    FE.CanalManager.getContextCanal().onModuleDeleted(module);
 };
 

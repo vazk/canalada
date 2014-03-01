@@ -14,11 +14,13 @@ FE.Module = fabric.util.createClass(fabric.Group, {
          'pStrokeSelect' : '#ad2e3a',
          'pFontColor': '#FFFFFF',
          'pFont' :  'Lato',
-         'pTitleFontSize': 13,
+         'pTitleFontSize': 13.5,
          },
     
     title: '',
     
+    parameters: {},
+
     initialize: function(options) {
         this.mname = options.mname;
         this.callSuper('initialize');
@@ -160,6 +162,13 @@ FE.Module = fabric.util.createClass(fabric.Group, {
         var data = {};
         data.top = this.top;
         data.left = this.left;
+        data.parameters = this.parameters;
         return data;   
+    },
+
+    deserialize: function(data) {
+        this.left = data.left;
+        this.top = data.top;
+        this.parameters = data.parameters;
     }
 });
