@@ -1,0 +1,78 @@
+.mp-wrapper {
+    margin:0 auto;
+    padding:0;
+    background:#2ca1cc;
+    font-family: "Open Sans",sans-serif;
+    font-size:11px;
+    color:#999;
+    vertical-align:baseline;
+    width:100%;/*400px;*/
+    height:100%;/*400px;*/
+    position:absolute;
+    top:0px;
+    left:0px;
+    bottom:0px;
+    overflow-x:hidden; /*This will hide the Horizontal Scroll bar*/
+}
+.mp-section {
+    margin:0px;
+    bottom:0px;
+    width:auto;/*300px;*/
+    float:center;
+    height:100%;
+    text-align:center;
+}
+.mp-signup-form {
+    background:#fff;
+    border-radius: 2px;
+    padding:5px;
+    text-align:center;
+    float:left;
+    margin:2em 1em;
+}
+.mp-signup-form {
+    width:auto;/*300px;*/
+}
+.mp-form-wrapper-01 {
+    margin: 0;
+    padding: 5px 0;
+}
+.mp-form-wrapper-01 .mp-inputbox {
+    border: 1px solid #eaedf2;
+    border-radius:3px;
+    height: 12px;
+    padding: 5px 0 5px 14px;
+    width: 84%;
+    outline:none;
+    margin-bottom:5px;
+    font-family: inherit;
+}
+.mp-form-wrapper-01 .mp-inputbox {
+    width:88%;
+}
+.mp-form-wrapper-01 .mp-name {
+    background:#eaedf2 url(img/user.png) 8px 10px no-repeat;
+}
+.mp-form-wrapper-01 .mp-email {
+    background:#eaedf2 url(img/email.png) 8px 10px no-repeat;
+}
+.mp-form-wrapper-01 .mp-password {
+    background:#eaedf2 url(img/password.png) 8px 18px no-repeat;
+}
+.mp-form-wrapper-01 a.mp-button {
+    background: none repeat scroll 0 0 #14B9D5;
+    border: none;
+    border-radius: 2px 2px 2px 2px;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+}
+.mp-form-wrapper-01 .mp-button:hover {
+    background:#0e778a;
+}
+.mp-form-wrapper-01 a.mp-button > i {
+    font-size:10px;
+}
