@@ -230,7 +230,7 @@ function setupSocket()
         //socket.emit('requestSaveCanal', {name: 'blabla', canal: {pam: 'parampampam'}}); 
         //socket.emit('requestLoadCanal', {name: 'blabla'}); 
     });
-    FE.socket.on('responseLoadCanal', function(cdata) {
+    FE.socket.on('responseCanalLoad', function(cdata) {
         //FE.onOpenData(cdata);
         //console.log(cdata);
         onCanalLoaded(cdata);

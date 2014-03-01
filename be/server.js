@@ -64,7 +64,7 @@ io.on('connection', function(socket) {
   				console.log('Error: failed to load the canal-file {0}'.format(fileName));
   			} else {
   				console.log('read: ' + data);
-          socket.emit('responseCanalLoad', data);
+          socket.emit('responseCanalLoad', JSON.parse(data));
   			}
 		});
 	});
